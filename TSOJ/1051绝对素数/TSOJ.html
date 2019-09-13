@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://acm.nuist.edu.cn/problem/submit?tw=1051&ck=25 -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge"><!--告诉IE浏览器，IE8/9及以后的版本都会以最高版本IE来渲染页面。 -->
+<meta name="viewport" content="width=device-width, initial-scale=1"><!--让当前viewport的宽度等于设备的宽度-->
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<meta name="renderer" content="webkit">
+<title>TSOJ</title>
+<link rel="shortcut icon" href="https://acm.nuist.edu.cn/static/images/favicon.gif?v=6ed8c2ad9f919989148ef22e145db5fd">
+<!-- Bootstrap -->
+<link href="./TSOJ_files/bootstrap.min.css" rel="stylesheet">
+<link href="./TSOJ_files/base.css" rel="stylesheet">
+<link href="./TSOJ_files/userInfoCard.css" rel="stylesheet">
+<link href="./TSOJ_files/bootstrap-select.css" rel="stylesheet">
+<script src="./TSOJ_files/jquery.min.js.下载"></script>
+<script src="./TSOJ_files/bootstrap.min.js.下载"></script>
+<script src="./TSOJ_files/bootstrap-select.min.js.下载"></script>
+<script src="./TSOJ_files/jquery.cookie.js.下载"></script>
+
+<script src="./TSOJ_files/userInfoCard.js.下载"></script>
+
+<script type="text/javascript">
+$(function() {
+u_id = 3706;
+u_level = 0;
+/*
+
+*/
+
+var avatarurl = "/static/uploads/avatar/" + u_id + ".jpg";
+var icon = document.getElementById("imgIcon");
+var head = document.getElementById("head-img");
+icon.src = head.src = avatarurl;
+$.cookie("userinfocard_flag","0");
+$.ajax({
+url: "/message/get_number",
+type: "POST",
+data: { key: "none" },
+beforeSend: function(request) {
+request.setRequestHeader("X-Xsrftoken", $.cookie("_xsrf"));
+},
+success: function(arg) {
+var obj = jQuery.parseJSON(arg);
+$('#message_number').html(obj);
+if (parseInt(obj) == 0) {
+$('#message_number').css("display", "none");
+} else {
+$('#message_number').css("display", "inline-block");
+}
+},
+error: function() {
+console.log("Get message number failed");
+}
+});
+
+});
+</script>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 10]>
+<script src="/static/js/html5shiv.min.js?v=40bd440d29b3a9371b0c63fec41ee64f"></script>
+<script src="/static/js/respond.min.js?v=afc1984a3d17110449dc90cf22de0c27"></script>
+<script src="/static/js/jquery.placeholder.min.js?v=ee60835ea8faa661d4e1ce6c1a97b141"></script>
+<script type="text/javascript">
+//forEach兼容
+if (!Array.prototype.forEach) {
+Array.prototype.forEach = function(callback/*, thisArg*/) {
+var T, k;
+if (this == null) {
+throw new TypeError('this is null or not defined');
+}
+var O = Object(this);
+var len = O.length >>> 0;
+if (typeof callback !== 'function') {
+throw new TypeError(callback + ' is not a function');
+}
+if (arguments.length > 1) {
+T = arguments[1];
+}
+k = 0;
+while (k < len) {
+var kValue;
+if (k in O) {
+kValue = O[k];
+callback.call(T, kValue, k, O);
+}
+k++;
+}
+};
+}
+$(function() {
+$('input, textarea').placeholder();
+});
+</script>
+<![endif]-->
+<!--<script>
+function loadXMLDoc(){
+if(window.XMLHttpRequest){
+xmlhttp = new XMLHttpRequest();
+}else{
+xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+xmlhttp.onreadyStatechange=function(){
+if(xmlhttp.readystate == 4 && xmlhttp.status == 200){
+document.getElementById("mydiv").innerHTML = xmlhttp.responseText;
+}
+}
+xmlhttp.open("GET","../index");
+xmlhttp.send();
+}
+</script>-->
+
+<script>
+var is_ct = 0;
+function submit_code() {
+//document.getElementById("code_form").submit();
+document.getElementById("but").disabled = true;
+$("#submithint").html("<div class='alert alert-info'><strong>正在提交中，请稍候...</strong></div>");
+$.ajax({
+url: "/problem/submit",
+type: "POST",
+data: {
+"hb": 1051,
+"chb": 25,
+"language": $("#lang").val(),
+"sourcecode": $("#sourcecode").val(),
+},
+beforeSend: function(request) {
+request.setRequestHeader("X-Xsrftoken", $.cookie("_xsrf"));
+},
+success: function(arg) {
+var obj = jQuery.parseJSON(arg);
+if (parseInt(obj.status) == 0) {
+$("#submithint").html("<div class='alert alert-success'><strong>提交成功，正在跳转...</strong></div>");
+setTimeout(function() {
+window.location.href = obj.msg;
+}, 3 * 1000); //延迟3秒跳转到状态页
+} else {
+$("#submithint").html("<div class='alert alert-danger'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><strong>"+obj.msg+"</strong></div>");
+document.getElementById("but").disabled = false;
+}
+},
+error: function() {
+$("#submithint").html("<div class='alert alert-danger'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><strong>提交失败</strong></div>");
+document.getElementById("but").disabled = false;
+}
+});
+}
+</script>
+
+</head>
+<body>
+
+<div id="userInfoCard">
+<div id="card-inner">
+<div id="card-top">
+<img class="l" id="head-img" src="./TSOJ_files/3706.jpg" onerror="javascript:this.src=&#39;/static/images/default.png?v=627134c0a42887a3eb084f0139e6e92d&#39;" href="/home">
+<div class="card-top-right-box l">
+<a>
+<span id="user_name" class="user-name"></span>
+</a>
+<!--
+<div class="meta">
+<a>经验<b>1,515</b></a>
+<a>积分<b id="user_score">100</b></a>
+</div>
+-->
+</div>
+</div>
+<div class="user-center-box">
+<ul>
+<li class="l"><a name="courses" href="https://acm.nuist.edu.cn/course?kclx=0"><img class="user-center-icon" src="./TSOJ_files/user_course_icon.png">我的课程</a></li>
+<li class="l"><a name="exam" href="https://acm.nuist.edu.cn/course?kclx=1"><img class="user-center-icon" src="./TSOJ_files/user_exam_icon.png">我的考试</a></li>
+<li class="l"><a name="contests" href="https://acm.nuist.edu.cn/contest"><img class="user-center-icon" src="./TSOJ_files/user_contest_icon.png">我的竞赛</a></li>
+<!-- <li class="l"><a name="ladder" href="/ladder"><img class="user-center-icon" src="/static/images/ladder.png?v=b045a959e17b9cb9f8d6582a968e3de5">天梯</a></li> -->
+<li class="l"><a href="https://acm.nuist.edu.cn/home"><img class="user-center-icon" src="./TSOJ_files/user_setting_icon.png">个性设置</a></li>
+</ul>
+</div>
+<br><br>
+<div class="new-course">
+<span class="course-item">
+<span class="latest-course">
+最新课程
+</span>
+<span id="latest_course" class="course-content">
+</span>
+<img class="icon-clock" src="./TSOJ_files/clock-icon.png">
+<a id="con" href="https://acm.nuist.edu.cn/problem/submit?tw=1051&amp;ck=25#" class="continue"></a>
+</span>
+</div>
+<div class="card-end">
+<a name="modifyPassword" href="https://acm.nuist.edu.cn/modifypassword">&nbsp;&nbsp;&nbsp;修改密码</a>
+<a href="https://acm.nuist.edu.cn/contestenrol">&nbsp;&nbsp;&nbsp;比赛报名</a>
+<a class="r" name="logout" href="https://acm.nuist.edu.cn/logout">退出</a>
+</div>
+</div>
+</div>
+
+
+<!-- 前台顶栏 -->
+<div id="basediv">
+<nav class="navbar navbar-inverse navbar-static-top">
+<div class="container">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+<span class="sr-only">Toggle navigation</span><!--sc(screen-reader)-->
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a name="tsoj" class="navbar-brand pull-left" href="https://acm.nuist.edu.cn/home">TSOJ</a>
+</div>
+<div class="collapse navbar-collapse" id="navbar">
+<ul class="nav navbar-nav" id="ul">
+<li class="dropdown">
+<a class="dropdown-toggle" data-toggle="dropdown" href="https://acm.nuist.edu.cn/problem/submit?tw=1051&amp;ck=25#">
+题目 <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+<li><a name="problems" href="https://acm.nuist.edu.cn/index">所有问题</a></li>
+<li><a name="course" href="https://acm.nuist.edu.cn/course?kclx=0">课程</a></li>
+<li><a name="exam" href="https://acm.nuist.edu.cn/course?kclx=1">考试</a></li>
+<!-- <li><a name="ladder" href="/ladder">天梯</a></li> -->
+</ul>
+</li>
+<li><a name="solution" href="https://acm.nuist.edu.cn/solution">状态</a></li>
+<li><a name="answer" href="https://acm.nuist.edu.cn/answer">题解</a></li>
+<li><a name="ranklist" href="https://acm.nuist.edu.cn/problem/ranklist">排名</a></li>
+<li><a name="notice" href="https://acm.nuist.edu.cn/notice?page=1">公告</a></li>
+<li><a name="helps" href="https://acm.nuist.edu.cn/help">帮助</a></li>
+</ul>
+<div class="pull-right">
+
+<!--
+<button class="btn btn-sm btn-info" type="button" onclick="javascript:window.location.href='/problem/add'">
+
+新题投稿
+
+</button>
+-->
+<img id="imgIcon" class="img-circle" src="./TSOJ_files/3706.jpg" onerror="javascript:this.src=&#39;/static/images/default.png?v=627134c0a42887a3eb084f0139e6e92d&#39;" href="/home">
+<span class="id_style">201883290072,胡广</span>
+<div style="margin-left:10px;" class="pull-right">
+<div class="comments">
+<a href="https://acm.nuist.edu.cn/message/manage?page=1"><span class="glyphicon glyphicon-bell"></span>消息</a>
+<span id="message_number" class="redpoint" style="display: none;">0</span>
+</div>
+</div>
+</div>
+</div><!--/.nav-collapse -->
+</div>
+</nav>
+</div>
+
+<!-- 导航 -->
+
+
+<!-- 正文 -->
+
+<div class="col-lg-offset-2 col-md-offset-1 col-lg-8 col-md-10">
+<div class="panel panel-info">
+<div class="panel-heading">
+<h2>
+
+1051
+:绝对素数
+
+</h2>
+
+<font size="3">难度:&nbsp;</font>
+<font size="3" color="blue">
+
+秩序白银
+
+</font>&nbsp;&nbsp;
+
+<font size="3">时间限制:&nbsp;</font>
+<font size="3" color="blue">1000MS</font>&nbsp;&nbsp;
+<font size="3">空间限制:&nbsp;</font>
+<font size="3" color="blue">16MB</font>&nbsp;&nbsp;
+<font size="3">提交数:&nbsp;</font>
+<font size="3" color="blue">208</font>&nbsp;&nbsp;
+<font size="3">通过数:&nbsp;</font>
+<font size="3" color="blue">178</font>&nbsp;&nbsp;
+
+<font size="3">题目来源:&nbsp;</font>
+<font size="3" color="blue">nuistoj</font>
+
+</div>
+</div>
+<div class="panel panel-info">
+<div class="panel-heading">
+<h4>题目内容</h4>
+</div>
+<div class="panel-body">
+<div style="display:none">
+<textarea id="text-input">#### 题目描述:
+&gt; 如果一个正整数是素数，它的反位数也是素数，这称这样的数为绝对素数 ，判断输入的一个正整数是否为绝对素数。
+#### 输入描述：
+&gt; 输入 占一行，表示一个正整数 ：31
+#### 输出描述：
+&gt; 输出一个数，占一行：1表示是 绝对素数 ，0表示不是绝对素数 
+#### 样例输入:
+&gt; 17
+
+&gt; 41
+#### 样例输出:
+&gt; 1
+
+&gt; 0
+</textarea>
+</div>
+<div id="preview"><h4>题目描述:</h4>
+
+<blockquote><p>如果一个正整数是素数，它的反位数也是素数，这称这样的数为绝对素数 ，判断输入的一个正整数是否为绝对素数。</p></blockquote>
+
+<h4>输入描述：</h4>
+
+<blockquote><p>输入 占一行，表示一个正整数 ：31</p></blockquote>
+
+<h4>输出描述：</h4>
+
+<blockquote><p>输出一个数，占一行：1表示是 绝对素数 ，0表示不是绝对素数 </p></blockquote>
+
+<h4>样例输入:</h4>
+
+<blockquote><p>17</p><p>41</p></blockquote>
+
+<h4>样例输出:</h4>
+
+<blockquote><p>1</p><p>0</p></blockquote></div>
+</div>
+<script src="./TSOJ_files/markdown.js.下载"></script>
+<script>
+function Editor(input, preview) {
+this.update = function () {
+preview.innerHTML = markdown.toHTML(input.value);
+};
+input.editor = this;
+this.update();
+}
+var $$ = function (id) { return document.getElementById(id); };
+new Editor($$("text-input"), $$("preview"));
+</script>
+</div>
+<div class="panel panel-info">
+<div class="panel-heading">
+<h4>代码提交</h4>
+</div>
+<div class="panel-body">
+<form id="code_form" action="https://acm.nuist.edu.cn/problem/submit?tw=1051&amp;ck=25" method="post">
+<div class="panel">
+<div class="panel-body" style="padding:0;">
+<div style="position:relative">
+<div style="position:relative;line-height:34px;padding:0;" class="col-md-2">
+<font size="4">language:</font>
+</div>
+<div style="position:absolute; top:0 ; margin-left:90px;padding:0;">
+<select id="lang" name="language" class="form-control">
+<option value="1">C++ 11</option>
+<option value="3">C++ 14</option>
+<option value="0">C 11</option>
+<option value="2">Java (OpenJDK 8)</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<textarea class="form-control" id="sourcecode" name="sourcecode" rows="20" style="resize:none"></textarea>
+<input id="but" type="button" value="提交" onclick="submit_code();" class="btn btn-default">
+<div id="submithint">
+</div>
+</form>
+</div>
+</div>
+<a class="btn btn-default" href="javascript:history.back();">返回</a>
+</div>
+
+<!-- 分页 -->
+
+
+<!-- 底栏 -->
+<footer>
+
+
+</footer>
+
+
+</body></html>

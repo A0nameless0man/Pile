@@ -1,0 +1,118 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "cl.exe build active file",
+            "command": "clang-cl",
+            "args": [
+                "/Zi",
+                "/EHsc",
+                "/O2",
+                "/Fe:",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "GccBuild",
+            "command": "g++",
+            "args": [
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.exe",
+                "-g",
+                "-Wall",
+                "-std=c++17",
+                //"-O2"
+            ],
+            "problemMatcher": [
+                "$gcc",
+                
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Run",
+            "command": [
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "args": [],
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Build",
+            "command": "clang-cl",
+            "args": [
+                "-Zi",
+                "-EHac",
+                "-Xclang",
+                "-std=c++17",
+                "-Werror",
+                "-O2",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Clean",
+            "command": "rm",
+            "args": [
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                ",",
+                "${fileDirname}\\${fileBasenameNoExtension}.ilk",
+                ",",
+                "${fileDirname}\\${fileBasenameNoExtension}.pdb",
+                "|Out-Null"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "CleanRun",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build",
+                "Run",
+                "Clean"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1553684826 source:/home/maran/hh/2019.3.17/2019.3.27/main.cpp
+	<iostream>
+	<cstring>
+	<cstdio>
+

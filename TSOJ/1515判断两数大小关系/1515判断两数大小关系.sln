@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1515判断两数大小关系", "1515判断两数大小关系\1515判断两数大小关系.vcxproj", "{414DACE1-2BAD-4A23-AD96-531505830EAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Debug|x64.ActiveCfg = Debug|x64
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Debug|x64.Build.0 = Debug|x64
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Debug|x86.ActiveCfg = Debug|Win32
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Debug|x86.Build.0 = Debug|Win32
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Release|x64.ActiveCfg = Release|x64
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Release|x64.Build.0 = Release|x64
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Release|x86.ActiveCfg = Release|Win32
+		{414DACE1-2BAD-4A23-AD96-531505830EAA}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {122B5240-DC64-4600-B8C0-E6B44528A458}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1116说反话+字符串反转", "1116说反话+字符串反转\1116说反话+字符串反转.vcxproj", "{D0962441-22C1-462A-955D-0803BA112100}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0962441-22C1-462A-955D-0803BA112100}.Debug|x64.ActiveCfg = Debug|x64
+		{D0962441-22C1-462A-955D-0803BA112100}.Debug|x64.Build.0 = Debug|x64
+		{D0962441-22C1-462A-955D-0803BA112100}.Debug|x86.ActiveCfg = Debug|Win32
+		{D0962441-22C1-462A-955D-0803BA112100}.Debug|x86.Build.0 = Debug|Win32
+		{D0962441-22C1-462A-955D-0803BA112100}.Release|x64.ActiveCfg = Release|x64
+		{D0962441-22C1-462A-955D-0803BA112100}.Release|x64.Build.0 = Release|x64
+		{D0962441-22C1-462A-955D-0803BA112100}.Release|x86.ActiveCfg = Release|Win32
+		{D0962441-22C1-462A-955D-0803BA112100}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D27BBFAB-F148-4463-8320-7C9240AB0FAA}
+	EndGlobalSection
+EndGlobal
