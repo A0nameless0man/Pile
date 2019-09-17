@@ -21,22 +21,27 @@ OnClipboardChange("ClipChanged")
 return
 
 ClipChanged(Type) {
-    Sleep, 50
     if(not MyChange)
     {
-        ToolTip %clipboard%
         FileDelete, temp.txt
         FileAppend, %clipboard%, temp.txt
         RunWait, py %A_ScriptDir%/HistoryCleaner.py
-        Sleep 1000
-        ToolTip  ; 关闭提示.
         MyChange := true
+        Sleep 20
         FileRead, Clipboard, temp.txt
-        FileDelete, temp.txt
+        Sleep 20
+        MyChange := False
+        ;FileDelete, temp.txt
     }
     Else
     {
-        MyChange := False
+        ToolTip %clipboard%
+        Sleep 1000
+        ToolTip  ; 关闭提示.
     }
     return 
 }
+
+1::Send, ^c
+
+2::Send, ^v
