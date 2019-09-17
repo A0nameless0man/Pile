@@ -25,12 +25,15 @@ ClipChanged(Type) {
     {
         FileDelete, temp.txt
         FileAppend, %clipboard%, temp.txt
-        RunWait, py %A_ScriptDir%/HistoryCleaner.py
+        ToolTip, processing
+        RunWait, py %A_ScriptDir%/HistoryCleaner.py,,Hide
+        ToolTip, 
         MyChange := true
         Sleep 20
         FileRead, Clipboard, temp.txt
         Sleep 20
         MyChange := False
+        Send, ^v
         ;FileDelete, temp.txt
     }
     Else
@@ -42,6 +45,8 @@ ClipChanged(Type) {
     return 
 }
 
-1::Send, ^c
+1::Send, ^a
 
-2::Send, ^v
+2::Send, ^c
+
+3::Send, ^v

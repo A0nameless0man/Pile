@@ -20,7 +20,7 @@ def testData(str = ""):
         line = line.strip()
         if line:
             ret = ret+line+'\n'
-    ret = '\n```\n'+ret+'```\n'
+    ret = '\n\n```\n'+ret+'```\n'
     return ret
 
 def all(str = ""):
@@ -33,9 +33,14 @@ def all(str = ""):
         if '#' in line:
             line = line.replace(":","")
             line = line.replace("：","")
+        line = line.replace("：",":")
         ret = ret+line+'\n'
     #if ':'in ret and '：'in ret:
     #ret = ret.replace(":",'')
+    ret = ret.replace('，'," , ")
+    ret = ret.replace('。',". ")
+    ret = ret.replace('？'," ? ")
+    ret = ret.replace("/problem/submit?tw=","/problem/")
     return ret
 
 def main():
