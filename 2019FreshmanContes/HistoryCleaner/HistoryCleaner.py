@@ -8,7 +8,10 @@ def DealOldShit(str):
 def latex(str = ""):
     str=str.replace('>='," \geq ")
     str=str.replace('<='," \leq ")
-    str = '$'+ str+'$'
+    str = str.replace('*',"\cdot ")
+    str = str.replace("&hellip;","\cdots ")
+    str = str.strip()
+    str = ' $'+ str+'$ '
     return str
 
 def testData(str = ""):
@@ -40,6 +43,9 @@ def all(str = ""):
     ret = ret.replace('，'," , ")
     ret = ret.replace('。',". ")
     ret = ret.replace('？'," ? ")
+    ret = ret.replace("；",";")
+    ret = ret.replace('（'," ( ")
+    ret = ret.replace('）'," ) ")
     ret = ret.replace("/problem/submit?tw=","/problem/")
     return ret
 
