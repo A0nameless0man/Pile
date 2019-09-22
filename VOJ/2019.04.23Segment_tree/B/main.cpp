@@ -1,53 +1,53 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include<stdio.h>
-#include<stack>
-#include<algorithm>
+#include <stdio.h>
+#include <stack>
+#include <algorithm>
 struct node
 {
 	int max;
 	int left;
 	int right;
 	int toSet;
-	node* l;
-	node* r;
-	node* p;
+	node *l;
+	node *r;
+	node *p;
 };
-bool isLeaf(const node& a)
+bool isLeaf(const node &a)
 {
 	return a.left == a.left;
 }
-void pushDown(node& a)
+void pushDown(node &a)
 {
 	if (a.toSet != 0)
 	{
 		if (a.l != NULL)
 		{
-			node& l = *(a.l);
+			node &l = *(a.l);
 			if (!isLeaf(l) && l.toSet != 0)
 			{
 				pushDown(l);
 			}
-			l.max = a.toSet ;
+			l.max = a.toSet;
 			l.toSet = a.toSet;
 		}
 		if (a.r != NULL)
 		{
-			node& r = *(a.r);
+			node &r = *(a.r);
 			if (!isLeaf(r) && r.toSet != 0)
 			{
 				pushDown(r);
 			}
-			r.max = a.toSet ;
+			r.max = a.toSet;
 			r.toSet = a.toSet;
 		}
 		a.toSet = 0;
 	}
 }
-void takeUp(node & a)
+void takeUp(node &a)
 {
 	a.max = std::max(((a.r == NULL) ? 0 : a.r->max), ((a.l == NULL) ? 0 : a.l->max));
 }
-void pushUp(node & a)
+void pushUp(node &a)
 {
 	if (a.p != NULL)
 	{
@@ -55,27 +55,26 @@ void pushUp(node & a)
 		pushUp(*(a.p));
 	}
 }
-int max(int from, int to, node & a)
+int max(int from, int to, node &a)
 {
 	int ans = 0;
 	if (from <= a.left && to >= a.right)
 	{
-		ans = std::max(ans,a.max);
+		ans = std::max(ans, a.max);
 	}
 	else
 	{
 		if (a.l != NULL)
 		{
-			node& l = *(a.l);
+			node &l = *(a.l);
 			if (l.left <= to && l.right >= to || l.left <= from && l.right >= from || from <= l.left && to >= l.right)
 			{
-				ans =std::max(ans, max(from, to, l));
+				ans = std::max(ans, max(from, to, l));
 			}
-
 		}
 		if (a.r != NULL)
 		{
-			node& r = *(a.r);
+			node &r = *(a.r);
 			if (r.left <= to && r.right >= to || r.left <= from && r.right >= from || from <= r.left && to >= r.right)
 			{
 				ans = std::max(ans, max(from, to, r));
@@ -85,7 +84,7 @@ int max(int from, int to, node & a)
 	return ans;
 }
 
-void set(int from, int to, node & a, int val)
+void set(int from, int to, node &a, int val)
 {
 	if (from <= a.left && to >= a.right)
 	{
@@ -97,16 +96,15 @@ void set(int from, int to, node & a, int val)
 	{
 		if (a.l != NULL)
 		{
-			node& l = *(a.l);
+			node &l = *(a.l);
 			if (l.left <= to && l.right >= to || l.left <= from && l.right >= from || from <= l.left && to >= l.right)
 			{
 				set(from, to, l, val);
 			}
-
 		}
 		if (a.r != NULL)
 		{
-			node& r = *(a.r);
+			node &r = *(a.r);
 			if (r.left <= to && r.right >= to || r.left <= from && r.right >= from || from <= r.left && to >= r.right)
 			{
 				set(from, to, r, val);
@@ -115,7 +113,7 @@ void set(int from, int to, node & a, int val)
 	}
 }
 
-void build(size_t n, node * tar)
+void build(size_t n, node *tar)
 {
 	struct val
 	{
@@ -125,7 +123,7 @@ void build(size_t n, node * tar)
 	};
 	std::stack<val> stack;
 	//std::stack<size_t> s2;
-	stack.push(val({ (int)1 , (int)1, (int)n }));
+	stack.push(val({(int)1, (int)1, (int)n}));
 	while (!stack.empty())
 	{
 		val V = stack.top();
@@ -154,8 +152,8 @@ void build(size_t n, node * tar)
 			tar[V.pos].l = tar + V.pos * 2;
 			tar[V.pos].r = tar + V.pos * 2 + 1;
 			int mid = (V.left + V.right) / 2;
-			stack.push(val({ V.pos * 2 + 1 ,mid + 1,V.right }));
-			stack.push(val({ V.pos * 2,V.left,mid }));
+			stack.push(val({V.pos * 2 + 1, mid + 1, V.right}));
+			stack.push(val({V.pos * 2, V.left, mid}));
 		}
 	}
 	//for (size_t i = n/2; i != size_t(-1); i--)
@@ -166,8 +164,8 @@ void build(size_t n, node * tar)
 node no[200000 * 10];
 int main(void)
 {
-		int n,m;
-	while (scanf("%d%d", &n, &m)!=EOF)
+	int n, m;
+	while (scanf("%d%d", &n, &m) != EOF)
 	{
 		build(n, no);
 		char s[10];
@@ -191,7 +189,6 @@ int main(void)
 				break;
 			}
 		}
-
 	}
 	return 0;
 }

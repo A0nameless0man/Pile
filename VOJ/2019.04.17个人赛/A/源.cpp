@@ -1,25 +1,25 @@
-#define _CRT_SECURE_NO_WARNINGS//shut up MS//NOT fo CPP//scanf VS. scanf_s
+#define _CRT_SECURE_NO_WARNINGS //shut up MS//NOT fo CPP//scanf VS. scanf_s
 //#define DEBUG
-#include<stdio.h>
-#include<iostream>//stream
-#include<sstream>//stringstream
-#include<fstream>//file
-#include<string.h>
-#include<ctype.h>
-#include<math.h>
-#include<string>
-#include<algorithm>
+#include <stdio.h>
+#include <iostream> //stream
+#include <sstream>  //stringstream
+#include <fstream>  //file
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+#include <string>
+#include <algorithm>
 //STL
-#include<map>
-#include<set>
-#include<vector>
-#include<queue>
-#include<stack>
+#include <map>
+#include <set>
+#include <vector>
+#include <queue>
+#include <stack>
 //STL
 #ifdef DEBUG
-#include<Windows.h>//sleep()
-#include<stdlib.h>//system("pause")
-#endif // DEBUG
+#include <Windows.h> //sleep()
+#include <stdlib.h>  //system("pause")
+#endif				 // DEBUG
 
 //template <typename T> void swap(T &a, T &b)
 //{
@@ -93,7 +93,7 @@ int main(void)
 			ans += min(n - (po + exa) / 2 + 1, (po + exa) / 2 - 1);
 			exa += po;
 		}
-		if (n<5)
+		if (n < 5)
 		{
 			ans = n * (n - 1) / 2;
 		}

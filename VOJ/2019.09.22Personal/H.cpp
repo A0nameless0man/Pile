@@ -43,7 +43,7 @@ int main(void)
 {
     int T;
     std::cin >> T;
-    int t =0;
+    int t = 0;
     while (T--)
     {
         int n, m, o, l;
@@ -87,6 +87,6 @@ int main(void)
                 }
             }
         }
-        std::cout << "Case #"<<++t<<": "<<ans << std::endl;
+        std::cout << "Case #" << ++t << ": " << ans << std::endl;
     }
 }

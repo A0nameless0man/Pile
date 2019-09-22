@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include<cstring>
+#include <cstring>
 int vec[200007];
 int main(void)
 {
