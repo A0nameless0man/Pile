@@ -1,4 +1,5 @@
 #include <iostream>
+#include<cstdio>
 #include <string>
 #include <unordered_map>
 //std::unordered_map<char , int[2]> DIR = {{'U',{-1,0}},{'D',{1,0}},{'L',{0,-1}},{'R',{0,1}}};
@@ -7,7 +8,7 @@ int sqrt(int i)
 {
     return i * i;
 }
-void tryMove(int &x, int &y, const char o)
+inline void tryMove(int &x, int &y, const char o)
 {
     int nx = x, ny = y;
     switch (o)
@@ -47,7 +48,8 @@ int main(void)
     while (T--)
     {
         int n, m, o, l;
-        std::cin >> n >> m >> o >> l;
+        //std::cin >> n >> m >> o >> l;
+        scanf("%d%d%d%d",&n,&m,&o,&l);
         for (int i = 1; i <= n; i++)
         {
             for (int j = 1; j <= m; j++)
@@ -66,11 +68,14 @@ int main(void)
         for (int i = 0; i < o; i++)
         {
             int x, y;
-            std::cin >> x >> y;
+            //std::cin >> x >> y;
+            scanf("%d%d",&x,&y);
             graid[x][y] = true;
         }
-        std::string order;
-        std::cin >> order;
+        //std::string order;
+        char order[2007];
+        //std::cin >> order;
+        scanf("%s",order);
         int ans = 0;
         for (int i = 1; i <= n; i++)
         {
@@ -79,9 +84,10 @@ int main(void)
                 if (!graid[i][j])
                 {
                     int cx = i, cy = j;
-                    for (auto c : order)
+                    //for (auto c : order)
+                    for(int i = 0;i<l;i++)
                     {
-                        tryMove(cx, cy, c);
+                        tryMove(cx, cy, order[i]);
                     }
                     ans += sqrt(i - cx) + sqrt(j - cy);
                 }

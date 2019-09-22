@@ -23,9 +23,9 @@ bool match(double T, double V1, double V2)
         else
         {
             double x = 300 * (sq(r) - 1 - 2 * sqrt(1 - sq(1 - sq(r)) + 0.0001)) / (2 * (1 - sq(r)));
-            double ETAA = (x + 2 * 300) / V1;
-            double ETAS = (2 * 300 - x) / V2 + T;
-            return ETAA <= ETAS;
+            // double ETAA = (x + 2 * 300) / V1;
+            // double ETAS = (2 * 300 - x) / V2 + T;
+            return (x + 2 * 300)*V2 <= (2 * 300 - x)*V1 + T*V1*V2;
         }
     }
 }
