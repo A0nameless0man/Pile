@@ -1,4 +1,3 @@
-
 #include"Format.h"
 
 const std::map<char, std::string> TransformChar
