@@ -54,6 +54,16 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "array": "cpp",
+        "charconv": "cpp",
+        "codecvt": "cpp",
+        "filesystem": "cpp",
+        "unordered_set": "cpp",
+        "iterator": "cpp",
+        "locale": "cpp",
+        "random": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp"
     }
 }
