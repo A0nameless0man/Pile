@@ -80,6 +80,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -128,6 +129,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Format\Format.vcxproj">
+      <Project>{f10b335c-8bc8-4645-915b-c827e6b603d9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLserver\SQLserver.vcxproj">
+      <Project>{df96c3da-30c9-47ad-8adf-2cf7c62def9b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

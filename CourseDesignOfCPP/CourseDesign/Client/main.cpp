@@ -1,4 +1,5 @@
 #include <iostream>
+#include"main.h"
 //#include<windows.h>
 const int BUF_SIZE = 128 * 1024;
 char buf[BUF_SIZE];
@@ -21,5 +22,11 @@ int main(void)
 		}
 
 	}
+{
+	std::map<std::string, std::string> map;
+	std::stringstream ss("{\"name\":\"Rufus\",\"age\":\"15\"}");
+	deFormatMap<std::string, std::string>(ss, map);
+	std::cout << format<int, int>(map) << std::endl;
+}
 	return 0;
 }

@@ -1,3 +1,4 @@
+
 #include"Format.h"
 
 const std::map<char, std::string> TransformChar
@@ -159,10 +160,10 @@ Is& deFormat(Is& is, std::string& str)
 	return is;
 }
 
-int main(void)
-{
-	std::map<std::string, std::string> map;
-	std::stringstream ss("{\"name\":\"Rufus\",\"age\":\"15\"}");
-	deFormatMap<std::string, std::string>(ss, map);
-	std::cout << format<int, int>(map) << std::endl;
-}
+//int main(void)
+//{
+//	std::map<std::string, std::string> map;
+//	std::stringstream ss("{\"name\":\"Rufus\",\"age\":\"15\"}");
+//	deFormatMap<std::string, std::string>(ss, map);
+//	std::cout << format<int, int>(map) << std::endl;
+//}
