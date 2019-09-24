@@ -1,37 +1,26 @@
 #include <iostream>
-
-#define RESET "\033[0m"
-#define BLACK "\033[30m"   /* Black */
-#define RED "\033[31m"     /* Red */
-#define GREEN "\033[32m"   /* Green */
-#define YELLOW "\033[33m"  /* Yellow */
-#define BLUE "\033[34m"    /* Blue */
-#define MAGENTA "\033[35m" /* Magenta */
-#define CYAN "\033[36m"    /* Cyan */
-#define WHITE "\033[37m"   /* White */
-#define FLASH "\033[5m"
-#define BOLDBLACK "\033[1m\033[30m"   /* Bold Black */
-#define BOLDRED "\033[1m\033[31m"     /* Bold Red */
-#define BOLDGREEN "\033[1m\033[32m"   /* Bold Green */
-#define BOLDYELLOW "\033[1m\033[33m"  /* Bold Yellow */
-#define BOLDBLUE "\033[1m\033[34m"    /* Bold Blue */
-#define BOLDMAGENTA "\033[1m\033[35m" /* Bold Magenta */
-#define BOLDCYAN "\033[1m\033[36m"    /* Bold Cyan */
-#define BOLDWHITE "\033[1m\033[37m"   /* Bold White */
-
+//#include<windows.h>
+const int BUF_SIZE = 128 * 1024;
+char buf[BUF_SIZE];
 int main(void)
 {
-    for (int i = 0; i < 5; i++)
+    setvbuf(stdout, buf, _IOFBF, BUF_SIZE);
+    for (int i = 0; i < 256; i++)
     {
-        if (i & 1)
+        // std::cout << "i:\t" << i << "\t";
+        std::cout << std::flush << "\033[48;5;" << i << "m" << std::flush;
+        std::cout << " "<< "\033[0m" << std::flush;
+        if (i && !((i + 3) % 6))
         {
-            std::cout << "\033[44m";
+            std::cout << "\n";
         }
         else
         {
-            std::cout << "\033[0m";
+            std::cout<<std::flush//<<"\t"<<std::flush;
+            ;
         }
-        std::cout << "Hello World!";
+        
     }
+    //while(1);
     return 0;
 }

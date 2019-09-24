@@ -23,8 +23,8 @@ const std::map<char, char> RevTransformChar
 	{'t','\t'},
 };
 
-template<class T_1, class T_2>
-std::string format(std::map<T_1, T_2> map)
+template<class Key, class Val, class Map>
+std::string format(Map map)
 {
 	std::string res;
 	res += "{";
@@ -35,24 +35,15 @@ std::string format(std::map<T_1, T_2> map)
 		res += format(iter->second);
 		res += ",";
 	}
-	//res.pop_back();//kill useless ','
+	res.pop_back();//kill useless ','
 	res += "}";
-		return res;
+	return res;
 }
 
 template<class T>
 std::string format(T dat)
 {
-	std::array<char, 100> str;
-	auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(), 42);
-	if (ec == std::errc())
-	{
-		return std::string(str.data(), p - str.data());
-	}
-	else
-	{
-		throw ec;
-	}
+	return std::to_string(dat);
 	//std::to_chars(str, str + 107, dat);
 	//return std::string(str);
 }
@@ -86,19 +77,92 @@ std::string format(char c)
 	}
 	else
 	{
-		return "\'"+std::string(1,c)+"\'";
+		return "\'" + std::string(1, c) + "\'";
 	}
 }
 
-template<class os = std::ostream>
-os & test(os & o)
+template<class Key, class Val, class Is, class Map>
+Is& deFormatMap(Is& is, Map& map)
 {
-	return o << format(TransformChar) << std::endl;
+	if (is.peek() == '{')
+	{
+		is.get();
+	}
+	while (is.peek() != '}')
+	{
+		Key key;
+		Val val;
+		deFormat(is, key);
+		if (is.peek() == ':')
+		{
+			is.get();
+		}
+		deFormat(is, val);
+		if (is.peek() == ',')
+		{
+			is.get();
+		}
+		map.insert(std::pair<Key, Val>(key, val));
+	}
+	is.get();
+	return is;
+}
+
+template<class T, class Is>
+Is& deFormat(Is& is, T& t)
+{
+	is >> t;
+	return is;
+}
+
+template<class Is>
+Is& deFormat(Is& is, char& c)
+{
+	if (is.peek() == '\'')
+	{
+		is.get();
+	}
+	if (is.peek() == '\\')
+	{
+		is.get();
+		if (RevTransformChar.find(is.peek()) != RevTransformChar.end())
+		{
+			c = RevTransformChar.find(is.peek())->second;
+		}
+		is.get();
+	}
+	else
+	{
+		c = is.get();
+	}
+	if (is.peek() == '\'')
+	{
+		is.get();
+	}
+	return is;
+}
+
+template<class Is>
+Is& deFormat(Is& is, std::string& str)
+{
+	if (is.peek() == '\"')
+	{
+		is.get();
+	}
+	while (is.peek() != '\"')
+	{
+		char c;
+		deFormat(is, c);
+		str.push_back(c);
+	}
+	is.get();
+	return is;
 }
 
 int main(void)
 {
-	test(std::cout);
-	system("pause");
-	return 0;
+	std::map<std::string, std::string> map;
+	std::stringstream ss("{\"name\":\"Rufus\",\"age\":\"15\"}");
+	deFormatMap<std::string, std::string>(ss, map);
+	std::cout << format<int, int>(map) << std::endl;
 }
