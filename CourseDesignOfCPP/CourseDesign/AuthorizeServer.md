@@ -3,7 +3,8 @@
 classDiagram
 class User
 class Server
-class Record
+class columnFilter
+class whereFilter
 User : ID
 User : Token
 User : public exec(cmd)
@@ -14,6 +15,4 @@ Server : private map ID,token
 Server : private studentList
 Server : public token login(ID,pwd)
 Server : private string execByHost(cmd,ID,token)
-Record : keyNames
-Record : keys
 ```
