@@ -13,7 +13,7 @@ alt Is User
 else
     A->>C:Refuse
 end
-loop Work is not Done
+loop Working
     C->>A:Commend
     deactivate C
     activate A
