@@ -42,8 +42,8 @@ StudentList o-- BaseIndex
 StudentList --> preBuildHashFun : buildIndex(name)
 
 Key : name
-Key : pure virtual getKey(Student)
-Key : pure virtual setKey(Student,val)
+Key : std::function getKey
+Key : std::function setKey
 Key : //key is't Student's friend class ,it get&set via Student's public method
 
 BaseIndex : Key myKey
