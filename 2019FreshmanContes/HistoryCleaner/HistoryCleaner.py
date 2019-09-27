@@ -9,8 +9,8 @@ def latex(str = ""):
     str=str.replace('>='," \\geq ")
     str=str.replace('<='," \\leq ")
     str=str.replace('!='," \\neq ")
-    str = str.replace('*',"\cdot ")
-    str = str.replace("&hellip;", "\cdots ")
+    str = str.replace('*',"\\cdot ")
+    str = str.replace("&hellip;", "\\cdots ")
     str = str.strip()
     str = ' $'+ str+'$ '
     return str
