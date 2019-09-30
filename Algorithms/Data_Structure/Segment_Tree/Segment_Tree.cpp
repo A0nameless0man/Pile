@@ -1,5 +1,5 @@
 #include"Segment_Tree.h"
-namespace S_tree//±ÕÇø¼ä
+namespace S_tree
 {
 
 	//template<class T>
@@ -276,16 +276,16 @@ namespace S_tree//±ÕÇø¼ä
 	////template<class T>
 	//Node & Node ::left()
 	//{
-	//	// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+	//	// TODO: é–¸ï¸ºåŠé¡’æ¿‡å¾„é•î„€çµ»é–¸å¿¥æ‹· return é å›¶å¼è¤°ï¿½
 	//}
 	////template<class T>
 	//Node & Node ::right()
 	//{
-	//	// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+	//	// TODO: é–¸ï¸ºåŠé¡’æ¿‡å¾„é•î„€çµ»é–¸å¿¥æ‹· return é å›¶å¼è¤°ï¿½
 	//}
 	////template<class T>
 	//Node & Node ::parent()
 	//{
-	//	// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+	//	// TODO: é–¸ï¸ºåŠé¡’æ¿‡å¾„é•î„€çµ»é–¸å¿¥æ‹· return é å›¶å¼è¤°ï¿½
 	//}
 }

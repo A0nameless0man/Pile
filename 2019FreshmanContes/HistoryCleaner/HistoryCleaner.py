@@ -45,10 +45,10 @@ def all(str = ""):
         if '#' in line:
             line = line.replace(":","")
             line = line.replace("：","")
-        line = line.replace("：",":")
+        line = line.replace("：",": ")
         ret = ret+line+'\n'
     #if ':'in ret and '：'in ret:
-    #ret = ret.replace(":",'')
+        #ret = ret.replace(":",'')
     ret = ret.replace('，'," , ")
     ret = ret.replace('。',". ")
     ret = ret.replace('？'," ? ")
