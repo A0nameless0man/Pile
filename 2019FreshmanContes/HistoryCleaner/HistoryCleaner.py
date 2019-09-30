@@ -5,12 +5,18 @@ def DealOldShit(str):
     print(str)
     return str
 
-def latex(str = ""):
-    str=str.replace('>='," \\geq ")
-    str=str.replace('<='," \\leq ")
-    str=str.replace('!='," \\neq ")
-    str = str.replace('*',"\\cdot ")
+def latex(str=""):
+    str = all(str)
+    str = str.replace('>='," \\geq ")
+    str = str.replace('<=', " \\leq ")
+    str = str.replace('<', " < ")
+    str = str.replace('>'," > ")
+    str = str.replace('!='," \\neq ")
+    str = str.replace('*'," \\cdot ")
+    str = str.replace('~'," \\sim ")
+    str = str.replace("&le;"," < ")
     str = str.replace("&hellip;", "\\cdots ")
+    str = str.replace("&times;","\\times")
     str = str.strip()
     str = ' $'+ str+'$ '
     return str
@@ -22,6 +28,8 @@ def testData(str = ""):
         line = line.strip()
         line = line.strip('>')
         line = line.strip()
+        line = line.strip('`')
+
         if line:
             ret = ret+line+'\n'
     ret = '\n\n```\n'+ret+'```\n'
@@ -47,7 +55,8 @@ def all(str = ""):
     ret = ret.replace("；",";")
     ret = ret.replace('（'," ( ")
     ret = ret.replace('）'," ) ")
-    str = str.replace("&rdquo;","`")
+    ret = ret.replace("&rdquo;", "`")
+    ret = ret.replace("..."," $\\dots$ ")
     ret = ret.replace("/problem/submit?tw=","/problem/")
     return ret
 
