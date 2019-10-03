@@ -276,16 +276,16 @@ namespace S_tree
 	////template<class T>
 	//Node & Node ::left()
 	//{
-	//	// TODO: 閸︺劍顒濇径鍕絻閸忥拷 return 鐠囶厼褰�
+	//	// TODO: 闁革负鍔嶉婵囧緞閸曨剙绲婚柛蹇ユ嫹 return 閻犲浂鍘艰ぐ锟�
 	//}
 	////template<class T>
 	//Node & Node ::right()
 	//{
-	//	// TODO: 閸︺劍顒濇径鍕絻閸忥拷 return 鐠囶厼褰�
+	//	// TODO: 闁革负鍔嶉婵囧緞閸曨剙绲婚柛蹇ユ嫹 return 閻犲浂鍘艰ぐ锟�
 	//}
 	////template<class T>
 	//Node & Node ::parent()
 	//{
-	//	// TODO: 閸︺劍顒濇径鍕絻閸忥拷 return 鐠囶厼褰�
+	//	// TODO: 闁革负鍔嶉婵囧緞閸曨剙绲婚柛蹇ユ嫹 return 閻犲浂鍘艰ぐ锟�
 	//}
 }
