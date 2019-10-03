@@ -29,5 +29,8 @@ Is & deFormat(Is & is, T& t);
 template<class Is = std::istream>
 Is & deFormat(Is & is, char& c);
 
+template<class Key,class Val,class Is = std::istream>
+Is& deFormat(Is& is, std::map<Key, Val>& map);
+
 template<class Is = std::istream>
 Is & deFormat(Is & is, std::string& str);

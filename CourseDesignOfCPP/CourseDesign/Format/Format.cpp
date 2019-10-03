@@ -142,6 +142,13 @@ Is& deFormat(Is& is, char& c)
 	return is;
 }
 
+template<class Key, class Val, class Is>
+Is& deFormat(Is& is, std::map<Key, Val>& map)
+{
+	deFormatMap<Key,Val,Is,std::map<Key,Val> >(is, map);
+	return is;
+}
+
 template<class Is>
 Is& deFormat(Is& is, std::string& str)
 {
