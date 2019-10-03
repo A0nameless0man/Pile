@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstdio>
 #include <stack>
@@ -185,22 +186,22 @@ const int MOD = 998244353;
 // 	return &vec[c];
 // }
 
-// inline long long qpow(long long base, long long p)
-// {
-// 	long long ans = 1;
-// 	while (p)
-// 	{
-// 		if (p & 1)
-// 		{
-// 			ans *= base;
-// 			ans %= MOD;
-// 		}
-// 		base *= base;
-// 		base %= MOD;
-// 		p >>= 1;
-// 	}
-// 	return ans;
-// }
+inline long long qpow(long long base, long long p)
+{
+	long long ans = 1;
+	while (p)
+	{
+		if (p & 1)
+		{
+			ans *= base;
+			ans %= MOD;
+		}
+		base *= base;
+		base %= MOD;
+		p >>= 1;
+	}
+	return ans;
+}
 // int main(void)
 // {
 // 	int t;
@@ -252,17 +253,27 @@ int main(void)
 	while (t--)
 	{
 		int n, m;
+		std::cin>>n>>m;
 		std::vector<int> vec[2];
 		vec[0].resize(n + 1);
 		vec[1].resize(n + 1);
-		for (int i = 1; i < m; i++)
+		for (int i = 0; i < m; i++)
 		{
 			int l, r, j;
 			scanf("%d%d%d", &l, &r, &j);
-			vec[j - 2][l - 1]--;
-			vec[j - 2][r]++;
+			vec[j - 2][l - 1]++;
+			vec[j - 2][r]--;
 		}
-		
-
+		int a = INF , b = INF;
+		int sa = 0 , sb = 0;
+		for(int i = 0;i<n;i++)
+		{
+			sa+=vec[0][i];
+			sb+=vec[1][i];
+			a = std::min(a,sa);
+			b= std::min(b,sb);
+		}
+		long long ans = qpow(2,a)*qpow(3,b);
+		printf("%lld\n", ans);
 	}
 }
