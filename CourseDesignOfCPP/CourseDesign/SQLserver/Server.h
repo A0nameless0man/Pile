@@ -23,6 +23,7 @@ class Student;
 using IDVec = std::vector<ID>;
 using StudentVec = std::vector<Student>;
 class StudentList;
+using ScoreMap = std::map<SubjectName, Point>;
 class Score;
 class Point;//data class
 using SingleScore = std::pair<SubjectName, Point>;
@@ -50,7 +51,7 @@ enum Sex
 	male, female, unKnown
 };
 template<>
-std::string format(Sex sex);
+std::string format(const Sex sex);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Sex& sex);
 
@@ -62,7 +63,7 @@ private:
 	Sex sex;
 	PWD pwd;
 public:
-	User(ID id, Name name = "John Doe", Sex sex = unKnown);
+	User(ID id, PWD pwd, Name name = "John Doe", Sex sex = unKnown);
 	Name getName();
 	//bool setName(Name newName);
 	bool login(PWD token);
@@ -70,9 +71,10 @@ public:
 	Sex getSex();
 };
 template<>
-std::string format(User user);
+std::string format(const User user);
 template<class Is = std::istream>
 Is& deFormat(Is& is, User& user);
+PWD hash(const PWD & in);
 
 class Point
 {
@@ -82,38 +84,39 @@ private:
 public:
 	Point(ExamPoint point, ClassHour classHour = 1);
 	bool setPoint(ExamPoint newPoint);
-	ExamPoint getPoint();
-	ClassHour getClassHour();
+	ExamPoint getPoint()const;
+	ClassHour getClassHour()const;
 };
 template<class vec = std::vector<Point> >
-ExamPoint getGPA(vec);
+ExamPoint getGPA(const vec);
 template<class vec = std::vector<Point> >
-ExamPoint getTotalClassHour(vec);
+ExamPoint getTotalClassHour(const vec);
 template<>
-std::string format(Point point);
+std::string format(const Point point);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Point& point);
 
 class Score
 {
 private:
-	std::map<SubjectName, Point> Points;
+	ScoreMap Points;
 public:
 	Score();
 	Score(SingleScore sig);
-	ExamPoint getPoint(SubjectName subjectName);
+	ExamPoint getPoint(SubjectName subjectName)const;
 	bool setPoint(SubjectName subjectName, ExamPoint newPoint);
 	bool setPoint(Score newScore);
-	ClassHour getClassHour(SubjectName subjectName);
-	bool contains(SubjectName subjectName);
+	ClassHour getClassHour(SubjectName subjectName)const;
+	bool contains(SubjectName subjectName)const;
 	bool addSubject(SubjectName subjectName, Point point);
 	bool addSubject(Score newScore);
 	bool removeSubject(SubjectName subjectName);
 	bool removeSubject(Score newScore);
 	template<class OP = std::equal_to<ExamPoint> >
-	bool compare(const Score& stand);
-	ExamPoint getGPA();
-	ClassHour getTotalClassHour();
+	bool compare(const Score& stand)const;
+	ExamPoint getGPA()const;
+	ClassHour getTotalClassHour()const;
+	operator ScoreMap()const;
 };
 bool operator==(const Score& stu, const Score& stand);
 bool operator>=(const Score& stu, const Score& stand);
@@ -122,7 +125,7 @@ bool operator!=(const Score& stu, const Score& stand);
 bool operator<(const Score& stu, const Score& stand);
 bool operator>(const Score& stu, const Score& stand);
 template<>
-std::string format(Score score);
+std::string format(const Score score);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Score& score);
 
@@ -139,7 +142,7 @@ public:
 	StuGrade getStuGrade();
 };
 template<>
-std::string format(Student Student);
+std::string format(const Student Student);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Student& Student);
 
@@ -213,7 +216,7 @@ public:
 	friend bool operator<(const KeyWord& a, const KeyWord& b);
 };
 template<>
-std::string format(KeyWord keyWord);
+std::string format(const KeyWord keyWord);
 
 class BaseIndex
 {
@@ -283,7 +286,7 @@ class Result
 {
 public:
 	virtual operator bool()const = 0;
-
+	virtual operator std::string()const = 0;
 };
 
 class GoodResult:virtual public Result
@@ -293,8 +296,104 @@ private:
 	std::vector<Record > rec;
 public:
 	GoodResult(std::vector<KeyName> names);
+	virtual operator bool()const;
 	bool addRec(Record& newRec);
-	operator std::string();
+	virtual operator std::string()const;
 };
 
 std::string form(Record kwyWord, std::vector<size_t>& width);//empty width or insufficent length means auto(2times  avg of top 5)
+
+template<>
+inline std::string format(const Sex sex)
+{
+	return std::string();
+}
+
+template<class Is>
+inline Is& deFormat(Is& is, Sex& sex)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: 在此处插入 return 语句
+}
+
+template<class OP>
+inline bool Score::compare(const Score& stand)const
+{
+	return false;
+}
+
+template<>
+inline std::string format(const User user)
+{
+	return std::string();
+}
+
+template<class Is>
+inline Is& deFormat(Is& is, User& user)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: 在此处插入 return 语句
+}
+
+template<class vec>
+inline ExamPoint getGPA(vec)
+{
+	return ExamPoint();
+}
+
+template<class vec>
+inline ExamPoint getTotalClassHour(vec)
+{
+	return ExamPoint();
+}
+
+template<>
+inline std::string format(const Point point)
+{
+	return std::string();
+}
+
+template<class Is>
+inline Is& deFormat(Is& is, Point& point)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: 在此处插入 return 语句
+}
+
+template<>
+inline std::string format(const Score score)
+{
+	return std::string();
+}
+
+template<class Is>
+inline Is& deFormat(Is& is, Score& score)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: 在此处插入 return 语句
+}
+
+template<>
+inline std::string format(const Student Student)
+{
+	return std::string();
+}
+
+template<class Is>
+inline Is& deFormat(Is& is, Student& Student)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: 在此处插入 return 语句
+}
+
+template<>
+inline std::string format(const KeyWord keyWord)
+{
+	return std::string();
+}
+
+template<class OP>
+inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)
+{
+	return IDVec();
+}
