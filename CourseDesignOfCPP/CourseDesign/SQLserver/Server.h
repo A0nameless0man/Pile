@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<stack>
 #include<map>
 #include<vector>
 #include<set>
@@ -16,16 +17,17 @@ using Name = std::string;
 using StuClass = std::string;
 using StuGrade = size_t;
 using SubjectName = std::string;
-enum Sex;
+enum Sex :char;
 //class RWlock;//giveup thread safety
 class User;
 class Student;
 using IDVec = std::vector<ID>;
+using IDset = std::set<ID>;
 using StudentVec = std::vector<Student>;
 class StudentList;
-using ScoreMap = std::map<SubjectName, Point>;
 class Score;
 class Point;//data class
+using ScoreMap = std::map<SubjectName, Point>;
 using SingleScore = std::pair<SubjectName, Point>;
 
 class BaseIndex;
@@ -34,7 +36,7 @@ class IDindex;
 class Key;
 using KeyName = std::string;
 class KeyWord;
-enum KeyWordType;//index class
+class KeyWordType;//index class
 
 class SQLrequest;
 class Column;
@@ -46,7 +48,7 @@ class GoodResult;
 class FailResult;
 class RefuleResult;//SQL class
 
-enum Sex
+enum Sex :char
 {
 	male, female, unKnown
 };
@@ -64,17 +66,17 @@ private:
 	PWD pwd;
 public:
 	User(ID id, PWD pwd, Name name = "John Doe", Sex sex = unKnown);
-	Name getName();
+	Name getName()const;
 	//bool setName(Name newName);
-	bool login(PWD token);
-	ID getID();
-	Sex getSex();
+	bool login(PWD token)const;
+	ID getID()const;
+	Sex getSex()const;
 };
 template<>
 std::string format(const User user);
 template<class Is = std::istream>
 Is& deFormat(Is& is, User& user);
-PWD hash(const PWD & in);
+PWD hash(const PWD& in);
 
 class Point
 {
@@ -86,6 +88,7 @@ public:
 	bool setPoint(ExamPoint newPoint);
 	ExamPoint getPoint()const;
 	ClassHour getClassHour()const;
+	bool operator<(const Point& b)const;
 };
 template<class vec = std::vector<Point> >
 ExamPoint getGPA(const vec);
@@ -105,19 +108,21 @@ public:
 	Score(SingleScore sig);
 	ExamPoint getPoint(SubjectName subjectName)const;
 	bool setPoint(SubjectName subjectName, ExamPoint newPoint);
-	bool setPoint(Score newScore);
+	bool setPoint(const Score& newScore);
 	ClassHour getClassHour(SubjectName subjectName)const;
 	bool contains(SubjectName subjectName)const;
+	bool contains(const Score& newScore)const;
 	bool addSubject(SubjectName subjectName, Point point);
-	bool addSubject(Score newScore);
+	bool addSubject(const Score& newScore);
 	bool removeSubject(SubjectName subjectName);
-	bool removeSubject(Score newScore);
+	bool removeSubject(const Score& newScore);
 	template<class OP = std::equal_to<ExamPoint> >
 	bool compare(const Score& stand)const;
 	ExamPoint getGPA()const;
 	ClassHour getTotalClassHour()const;
 	operator ScoreMap()const;
 };
+bool operator<(const SingleScore& a, const SingleScore& b);
 bool operator==(const Score& stu, const Score& stand);
 bool operator>=(const Score& stu, const Score& stand);
 bool operator<=(const Score& stu, const Score& stand);
@@ -153,37 +158,61 @@ private:
 	std::map<KeyName, BaseIndex> indexs;
 public:
 	StudentList();
-	bool addStudent(StudentVec vec);
+	bool addStudent(const StudentVec& vec);
 	//bool addStudent(Student stu);
-	bool removeStudent(IDVec vec);
+	bool removeStudent(const IDVec& vec);
 	bool buildIndexOn(KeyName name);
 	template<class OP = std::equal_to<KeyWord> >
 	IDVec getByKey(KeyName name, KeyWord keyWord);
-
 };
 
 IDVec operator&(const IDVec& a, const IDVec& b);
 IDVec operator|(const IDVec& a, const IDVec& b);
 
+//class Key
+//{
+//private:
+//	std::function<KeyWord(const Student&)> get;
+//	std::function<bool(Student&, KeyWord)> set;
+//	KeyWordType type;
+//public:
+//	Key(KeyWordType type);
+//	Key(KeyName name);
+//	KeyWord getKey(Student& stu);
+//	operator KeyWordType();
+//	KeyWordType getType();
+//	bool getKey(Student& stu, KeyWord keyWord);
+//};
+//
+////Key keyByName(KeyName name);
+
 class Key
 {
 private:
-	std::function<KeyWord(const Student&)> get;
-	std::function<bool(Student&, KeyWord)> set;
 	KeyWordType type;
+	//SubjectName subjectName;
 public:
-	Key(KeyWordType type, KeyWord(*howToGet)(const Student&), bool(*howToSet)(Student&, KeyWord));
-	KeyWord getKey(Student& stu);
-	operator KeyWordType();
-	KeyWordType getType();
-	bool getKey(Student& stu, KeyWord keyWord);
+	Key(KeyWordType type);
+	KeyWord getKey(const Student& stu);
+	bool setKey(Student& stu, KeyWord val);
 };
 
-Key keyByName(KeyName name);
-
-enum KeyWordType
+class KeyWordType
 {
-	name, id, sex, stuClass, stuGrade, score
+public:
+	enum BasicType :char
+	{
+		name, id, sex, stuClass, stuGrade, score
+	};
+private:
+	BasicType basicType;
+	SubjectName subjectName;
+public:
+	KeyWordType(BasicType bType, SubjectName sName = "");
+	operator std::string()const;
+	operator BasicType()const;
+	operator SubjectName()const;
+	bool operator==(const KeyWordType& b)const;
 };
 
 
@@ -198,7 +227,7 @@ private:
 		Sex sex;
 		StuClass stuClass;
 		StuGrade stuGrade;
-		Score score;
+		SingleScore score;
 	}data;
 public:
 	KeyWord(Name name);
@@ -261,7 +290,7 @@ private:
 	WhereFilter whereFilter;
 public:
 	SQLrequest(std::string request);
-	GoodResult exec(StudentList &list);
+	GoodResult exec(StudentList& list);
 };
 
 class ColumnFilter
@@ -289,7 +318,7 @@ public:
 	virtual operator std::string()const = 0;
 };
 
-class GoodResult:virtual public Result
+class GoodResult :virtual public Result
 {
 private:
 	std::vector<KeyName> head;

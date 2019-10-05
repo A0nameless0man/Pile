@@ -1,25 +1,25 @@
 #include"Server.h"
-
+#include"md5.h"
 User::User(ID id, PWD pwd = "", Name name, Sex sex) :name(name), id(id), sex(sex), pwd(pwd)
 {
 }
 
-Name User::getName()
+Name User::getName()const
 {
 	return name;
 }
 
-bool User::login(PWD token)
+bool User::login(PWD token)const
 {
 	return pwd == hash(token);
 }
 
-ID User::getID()
+ID User::getID()const
 {
 	return id;
 }
 
-Sex User::getSex()
+Sex User::getSex()const
 {
 	return sex;
 }
@@ -35,7 +35,7 @@ Score::Score(SingleScore sig)
 
 ExamPoint Score::getPoint(SubjectName subjectName)const
 {
-	if (Points.contains(subjectName))
+	if (contains(subjectName))
 	{
 		return Points.find(subjectName)->second.getPoint();
 	}
@@ -47,7 +47,7 @@ ExamPoint Score::getPoint(SubjectName subjectName)const
 
 bool Score::setPoint(SubjectName subjectName, ExamPoint newPoint)
 {
-	if (Points.contains(subjectName))
+	if (contains(subjectName))
 	{
 		return Points.find(subjectName)->second.setPoint(newPoint);
 	}
@@ -57,64 +57,130 @@ bool Score::setPoint(SubjectName subjectName, ExamPoint newPoint)
 	}
 }
 
-bool Score::setPoint(Score newScore)
+bool Score::setPoint(const Score& newScore)
+{
+	bool haveThenAll = contains(newScore);
+	if (haveThenAll)
+	{
+		for (auto p : (ScoreMap)newScore)
+		{
+			Points.find(p.first)->second.setPoint(p.second.getPoint());
+		}
+	}
+	return haveThenAll;
+}
+
+ClassHour Score::getClassHour(SubjectName subjectName)const
+{
+	if (contains(subjectName))
+	{
+		return Points.find(subjectName)->second.getClassHour();
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+bool Score::contains(SubjectName subjectName)const
+{
+	return Points.contains(subjectName);
+}
+
+bool Score::contains(const Score& newScore) const
 {
 	bool haveThenAll = true;
 	for (auto p : (ScoreMap)newScore)
 	{
-		if (haveThenAll = haveThenAll && Points.contains(p.first))
+		if (contains(p.first))
 		{
 			continue;
 		}
 		else
 		{
+			haveThenAll = false;
 			break;
 		}
 	}
-	if (haveThenAll)
-	{
-
-	}
-}
-
-ClassHour Score::getClassHour(SubjectName subjectName)const
-{
-	return ClassHour();
-}
-
-bool Score::contains(SubjectName subjectName)const
-{
-	return false;
+	return haveThenAll;
 }
 
 bool Score::addSubject(SubjectName subjectName, Point point)
 {
-	return false;
+	try
+	{
+		Points.insert(SingleScore(subjectName, point));
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
 }
 
-bool Score::addSubject(Score newScore)
+bool Score::addSubject(const Score& newScore)
 {
-	return false;
+	try
+	{
+		for (auto p : (ScoreMap)newScore)
+		{
+			Points.insert(p);
+		}
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
 }
 
 bool Score::removeSubject(SubjectName subjectName)
 {
-	return false;
+	if (contains(subjectName))
+	{
+		Points.erase(subjectName);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-bool Score::removeSubject(Score newScore)
+bool Score::removeSubject(const Score& newScore)
 {
-	return false;
+	if (contains(newScore))
+	{
+		for (auto p : (ScoreMap)newScore)
+		{
+			Points.erase(p.first);
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 ExamPoint Score::getGPA()const
 {
-	return ExamPoint();
+	double sum = 0;
+	for (auto p : Points)
+	{
+		sum += p.second.getPoint() * p.second.getClassHour();
+	}
+	sum /= getTotalClassHour();
 }
 
 ClassHour Score::getTotalClassHour()const
 {
-	return ClassHour();
+	double sum = 0;
+	for (auto p : Points)
+	{
+		sum += p.second.getClassHour();
+	}
+	return sum;
 }
 
 Score::operator ScoreMap() const
@@ -122,81 +188,156 @@ Score::operator ScoreMap() const
 	return Points;
 }
 
-Point::Point(ExamPoint point, ClassHour classHour)
+Point::Point(ExamPoint point, ClassHour classHour) :point(point), classHour(classHour)
 {
 }
 
 bool Point::setPoint(ExamPoint newPoint)
 {
-	return false;
+	point = newPoint;
+	return true;
 }
 
 ExamPoint Point::getPoint()const
 {
-	return ExamPoint();
+	return point;
 }
 
 ClassHour Point::getClassHour()const
 {
-	return ClassHour();
+	return classHour;
+}
+
+bool Point::operator<(const Point& b) const
+{
+	return point < b.point;
 }
 
 PWD hash(const PWD& in)
 {
-	return in;
+	return MD5(in + "salt").md5();
+}
+
+bool operator<(const SingleScore& a, const SingleScore& b)
+{
+	if (a.first == b.first)
+	{
+		return a.second < b.second;
+	}
+	else
+	{
+		throw std::invalid_argument("not same subject");
+	}
 }
 
 bool operator==(const Score& stu, const Score& stand)
 {
-	return false;
+	return (stu.contains(stand) && stu.compare(stand));
 }
 
 bool operator>=(const Score& stu, const Score& stand)
 {
-	return false;
+	return (stu.contains(stand) && stu.compare<std::greater_equal<ExamPoint> >(stand));
 }
 
 bool operator<=(const Score& stu, const Score& stand)
 {
-	return false;
+	return (stu.contains(stand) && stu.compare<std::less_equal<ExamPoint> >(stand));
 }
 
 bool operator!=(const Score& stu, const Score& stand)
 {
-	return false;
+	return (stu.contains(stand) && stu.compare<std::not_equal_to<ExamPoint> >(stand));
 }
 
 bool operator<(const Score& stu, const Score& stand)
 {
-	return false;
+	return (stu.contains(stand) && stu.compare<std::less<ExamPoint> >(stand));
 }
 
 bool operator>(const Score& stu, const Score& stand)
 {
-	return false;
+	return (stu.contains(stand) && stu.compare<std::greater<ExamPoint> >(stand));
 }
 
 IDVec operator&(const IDVec& a, const IDVec& b)
 {
-	return IDVec();
+	IDVec aa = a, bb = b;
+	std::sort(aa.begin(), aa.end());
+	std::sort(bb.begin(), bb.end());
+	auto ai = aa.begin();
+	auto bi = bb.begin();
+	IDVec ans;
+	while (ai != aa.end() && bi != bb.end())
+	{
+		if (*ai == *bi)
+		{
+			ans.push_back(*ai);
+			ai++;
+			bi++;
+		}
+		else
+		{
+			if (*ai > * bi)
+			{
+				bi++;
+			}
+			else
+			{
+				ai++;
+			}
+		}
+
+	}
+	return ans;
 }
 
 IDVec operator|(const IDVec& a, const IDVec& b)
 {
-	return IDVec();
-}
-
-Key keyByName(KeyName name)
-{
-	return Key();
+	IDset aa(a.begin(), a.end());
+	for (auto p : b)
+	{
+		aa.insert(p);
+	}
+	IDVec ans(aa.begin(), aa.end());
+	return ans;
 }
 
 bool operator<(const KeyWord& a, const KeyWord& b)
 {
-	return false;
+	if (a.type == b.type)
+	{
+		switch ((KeyWordType::BasicType)a.type)
+		{
+		case KeyWordType::BasicType::name:
+			return a.data.name < b.data.name;
+			break;
+		case KeyWordType::BasicType::id:
+			return a.data.id < b.data.id;
+			break;
+		case KeyWordType::BasicType::sex:
+			return a.data.sex < b.data.sex;
+			break;
+		case KeyWordType::BasicType::stuClass:
+			return a.data.stuClass < b.data.stuClass;
+			break;
+		case KeyWordType::BasicType::stuGrade:
+			return a.data.stuGrade < b.data.stuGrade;
+			break;
+		case KeyWordType::BasicType::score:
+			return a.data.score < b.data.score;
+		default:
+			throw std::invalid_argument("unknow type");
+			break;
+		}
+	}
+	else
+	{
+		throw std::invalid_argument("bad type match");
+	}
 }
 
-std::string form(Record kwyWord, std::vector<size_t>& width)
+std::string form(Record kwyWord, std::vector<size_t>& width)//TODO
 {
 	return std::string();
 }
@@ -205,14 +346,29 @@ StudentList::StudentList()
 {
 }
 
-bool StudentList::addStudent(StudentVec vec)
+bool StudentList::addStudent(const StudentVec& vec)
 {
-	return false;
+	for (auto s : vec)
+	{
+		data.insert({ s.getID(),s });
+	}
+	return true;
 }
 
-bool StudentList::removeStudent(IDVec vec)
+bool StudentList::removeStudent(const IDVec& vec)
 {
-	return false;
+	for (auto s : vec)
+	{
+		if (!data.contains(s))
+		{
+			return false;
+		}
+	}
+	for (auto s : vec)
+	{
+		data.erase(s);
+	}
+	return true;
 }
 
 bool StudentList::buildIndexOn(KeyName name)
@@ -220,50 +376,58 @@ bool StudentList::buildIndexOn(KeyName name)
 	return false;
 }
 
-Student::Student(User user, StuGrade stuGrade, StuClass stuClass)
+Student::Student(User user, StuGrade stuGrade, StuClass stuClass) :User(user), stuGrade(stuGrade), stuClass(stuClass)
 {
 }
 
 StuClass Student::getStuClass()
 {
-	return StuClass();
+	return stuClass;
 }
 
 bool Student::setStuClass(StuClass newStuClass)
 {
-	return false;
+	stuClass = newStuClass;
+	return true;
 }
 
 StuGrade Student::getStuGrade()
 {
-	return StuGrade();
+	return stuGrade;
 }
 
-GoodResult::GoodResult(std::vector<KeyName> names)
+GoodResult::GoodResult(std::vector<KeyName> names) :head(names)
 {
 }
 
 GoodResult::operator bool() const
 {
+	return true;
 }
 
 bool GoodResult::addRec(Record& newRec)
 {
-	return false;
+	rec.push_back(newRec);
+	return true;
 }
 
-GoodResult::operator std::string() const
+GoodResult::operator std::string() const//TODO
 {
 }
 
-
-
-WhereFilter::WhereFilter(std::string expr)
+WhereFilter::WhereFilter(std::string expr):expr(expr)
 {
 }
 
 IDVec WhereFilter::filt(StudentList list)
 {
+	enum LogicOp
+	{
+		logicAnd, logicOr
+	};
+	std::stack<IDVec> IDs;
+	std::stack<LogicOp> Ops;
+
 	return IDVec();
 }
 
@@ -382,26 +546,30 @@ KeyWord::operator Score()
 KeyWord::operator KeyWordType()
 {
 }
-
-Key::Key(KeyWordType type, KeyWord(*howToGet)(const Student&), bool(*howToSet)(Student&, KeyWord))
-{
-}
-
-KeyWord Key::getKey(Student& stu)
-{
-	return KeyWord();
-}
-
-Key::operator KeyWordType()
-{
-}
-
-KeyWordType Key::getType()
-{
-	return KeyWordType();
-}
-
-bool Key::getKey(Student& stu, KeyWord keyWord)
-{
-	return false;
-}
+//
+//Key::Key(KeyWordType type)
+//{
+//}
+//
+//Key::Key(KeyName name)
+//{
+//}
+//
+//KeyWord Key::getKey(Student& stu)
+//{
+//	return;
+//}
+//
+//Key::operator KeyWordType()
+//{
+//}
+//
+//KeyWordType Key::getType()
+//{
+//	return KeyWordType();
+//}
+//
+//bool Key::getKey(Student& stu, KeyWord keyWord)
+//{
+//	return false;
+//}
