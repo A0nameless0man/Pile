@@ -191,11 +191,14 @@ class Key
 {
 private:
 	KeyWordType type;
+	KeyWord data;
 	//SubjectName subjectName;
 public:
 	Key(KeyWordType type);
-	KeyWord getKey(const Student& stu);
-	bool setKey(Student& stu, KeyWord val);
+	KeyWord getKey(const Student& stu)const;
+	//bool setKey(Student& stu,const KeyWord val)const;
+	bool setKey(Student& stu)const;
+	KeyWordType getType()const;
 };
 
 class KeyWordType
@@ -210,6 +213,7 @@ private:
 	SubjectName subjectName;
 public:
 	KeyWordType(BasicType bType, SubjectName sName = "");
+	KeyWordType(std::string name);
 	operator std::string()const;
 	operator BasicType()const;
 	operator SubjectName()const;
@@ -237,12 +241,12 @@ public:
 	KeyWord(StuClass stuClass);
 	KeyWord(StuGrade stuGrade);
 	KeyWord(Score score);
-	operator Name();
-	operator ID();
-	operator Sex();
-	operator StuClass();
-	operator Score();
-	operator KeyWordType();
+	operator Name()const;
+	operator ID()const;
+	operator Sex()const;
+	operator StuClass()const;
+	operator SingleScore()const;
+	operator KeyWordType()const;
 	friend bool operator<(const KeyWord& a, const KeyWord& b);
 };
 template<>

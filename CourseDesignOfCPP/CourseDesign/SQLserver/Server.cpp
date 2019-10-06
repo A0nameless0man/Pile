@@ -523,11 +523,26 @@ IDVec WhereFilter::filt(StudentList list)
 
 ColumnFilter::ColumnFilter(std::string filter)
 {
+	std::stringstream ss(filter);
+	std::string buf;
+	while (ss >> buf)
+	{
+		try
+		{
+			columns.push_back(Key(KeyWordType(buf)));
+		}
+		catch (...)
+		{
+			columns.clear();
+			return;
+		}
+	}
 }
 
 GoodResult ColumnFilter::filt(IDVec vec)
 {
-	return GoodResult();
+	GoodResult result();
+
 }
 
 SQLrequest::SQLrequest(std::string request)
@@ -613,27 +628,27 @@ KeyWord::KeyWord(Score score)
 {
 }
 
-KeyWord::operator Name()
+KeyWord::operator Name()const
 {
 }
 
-KeyWord::operator ID()
+KeyWord::operator ID()const
 {
 }
 
-KeyWord::operator Sex()
+KeyWord::operator Sex()const
 {
 }
 
-KeyWord::operator StuClass()
+KeyWord::operator StuClass()const
 {
 }
 
-KeyWord::operator Score()
+KeyWord::operator SingleScore()const
 {
 }
 
-KeyWord::operator KeyWordType()
+KeyWord::operator KeyWordType()const
 {
 }
 //
