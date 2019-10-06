@@ -31,9 +31,9 @@ class Point;//data class
 using ScoreMap = std::map<SubjectName, Point>;
 using SingleScore = std::pair<SubjectName, Point>;
 
-class BaseIndex;
-class MapIndex;
-class IDindex;
+//class BaseIndex;
+//class MapIndex;
+//class IDindex;
 class Key;
 using KeyName = std::string;
 class KeyWord;
@@ -46,6 +46,7 @@ class WhereFilter;
 class Result;
 using Record = std::vector<KeyWord>;
 class GoodResult;
+class SuccessResult;
 class FailResult;
 class RefuleResult;//SQL class
 
@@ -70,6 +71,7 @@ public:
 	Name getName()const;
 	//bool setName(Name newName);
 	bool login(PWD token)const;
+	bool setPWD(PWD newPWD);
 	ID getID()const;
 	Sex getSex()const;
 };
@@ -163,29 +165,15 @@ public:
 	//bool addStudent(Student stu);
 	bool removeStudent(const IDVec& vec);
 	bool buildIndexOn(KeyName name);
+	bool contains(ID id)const;
+	const Student& operator[](ID id)const;
+	Student& getStu(ID id);
 	template<class OP = std::equal_to<KeyWord> >
-	IDVec getByKey(KeyName name, KeyWord keyWord);
+	IDVec getByKey(KeyName name, KeyWord keyWord)const;
 };
 
 IDVec operator&(const IDVec& a, const IDVec& b);
 IDVec operator|(const IDVec& a, const IDVec& b);
-
-//class Key
-//{
-//private:
-//	std::function<KeyWord(const Student&)> get;
-//	std::function<bool(Student&, KeyWord)> set;
-//	KeyWordType type;
-//public:
-//	Key(KeyWordType type);
-//	Key(KeyName name);
-//	KeyWord getKey(Student& stu);
-//	operator KeyWordType();
-//	KeyWordType getType();
-//	bool getKey(Student& stu, KeyWord keyWord);
-//};
-//
-////Key keyByName(KeyName name);
 
 class Key
 {
@@ -226,22 +214,20 @@ class KeyWord
 {
 private:
 	KeyWordType type;
-	union Data
-	{
-		Name name;
-		ID id;
-		Sex sex;
-		StuClass stuClass;
-		StuGrade stuGrade;
-		SingleScore score;
-	}data;
+	Name name;
+	ID id;
+	Sex sex;
+	StuClass stuClass;
+	StuGrade stuGrade;
+	SingleScore singleScore;
 public:
 	KeyWord(Name name);
 	KeyWord(ID id);
 	KeyWord(Sex sex);
 	KeyWord(StuClass stuClass);
 	KeyWord(StuGrade stuGrade);
-	KeyWord(Score score);
+	KeyWord(SingleScore singleSore);
+	~KeyWord();
 	operator Name()const;
 	operator ID()const;
 	operator Sex()const;
@@ -253,47 +239,51 @@ public:
 template<>
 std::string format(const KeyWord keyWord);
 
-class BaseIndex
-{
-private:
-
-public:
-	const virtual IDVec getEqByKey(KeyWord keyWord) = 0;
-	const virtual IDVec getGeByKey(KeyWord keyWord) = 0;
-	const virtual IDVec getLeByKey(KeyWord keyWord) = 0;
-	virtual bool trackStu(const Student& stu) = 0;
-	virtual bool untrackStu(const Student& stu) = 0;
-};
-
-class MapIndex : virtual public BaseIndex
-{
-private:
-	std::map<KeyWord, ID> rec;
-public:
-	const virtual IDVec getEqByKey(KeyWord keyWord);
-	const virtual IDVec getGeByKey(KeyWord keyWord);
-	const virtual IDVec getLeByKey(KeyWord keyWord);
-	virtual bool trackStu(const Student& stu);
-	virtual bool untrackStu(const Student& stu);
-};
-
-class SexIndex : virtual public BaseIndex
-{
-private:
-	std::unordered_map<Sex, std::set<ID> > rec;
-public:
-	const virtual IDVec getEqByKey(KeyWord keyWord);
-	const virtual IDVec getGeByKey(KeyWord keyWord);
-	const virtual IDVec getLeByKey(KeyWord keyWord);
-	virtual bool trackStu(const Student& stu);
-	virtual bool untrackStu(const Student& stu);
-};
-
+//class BaseIndex
+//{
+//private:
+//
+//public:
+//	const virtual IDVec getEqByKey(KeyWord keyWord) = 0;
+//	const virtual IDVec getGeByKey(KeyWord keyWord) = 0;
+//	const virtual IDVec getLeByKey(KeyWord keyWord) = 0;
+//	virtual bool trackStu(const Student& stu) = 0;
+//	virtual bool untrackStu(const Student& stu) = 0;
+//};
+//
+//class MapIndex : virtual public BaseIndex
+//{
+//private:
+//	std::map<KeyWord, ID> rec;
+//public:
+//	const virtual IDVec getEqByKey(KeyWord keyWord);
+//	const virtual IDVec getGeByKey(KeyWord keyWord);
+//	const virtual IDVec getLeByKey(KeyWord keyWord);
+//	virtual bool trackStu(const Student& stu);
+//	virtual bool untrackStu(const Student& stu);
+//};
+//
+//class SexIndex : virtual public BaseIndex
+//{
+//private:
+//	std::unordered_map<Sex, std::set<ID> > rec;
+//public:
+//	const virtual IDVec getEqByKey(KeyWord keyWord);
+//	const virtual IDVec getGeByKey(KeyWord keyWord);
+//	const virtual IDVec getLeByKey(KeyWord keyWord);
+//	virtual bool trackStu(const Student& stu);
+//	virtual bool untrackStu(const Student& stu);
+//};
+//
 class SQLrequest
 {
 private:
 	ColumnFilter columnFilter;
 	WhereFilter whereFilter;
+	enum RequestType
+	{
+		select, set, remove, insert
+	};
 public:
 	SQLrequest(std::string request);
 	GoodResult exec(StudentList& list);
@@ -305,7 +295,10 @@ private:
 	std::vector<Key> columns;
 public:
 	ColumnFilter(std::string filter);
-	GoodResult filt(IDVec vec);
+	std::vector<KeyName> getHeads()const;
+	GoodResult getVal(const IDVec& vec, const StudentList& list)const;
+	bool applyVal(const IDVec& vec, StudentList& list)const;
+
 };
 
 class WhereFilter
@@ -314,7 +307,7 @@ private:
 	std::string expr;
 public:
 	WhereFilter(std::string expr);
-	IDVec filt(StudentList list);
+	IDVec filt(const StudentList& list);
 };
 
 class Result
@@ -333,6 +326,15 @@ public:
 	GoodResult(std::vector<KeyName> names);
 	virtual operator bool()const;
 	bool addRec(Record& newRec);
+	virtual operator std::string()const;
+};
+
+class SuccessResult :public Result
+{
+	std::string msg;
+public:
+	SuccessResult(const std::string& msg = "Operation succeded");
+	virtual operator bool()const;
 	virtual operator std::string()const;
 };
 
@@ -428,7 +430,7 @@ inline std::string format(const KeyWord keyWord)
 }
 
 template<class OP>
-inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)
+inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)const
 {
 	return IDVec();
 }

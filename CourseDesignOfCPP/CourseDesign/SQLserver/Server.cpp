@@ -310,22 +310,22 @@ bool operator<(const KeyWord& a, const KeyWord& b)
 		switch ((KeyWordType::BasicType)a.type)
 		{
 		case KeyWordType::BasicType::name:
-			return a.data.name < b.data.name;
+			return a.name < b.name;
 			break;
 		case KeyWordType::BasicType::id:
-			return a.data.id < b.data.id;
+			return a.id < b.id;
 			break;
 		case KeyWordType::BasicType::sex:
-			return a.data.sex < b.data.sex;
+			return a.sex < b.sex;
 			break;
 		case KeyWordType::BasicType::stuClass:
-			return a.data.stuClass < b.data.stuClass;
+			return a.stuClass < b.stuClass;
 			break;
 		case KeyWordType::BasicType::stuGrade:
-			return a.data.stuGrade < b.data.stuGrade;
+			return a.stuGrade < b.stuGrade;
 			break;
 		case KeyWordType::BasicType::score:
-			return a.data.score < b.data.score;
+			return a.singleScore < b.singleScore;
 		default:
 			throw std::invalid_argument("unknow type");
 			break;
@@ -376,6 +376,21 @@ bool StudentList::buildIndexOn(KeyName name)
 	return false;
 }
 
+inline bool StudentList::contains(ID id)const
+{
+	return data.contains(id);
+}
+
+const Student& StudentList::operator[](ID id)const
+{
+	return data.find(id)->second;
+}
+
+Student& StudentList::getStu(ID id)
+{
+	return data[id];
+}
+
 Student::Student(User user, StuGrade stuGrade, StuClass stuClass) :User(user), stuGrade(stuGrade), stuClass(stuClass)
 {
 }
@@ -411,6 +426,15 @@ bool GoodResult::addRec(Record& newRec)
 	return true;
 }
 
+SuccessResult::SuccessResult(const std::string& msg):msg(msg)
+{
+}
+
+SuccessResult::operator bool() const
+{
+	return true;
+}
+
 GoodResult::operator std::string() const//TODO
 {
 }
@@ -419,7 +443,7 @@ WhereFilter::WhereFilter(std::string expr) :expr(expr)
 {
 }
 
-IDVec WhereFilter::filt(StudentList list)
+IDVec WhereFilter::filt(const StudentList& list)
 {
 	try
 	{
@@ -539,14 +563,35 @@ ColumnFilter::ColumnFilter(std::string filter)
 	}
 }
 
-GoodResult ColumnFilter::filt(IDVec vec)
+std::vector<KeyName> ColumnFilter::getHeads() const
 {
-	GoodResult result();
-
+	std::vector<KeyName> names;
+	for (auto k = columns.begin(); k != columns.end(); k++)
+	{
+		names.push_back((k->getType()));
+	}
+	return names;
 }
 
-SQLrequest::SQLrequest(std::string request)
+GoodResult ColumnFilter::getVal(const IDVec& vec, const StudentList& list)const
 {
+	GoodResult result(getHeads());
+	for (auto id : vec)
+	{
+		Record rec;
+		const Student& thisStu = list[id];
+		for (auto k = columns.begin(); k != columns.end(); k++)
+		{
+			rec.push_back(k->getKey(thisStu));
+		}
+		result.addRec(rec);
+	}
+	return result;
+}
+
+SQLrequest::SQLrequest(std::string request)//TODO
+{
+	
 }
 
 GoodResult SQLrequest::exec(StudentList& list)
@@ -554,78 +599,88 @@ GoodResult SQLrequest::exec(StudentList& list)
 	return GoodResult();
 }
 
-const IDVec SexIndex::getEqByKey(KeyWord keyWord)
+//const IDVec SexIndex::getEqByKey(KeyWord keyWord)
+//{
+//	return IDVec();
+//}
+//
+//const IDVec SexIndex::getGeByKey(KeyWord keyWord)
+//{
+//	return IDVec();
+//}
+//
+//const IDVec SexIndex::getLeByKey(KeyWord keyWord)
+//{
+//	return IDVec();
+//}
+//
+//bool SexIndex::trackStu(const Student& stu)
+//{
+//	return false;
+//}
+//
+//bool SexIndex::untrackStu(const Student& stu)
+//{
+//	return false;
+//}
+//
+//const IDVec MapIndex::getEqByKey(KeyWord keyWord)
+//{
+//	return IDVec();
+//}
+//
+//const IDVec MapIndex::getGeByKey(KeyWord keyWord)
+//{
+//	return IDVec();
+//}
+//
+//const IDVec MapIndex::getLeByKey(KeyWord keyWord)
+//{
+//	return IDVec();
+//}
+//
+//bool MapIndex::trackStu(const Student& stu)
+//{
+//	return false;
+//}
+//
+//bool MapIndex::untrackStu(const Student& stu)
+//{
+//	return false;
+//}
+
+KeyWord::KeyWord(Name name) :type(KeyWordType::BasicType::name), name(name),singleScore("",0)
 {
-	return IDVec();
+
 }
 
-const IDVec SexIndex::getGeByKey(KeyWord keyWord)
+KeyWord::KeyWord(ID id) :type(KeyWordType::BasicType::id), id(id), singleScore("", 0)
 {
-	return IDVec();
+
 }
 
-const IDVec SexIndex::getLeByKey(KeyWord keyWord)
+KeyWord::KeyWord(Sex sex) : type(KeyWordType::BasicType::sex),sex(sex), singleScore("", 0)
 {
-	return IDVec();
+
 }
 
-bool SexIndex::trackStu(const Student& stu)
-{
-	return false;
-}
-
-bool SexIndex::untrackStu(const Student& stu)
-{
-	return false;
-}
-
-const IDVec MapIndex::getEqByKey(KeyWord keyWord)
-{
-	return IDVec();
-}
-
-const IDVec MapIndex::getGeByKey(KeyWord keyWord)
-{
-	return IDVec();
-}
-
-const IDVec MapIndex::getLeByKey(KeyWord keyWord)
-{
-	return IDVec();
-}
-
-bool MapIndex::trackStu(const Student& stu)
-{
-	return false;
-}
-
-bool MapIndex::untrackStu(const Student& stu)
-{
-	return false;
-}
-
-KeyWord::KeyWord(Name name)
+KeyWord::KeyWord(StuClass stuClass) : type(KeyWordType::BasicType::stuClass), stuClass(stuClass), singleScore("", 0)
 {
 }
 
-KeyWord::KeyWord(ID id)
+KeyWord::KeyWord(StuGrade stuGrade) : type(KeyWordType::BasicType::stuGrade), stuGrade(stuGrade), singleScore("", 0)
+
 {
 }
 
-KeyWord::KeyWord(Sex sex)
+KeyWord::KeyWord(SingleScore singleSore): type(KeyWordType::BasicType::score)
 {
 }
 
-KeyWord::KeyWord(StuClass stuClass)
+KeyWord::~KeyWord()
 {
-}
 
-KeyWord::KeyWord(StuGrade stuGrade)
-{
-}
 
-KeyWord::KeyWord(Score score)
-{
 }
 
 KeyWord::operator Name()const
@@ -651,30 +706,3 @@ KeyWord::operator SingleScore()const
 KeyWord::operator KeyWordType()const
 {
 }
-//
-//Key::Key(KeyWordType type)
-//{
-//}
-//
-//Key::Key(KeyName name)
-//{
-//}
-//
-//KeyWord Key::getKey(Student& stu)
-//{
-//	return;
-//}
-//
-//Key::operator KeyWordType()
-//{
-//}
-//
-//KeyWordType Key::getType()
-//{
-//	return KeyWordType();
-//}
-//
-//bool Key::getKey(Student& stu, KeyWord keyWord)
-//{
-//	return false;
-//}

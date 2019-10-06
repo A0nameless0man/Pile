@@ -253,7 +253,7 @@ int main(void)
 	while (t--)
 	{
 		int n, m;
-		std::cin>>n>>m;
+		std::cin >> n >> m;
 		std::vector<int> vec[2];
 		vec[0].resize(n + 1);
 		vec[1].resize(n + 1);
@@ -264,16 +264,16 @@ int main(void)
 			vec[j - 2][l - 1]++;
 			vec[j - 2][r]--;
 		}
-		int a = INF , b = INF;
-		int sa = 0 , sb = 0;
-		for(int i = 0;i<n;i++)
+		int a = INF, b = INF;
+		int sa = 0, sb = 0;
+		for (int i = 0; i < n; i++)
 		{
-			sa+=vec[0][i];
-			sb+=vec[1][i];
-			a = std::min(a,sa);
-			b= std::min(b,sb);
+			sa += vec[0][i];
+			sb += vec[1][i];
+			a = std::min(a, sa);
+			b = std::min(b, sb);
 		}
-		long long ans = qpow(2,a)*qpow(3,b);
+		long long ans = qpow(2, a) * qpow(3, b);
 		printf("%lld\n", ans);
 	}
 }
