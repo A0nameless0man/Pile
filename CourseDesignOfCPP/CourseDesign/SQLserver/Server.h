@@ -195,6 +195,7 @@ private:
 	//SubjectName subjectName;
 public:
 	Key(KeyWordType type);
+	~Key();
 	KeyWord getKey(const Student& stu)const;
 	//bool setKey(Student& stu,const KeyWord val)const;
 	bool setKey(Student& stu)const;
