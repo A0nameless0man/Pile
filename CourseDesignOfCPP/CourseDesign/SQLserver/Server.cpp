@@ -415,20 +415,110 @@ GoodResult::operator std::string() const//TODO
 {
 }
 
-WhereFilter::WhereFilter(std::string expr):expr(expr)
+WhereFilter::WhereFilter(std::string expr) :expr(expr)
 {
 }
 
 IDVec WhereFilter::filt(StudentList list)
 {
-	enum LogicOp
+	try
 	{
-		logicAnd, logicOr
-	};
-	std::stack<IDVec> IDs;
-	std::stack<LogicOp> Ops;
-
-	return IDVec();
+		enum LogicOp
+		{
+			left, right, logicAnd, logicOr
+		};
+		std::unordered_map<std::string, LogicOp> ops =
+		{
+			{"and",logicAnd},
+			{"or",logicOr},
+			{"(",left},
+			{")",right}
+		};
+		std::stack<IDVec> IDs;
+		std::stack<LogicOp> Ops;
+		std::stringstream cmd(expr);
+		std::string buf;
+		auto pop = [&Ops, &IDs]() {
+			if (Ops.top() > right&& IDs.size() >= 2)
+			{
+				LogicOp nextOp = Ops.top();
+				Ops.pop();
+				IDVec a = IDs.top();
+				IDs.pop();
+				IDVec b = IDs.top();
+				IDs.pop;
+				switch (nextOp)
+				{
+				case left:
+					break;
+				case right:
+					break;
+				case logicAnd:
+					IDs.push(a & b);
+					break;
+				case logicOr:
+					IDs.push(a | b);
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				throw std::invalid_argument("in sufficent arg");
+			}
+		};
+		while (cmd >> buf)
+		{
+			if (!ops.contains(buf))
+			{
+				IDVec num = {};//TODO
+				IDs.push(num);
+			}
+			else
+			{
+				LogicOp nextOp = ops[buf];
+				if (nextOp == left)
+				{
+					Ops.push(nextOp);
+				}
+				else
+				{
+					if (nextOp == right)
+					{
+						while (!Ops.empty() && Ops.top() != left)
+						{
+							pop();
+						}
+					}
+					else
+					{
+						while (!Ops.empty() && Ops.top() <= nextOp)
+						{
+							pop();
+						}
+						Ops.push(nextOp);
+					}
+				}
+			}
+		}
+		while (!Ops.empty())
+		{
+			pop();
+		}
+		if (IDs.size() != 1)
+		{
+			return {};
+		}
+		else
+		{
+			return IDs.top();
+		}
+	}
+	catch (const std::exception&)
+	{
+		return {};
+	}
 }
 
 ColumnFilter::ColumnFilter(std::string filter)

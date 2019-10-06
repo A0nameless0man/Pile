@@ -5,6 +5,7 @@
 #include<vector>
 #include<set>
 #include<string>
+#include<sstream>
 #include<functional>
 #include"Format.h"
 #include"Format.cpp"
