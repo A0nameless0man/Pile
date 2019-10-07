@@ -67,13 +67,15 @@ private:
 	Sex sex;
 	PWD pwd;
 public:
-	User(ID id, PWD pwd, Name name = "John Doe", Sex sex = unKnown);
+	User(ID id = "", PWD pwd = "", Name name = "John Doe", Sex sex = unKnown);
 	Name getName()const;
 	//bool setName(Name newName);
 	bool login(PWD token)const;
 	bool setPWD(PWD newPWD);
 	ID getID()const;
 	Sex getSex()const;
+	template<class Is>
+	friend Is& deFormat(Is& is, User& user);
 };
 template<>
 std::string format(const User user);
@@ -144,10 +146,12 @@ private:
 	StuClass stuClass;
 	StuGrade stuGrade;
 public:
-	Student(User user, StuGrade stuGrade = 1960, StuClass stuClass = "");
+	Student(User user = User(), StuGrade stuGrade = 1960, StuClass stuClass = "");
 	StuClass getStuClass();
 	bool setStuClass(StuClass newStuClass);
 	StuGrade getStuGrade();
+	template<class Is>
+	friend Is& deFormat(Is& is, Student& Student);
 };
 template<>
 std::string format(const Student Student);
@@ -158,7 +162,7 @@ class StudentList
 {
 private:
 	std::map<ID, Student> data;
-	std::map<KeyName, BaseIndex> indexs;
+	//std::map<KeyName, BaseIndex> indexs;
 public:
 	StudentList();
 	bool addStudent(const StudentVec& vec);
@@ -175,21 +179,6 @@ public:
 IDVec operator&(const IDVec& a, const IDVec& b);
 IDVec operator|(const IDVec& a, const IDVec& b);
 
-class Key
-{
-private:
-	KeyWordType type;
-	KeyWord data;
-	//SubjectName subjectName;
-public:
-	Key(KeyWordType type);
-	~Key();
-	KeyWord getKey(const Student& stu)const;
-	//bool setKey(Student& stu,const KeyWord val)const;
-	bool setKey(Student& stu)const;
-	KeyWordType getType()const;
-};
-
 class KeyWordType
 {
 public:
@@ -202,7 +191,7 @@ private:
 	SubjectName subjectName;
 public:
 	KeyWordType(BasicType bType, SubjectName sName = "");
-	KeyWordType(std::string name);
+	KeyWordType(std::string name = "");
 	operator std::string()const;
 	operator BasicType()const;
 	operator SubjectName()const;
@@ -227,74 +216,47 @@ public:
 	KeyWord(StuClass stuClass);
 	KeyWord(StuGrade stuGrade);
 	KeyWord(SingleScore singleSore);
+	KeyWord();
+	KeyWord(KeyWordType type, std::string str);
 	~KeyWord();
+	std::string form(size_t width)const;
 	operator Name()const;
 	operator ID()const;
 	operator Sex()const;
 	operator StuClass()const;
 	operator SingleScore()const;
 	operator KeyWordType()const;
+	operator std::string()const;
 	friend bool operator<(const KeyWord& a, const KeyWord& b);
 };
 template<>
 std::string format(const KeyWord keyWord);
 
-//class BaseIndex
-//{
-//private:
-//
-//public:
-//	const virtual IDVec getEqByKey(KeyWord keyWord) = 0;
-//	const virtual IDVec getGeByKey(KeyWord keyWord) = 0;
-//	const virtual IDVec getLeByKey(KeyWord keyWord) = 0;
-//	virtual bool trackStu(const Student& stu) = 0;
-//	virtual bool untrackStu(const Student& stu) = 0;
-//};
-//
-//class MapIndex : virtual public BaseIndex
-//{
-//private:
-//	std::map<KeyWord, ID> rec;
-//public:
-//	const virtual IDVec getEqByKey(KeyWord keyWord);
-//	const virtual IDVec getGeByKey(KeyWord keyWord);
-//	const virtual IDVec getLeByKey(KeyWord keyWord);
-//	virtual bool trackStu(const Student& stu);
-//	virtual bool untrackStu(const Student& stu);
-//};
-//
-//class SexIndex : virtual public BaseIndex
-//{
-//private:
-//	std::unordered_map<Sex, std::set<ID> > rec;
-//public:
-//	const virtual IDVec getEqByKey(KeyWord keyWord);
-//	const virtual IDVec getGeByKey(KeyWord keyWord);
-//	const virtual IDVec getLeByKey(KeyWord keyWord);
-//	virtual bool trackStu(const Student& stu);
-//	virtual bool untrackStu(const Student& stu);
-//};
-//
-class SQLrequest
+class Key
 {
 private:
-	ColumnFilter columnFilter;
-	WhereFilter whereFilter;
-	enum RequestType
-	{
-		select, set, remove, insert
-	};
+	KeyWordType type;
+	KeyWord data;
+	//SubjectName subjectName;
 public:
-	SQLrequest(std::string request);
-	GoodResult exec(StudentList& list);
+	Key(KeyWordType type, KeyWord data);
+	Key(std::string str);
+	~Key();
+	KeyWord getKey(const Student& stu)const;
+	//bool setKey(Student& stu,const KeyWord val)const;
+	bool setKey(Student& stu)const;
+	//bool removeKey(Student& stu)const;
+	KeyWordType getType()const;
 };
+
+
 
 class ColumnFilter
 {
 private:
 	std::vector<Key> columns;
 public:
-	ColumnFilter(std::string filter);
+	ColumnFilter(std::string filter = "");
 	std::vector<KeyName> getHeads()const;
 	GoodResult getVal(const IDVec& vec, const StudentList& list)const;
 	bool applyVal(const IDVec& vec, StudentList& list)const;
@@ -306,8 +268,23 @@ class WhereFilter
 private:
 	std::string expr;
 public:
-	WhereFilter(std::string expr);
+	WhereFilter(std::string expr = "");
 	IDVec filt(const StudentList& list);
+};
+
+class SQLrequest
+{
+private:
+	ColumnFilter columnFilter;
+	WhereFilter whereFilter;
+	std::string insertBuffer;
+	enum RequestType
+	{
+		select, set, remove, insert
+	}type;
+public:
+	SQLrequest(std::string request);
+	std::string exec(StudentList& list);
 };
 
 class Result
@@ -434,3 +411,40 @@ inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)const
 {
 	return IDVec();
 }
+
+//class BaseIndex
+//{
+//private:
+//
+//public:
+//	const virtual IDVec getEqByKey(KeyWord keyWord) = 0;
+//	const virtual IDVec getGeByKey(KeyWord keyWord) = 0;
+//	const virtual IDVec getLeByKey(KeyWord keyWord) = 0;
+//	virtual bool trackStu(const Student& stu) = 0;
+//	virtual bool untrackStu(const Student& stu) = 0;
+//};
+//
+//class MapIndex : virtual public BaseIndex
+//{
+//private:
+//	std::map<KeyWord, ID> rec;
+//public:
+//	const virtual IDVec getEqByKey(KeyWord keyWord);
+//	const virtual IDVec getGeByKey(KeyWord keyWord);
+//	const virtual IDVec getLeByKey(KeyWord keyWord);
+//	virtual bool trackStu(const Student& stu);
+//	virtual bool untrackStu(const Student& stu);
+//};
+//
+//class SexIndex : virtual public BaseIndex
+//{
+//private:
+//	std::unordered_map<Sex, std::set<ID> > rec;
+//public:
+//	const virtual IDVec getEqByKey(KeyWord keyWord);
+//	const virtual IDVec getGeByKey(KeyWord keyWord);
+//	const virtual IDVec getLeByKey(KeyWord keyWord);
+//	virtual bool trackStu(const Student& stu);
+//	virtual bool untrackStu(const Student& stu);
+//};
+//

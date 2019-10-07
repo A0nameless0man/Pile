@@ -337,9 +337,21 @@ bool operator<(const KeyWord& a, const KeyWord& b)
 	}
 }
 
-std::string form(Record kwyWord, std::vector<size_t>& width)//TODO
+std::string form(Record keyWord, std::vector<size_t>& width)
 {
-	return std::string();
+	if (width.size() == keyWord.size())
+	{
+		std::string ans = "|";
+		for (size_t i = 0; i < keyWord.size(); i++)
+		{
+			ans += keyWord[i].form(width[i]) + "|";
+		}
+		return ans;
+	}
+	else
+	{
+		throw std::invalid_argument("different length");
+	}
 }
 
 StudentList::StudentList()
@@ -426,7 +438,40 @@ bool GoodResult::addRec(Record& newRec)
 	return true;
 }
 
-SuccessResult::SuccessResult(const std::string& msg):msg(msg)
+GoodResult::operator std::string() const//TODO
+{
+}
+
+KeyWordType::operator BasicType() const
+{
+	return basicType;
+}
+
+KeyWordType::operator SubjectName() const
+{
+	return subjectName;
+}
+
+bool KeyWordType::operator==(const KeyWordType& b) const
+{
+	if (basicType == b.basicType)
+	{
+		if (basicType == score)
+		{
+			return subjectName == b.subjectName;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+SuccessResult::SuccessResult(const std::string& msg) :msg(msg)
 {
 }
 
@@ -435,8 +480,9 @@ SuccessResult::operator bool() const
 	return true;
 }
 
-GoodResult::operator std::string() const//TODO
+SuccessResult::operator std::string()const
 {
+	return "It was a SuccessResult :\n" + msg;
 }
 
 WhereFilter::WhereFilter(std::string expr) :expr(expr)
@@ -553,7 +599,7 @@ ColumnFilter::ColumnFilter(std::string filter)
 	{
 		try
 		{
-			columns.push_back(Key(KeyWordType(buf)));
+			columns.push_back(Key(buf));
 		}
 		catch (...)
 		{
@@ -589,14 +635,277 @@ GoodResult ColumnFilter::getVal(const IDVec& vec, const StudentList& list)const
 	return result;
 }
 
-SQLrequest::SQLrequest(std::string request)//TODO
+bool ColumnFilter::applyVal(const IDVec& vec, StudentList& list) const
 {
-	
+	for (auto id : vec)
+	{
+		if (list.contains(id))
+		{
+			Student& thisStu = list.getStu(id);
+			for (auto k : columns)
+			{
+				k.setKey(thisStu);
+			}
+		}
+		else
+		{
+			continue;
+		}
+	}
+	return true;
 }
 
-GoodResult SQLrequest::exec(StudentList& list)
+SQLrequest::SQLrequest(std::string request)
 {
-	return GoodResult();
+	std::string cmd, c, w, i, buf;
+	std::stringstream ss(request);
+	while (ss >> buf)
+	{
+		if (buf == "set" || buf == "select" || buf == "remove")
+		{
+			if (buf == "set")
+			{
+				type = set;
+			}
+			else if (buf == "select")
+			{
+				type = select;
+			}
+			else
+			{
+				type = remove;
+			}
+			while (ss && buf != "where")
+			{
+				ss >> buf;
+				if (buf != "where")
+					c += buf + " ";
+			}
+			while (ss >> buf)
+			{
+				w += buf + " ";
+			}
+			columnFilter = ColumnFilter(c);
+			whereFilter = WhereFilter(w);
+		}
+		else if (buf == "insert")
+		{
+			type = insert;
+			while (ss >> buf)
+			{
+				i += buf + " ";
+			}
+			insertBuffer = i;
+		}
+	}
+}
+
+std::string SQLrequest::exec(StudentList& list)
+{
+	IDVec Where = whereFilter.filt(list);
+	switch (type)
+	{
+	case SQLrequest::set:
+		if (columnFilter.applyVal(Where, list))
+		{
+			return "applied";
+		}
+		else
+		{
+			return "failed";
+		}
+		break;
+	case SQLrequest::select:
+		return columnFilter.getVal(Where, list).operator std::string();
+		break;
+	case SQLrequest::insert:
+	{
+		Student buffer;
+		std::stringstream ss(insertBuffer);
+		StudentVec vec;
+		while (deFormat(ss, buffer))
+		{
+			vec.push_back(buffer);
+		}
+		list.addStudent(vec);
+	}
+	break;
+	case SQLrequest::remove:
+		if (list.removeStudent(Where))
+
+		{
+			return "applied";
+		}
+		else
+		{
+			return "failed";
+		}
+	default:
+		throw std::invalid_argument("unknow sql type");
+		break;
+	}
+}
+
+KeyWord::KeyWord(Name name) :type(KeyWordType::BasicType::name), name(name), singleScore("", 0)
+{
+
+}
+
+KeyWord::KeyWord(ID id) : type(KeyWordType::BasicType::id), id(id), singleScore("", 0)
+{
+
+}
+
+KeyWord::KeyWord(Sex sex) : type(KeyWordType::BasicType::sex), sex(sex), singleScore("", 0)
+{
+
+}
+
+KeyWord::KeyWord(StuClass stuClass) : type(KeyWordType::BasicType::stuClass), stuClass(stuClass), singleScore("", 0)
+{
+
+}
+
+KeyWord::KeyWord(StuGrade stuGrade) : type(KeyWordType::BasicType::stuGrade), stuGrade(stuGrade), singleScore("", 0)
+{
+
+}
+
+KeyWord::KeyWord(SingleScore singleSore) : type(KeyWordType::BasicType::score), singleScore(singleScore)
+{
+
+}
+
+KeyWord::KeyWord(): singleScore("", 0)
+{
+}
+
+KeyWord::KeyWord(KeyWordType type, std::string str): singleScore("", 0)
+{
+	switch ((KeyWordType::BasicType)type)
+	{
+	case KeyWordType::BasicType::id:
+		id = str;
+		break;
+	case KeyWordType::BasicType::sex:
+		if (str == "male")
+		{
+			sex = male;
+		}
+		else
+		{
+			sex = female;
+		}
+		break;
+	case KeyWordType::BasicType::stuClass:
+		stuClass = str;
+		break;
+	case KeyWordType::BasicType::stuGrade:
+		
+		break;
+	case KeyWordType::BasicType::score:
+		break;
+	case KeyWordType::BasicType::name:
+		break;
+	default:
+		throw std::invalid_argument("unknow type");
+		break;
+	}
+}
+
+KeyWord::~KeyWord()
+{
+
+}
+
+std::string KeyWord::form(size_t width) const
+{
+	std::string ans = operator std::string();
+	ans += std::string((ans.length() < width ? (width - ans.length()) : 0), ' ');
+	return ans;
+
+}
+
+KeyWord::operator Name()const
+{
+	return name;
+}
+
+KeyWord::operator ID()const
+{
+	return id;
+}
+
+KeyWord::operator Sex()const
+{
+	return sex;
+}
+
+KeyWord::operator StuClass()const
+{
+	return stuClass;
+}
+
+KeyWord::operator SingleScore()const
+{
+	return singleScore;
+}
+
+KeyWord::operator KeyWordType()const
+{
+	return type;
+}
+
+KeyWord::operator std::string()const
+{
+	switch ((KeyWordType::BasicType)type)
+	{
+	case KeyWordType::BasicType::id:
+		return id;
+		break;
+	case KeyWordType::BasicType::sex:
+		return format(sex);
+		break;
+	case KeyWordType::BasicType::stuClass:
+		return stuClass;
+		break;
+	case KeyWordType::BasicType::stuGrade:
+		return std::to_string(stuGrade);
+		break;
+	case KeyWordType::BasicType::score:
+		return std::to_string(singleScore.second.getPoint());
+		break;
+	case KeyWordType::BasicType::name:
+		return name;
+		break;
+	default:
+		throw std::invalid_argument("unknow type");
+		return "";
+		break;
+	}
+}
+
+Key::Key(KeyWordType type, KeyWord data) :type(type), data(data)
+{
+}
+
+Key::Key(std::string str)
+{
+	std::string name = str.substr(0, str.find('='));
+	type = KeyWordType(name);
+	if (str.find('=') != std::string::npos)
+	{
+		data = KeyWord(type, str.substr(str.find('=')+1, str.size()));
+	}
+}
+
+Key::~Key()
+{
+}
+
+KeyWordType Key::getType() const
+{
+	return type;
 }
 
 //const IDVec SexIndex::getEqByKey(KeyWord keyWord)
@@ -649,60 +958,3 @@ GoodResult SQLrequest::exec(StudentList& list)
 //	return false;
 //}
 
-KeyWord::KeyWord(Name name) :type(KeyWordType::BasicType::name), name(name),singleScore("",0)
-{
-
-}
-
-KeyWord::KeyWord(ID id) :type(KeyWordType::BasicType::id), id(id), singleScore("", 0)
-{
-
-}
-
-KeyWord::KeyWord(Sex sex) : type(KeyWordType::BasicType::sex),sex(sex), singleScore("", 0)
-{
-
-}
-
-KeyWord::KeyWord(StuClass stuClass) : type(KeyWordType::BasicType::stuClass), stuClass(stuClass), singleScore("", 0)
-{
-}
-
-KeyWord::KeyWord(StuGrade stuGrade) : type(KeyWordType::BasicType::stuGrade), stuGrade(stuGrade), singleScore("", 0)
-
-{
-}
-
-KeyWord::KeyWord(SingleScore singleSore): type(KeyWordType::BasicType::score)
-{
-}
-
-KeyWord::~KeyWord()
-{
-
-
-}
-
-KeyWord::operator Name()const
-{
-}
-
-KeyWord::operator ID()const
-{
-}
-
-KeyWord::operator Sex()const
-{
-}
-
-KeyWord::operator StuClass()const
-{
-}
-
-KeyWord::operator SingleScore()const
-{
-}
-
-KeyWord::operator KeyWordType()const
-{
-}
