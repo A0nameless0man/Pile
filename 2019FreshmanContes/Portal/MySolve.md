@@ -9,6 +9,7 @@
    - 这一部分可以做到 $O(n^2)$ 标程中未给出,请自行考虑具体实现
 3. 图上找最短路
 4. $\textrm{最短路径长}+1$ 即为所求答案
+    - 最短路长为 $0$ 即 用户和出口在同一块地面时,输出 `0`
 
 ## 针对新手
 
@@ -46,37 +47,29 @@ int theBlockGroundBelongsTo[n][m] = {-1};
 
 如果满足这两个条件,就 `connectedBlockCount++;` , 并且为这块路面 赋予编号
 
-在给一个格子赋予编号之后,检查其相邻的格子,如果也满足以上两个条件,则也赋予编号并进行这个检查
+在给一个格子赋予编号之后,检查其相邻的格子,如果也满足以上两个条件,则也赋予相同的编号并进行这个检查
 
-```cpp
-int getBlockID(int m, int n)
-{
-	if (isUnidedGround(m, n))
-	{
-		int currentID = blocks.size();
-		blocks.push_back(Block());
-		std::queue<coordinate> que;//BFS based on queue;
-		que.push({ m, n });
-		while (!que.empty())
-		{
-			coordinate curPos = que.front();
-			que.pop();
-			setBlockID(curPos,currentID);
-			blocks[currentID].member.push_back(curPos);
-			for (size_t i = 0; i < 4; i++)
-			{
-				if (isUnidedGround(curPos.x + DIR[i][0], curPos.y + DIR[i][1]))
-				{
-					que.push(curPos+i);
-					setBlockID(curPos+i,currentID);
-				}
-			}
-		}
-		return currentID;
-	}
-	else
-	{
-		return theBlockGroundBelongsTo[m][n];
-	}
-}
-```
+> 这是递归哦,为了不无限递归,记得先赋予编号
+
+### 传送的可能性
+
+直接对于每个坐标,暴力查找其各个方向所对的墙壁是否宜于传送.
+
+但是有几个地方需要注意
+
+- 某些连通块可能不靠墙,也就无法传送离开
+
+- 真正有用的信息是 : 从 $x$ 号连通块可以传送到 $y$ 号连通块
+
+### 如何传送
+
+这一部分其实就是在一张有向图上找最短路.
+
+简单来说,对于任意的连通块,保存一个列表来记录从这个连通块可以直接到达的连通块的 **序号**
+
+实现上来说,可以是二维数组,也可以是 `std::vector<std::vector<size_t> >`
+
+然后顺这这个关系开展搜索,每个连通块记录其已知的最短距离并在搜索过程中更新.
+
+- $\textrm{最短路径长}+1$ 即为所求答案
+- 最短路长为 $0$ 即 用户和出口在同一块地面时,输出 `0`
