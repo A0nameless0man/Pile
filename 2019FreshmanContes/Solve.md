@@ -114,6 +114,493 @@ map<int, int> heap[2];
 
 最终整体复杂度 $O((n+q)log(n+q))$。
 
+## E - 后四位
+
+如题目所示
+
+$$
+\Huge
+3^{25}  =3^{1\cdot2^4}\cdot 3^{1\cdot2^3} \cdot 3^{0\cdot2^2} \cdot 3^{0\cdot2^1} \cdot 3^{1\cdot2^0}\\
+\ \ \ \ \ =3^{1\cdot2^0}\cdot 3^{0\cdot2^1} \cdot 3^{0\cdot2^2} \cdot 3^{1\cdot2^3} \cdot 3^{1\cdot2^4}\\
+3^{2^4} = 3^{2^3}\cdot 3^{2^3}\\
+\cdots\\
+3^{2^1} = 3^{2^0}\cdot 3^{2^0}\\
+$$
+
+用一个循环来依次得到$\huge 3^{2^0},3^{2^1},\cdots,3^{2^{\lfloor \log_{2}{(n)}+1\rfloor}}$
+
+```cpp
+int a = 3;
+for(int i = 0;i < n;i++)
+{
+    a;//所求序列
+    a *= a;
+}
+```
+
+利用 `c` 的位运算,分解 $n$为其二进制的每一位
+
+```cpp
+void pow(unsigned int n)
+{
+    while(n)
+    {
+        n&1;//所求的二进制序列
+        n>>=1;
+    }
+}
+```
+
+综合起来
+
+```cpp
+unsigned int pow(unsigned int base,unsigned int n)
+{
+    unsigned int ans = 1;
+    while(n)
+    {
+        if(n&1)
+        {
+            ans*=base;
+        }
+        base*=base;
+        n>>=1;
+    }
+    return ans;
+}
+```
+
+这道题目要求保留后四位,那也就是对 $10^4$取模
+
+因此
+
+
+```cpp
+unsigned int pow(unsigned int base,unsigned int n)
+{
+    const unsigned int MOD = 10000;
+    unsigned int ans = 1;
+    while(n)
+    {
+        if(n&1)
+        {
+            ans*=base;
+            ans%=MOD;
+        }
+        base*=base;
+        base%=MOD
+        n>>=1;
+    }
+    return ans%MOD;
+}
+```
+
+## F - 传送门
+
+### 针对 **OIer**
+
+1. 建立空图 $G$
+1. `DFS` 找出连通块 作为 $G$ 的节点
+2. 暴力搜索 , 图上建边
+   - 注意有的连通块完全不靠墙, 尤其是出发的块
+   - 这一部分可以做到 $O(n^2)$ 标程中未给出,请自行考虑具体实现
+3. 图上找最短路
+4. $\textrm{最短路径长}+1$ 即为所求答案
+    - 最短路长为 $0$ 即 用户和出口在同一块地面时,输出 `0`
+
+### 针对新手
+
+#### 连通块
+
+可以看出,这题的结果与每一块 '**可以自由走动的地面**' 的大小及形状没有关系
+
+有影响的,是这些 '**可以自由走动的地面**' 之间的关系,即
+
+- 从 某一片 '**可以自由走动的地面**' 可不可以传送到 另一片 '**可以自由走动的地面**' 上
+
+为了方便描述, 定义 一片 '**可以自由走动的地面**' 为 一块 `连通块`
+
+首先,为了了解 连通块 之间的关系, 我们希望计算出
+
+1. 有多少连通块
+2. 每片地面属于哪一块连通块
+
+为了存储这两个问题的答案,我们声明两个变量
+
+```cpp
+int connectedBlockCount = 0;
+int theBlockGroundBelongsTo[n][m] = {-1};
+```
+
+约定, 
+- `theBlockGroundBelongsTo[i][j]` 代表 $(i,j)$ 这片地面所对应的 连通块 的序号,为 $[0,connectedBlockCount)$ 中的正整数
+- `connectedBlockCount` 代表所有已知的  连通块的数量
+
+然后,我们对于所有的格子进行检查
+
+- 是地面吗?
+
+- 还没有编号吗?
+
+如果满足这两个条件,就 `connectedBlockCount++;` , 并且为这块路面 赋予编号
+
+在给一个格子赋予编号之后,检查其相邻的格子,如果也满足以上两个条件,则也赋予相同的编号并进行这个检查
+
+> 这是递归哦,为了不无限递归,记得先赋予编号
+
+#### 传送的可能性
+
+直接对于每个坐标,暴力查找其各个方向所对的墙壁是否宜于传送.
+
+但是有几个地方需要注意
+
+- 某些连通块可能不靠墙,也就无法传送离开
+
+- 真正有用的信息是 : 从 $x$ 号连通块可以传送到 $y$ 号连通块
+
+#### 如何传送
+
+这一部分其实就是在一张有向图上找最短路.
+
+简单来说,对于任意的连通块,保存一个列表来记录从这个连通块可以直接到达的连通块的 **序号**
+
+实现上来说,可以是二维数组,也可以是 `std::vector<std::vector<size_t> >`
+
+然后顺这这个关系开展搜索,每个连通块记录其已知的最短距离并在搜索过程中更新.
+
+- $\textrm{最短路径长}+1$ 即为所求答案
+- 最短路长为 $0$ 即 用户和出口在同一块地面时,输出 `0`
+
+
+```cpp
+#include<iostream>
+#include<iomanip>
+#include<string>
+#include<vector>
+#include<queue>
+#include<set>
+#include<map>
+
+//#define DEBUG
+
+const int MAX_M = 100;
+const int MAX_N = 100;
+const int DIR[4][2] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} };
+using BlockID = int;
+const BlockID VOIDBLOCK = -1;
+
+struct coordinate
+{
+	int x, y;
+};
+
+inline coordinate operator+(const coordinate pos,int dir)
+{
+	return {pos.x+DIR[dir][0],pos.y+DIR[dir][1]};
+}
+
+class Block
+{
+public:
+	Block() : ableToLeaveViaPortal(false), vistied(false), portalCount(-1), portalFrom(VOIDBLOCK) {}
+	std::vector<coordinate> member;
+	std::set<BlockID> edge;
+	bool ableToLeaveViaPortal;
+	bool vistied;
+	int portalCount;
+	BlockID portalFrom;
+};
+
+std::vector<Block> blocks;
+BlockID theBlockGroundBelongsTo[MAX_M][MAX_N];
+bool passable[MAX_M][MAX_N];
+bool visibility[MAX_M][MAX_N];
+//+--------->y/n
+//|
+//|
+//|
+//|
+//v
+//x/m
+
+inline bool isUnidedGround(int m, int n)
+{
+	return passable[m][n] && theBlockGroundBelongsTo[m][n] == VOIDBLOCK;
+}
+
+inline int setBlockID(coordinate pos,BlockID id)
+{
+	return theBlockGroundBelongsTo[pos.x][pos.y]=id;
+}
+
+int getBlockID(int m, int n)
+{
+	if (isUnidedGround(m, n))
+	{
+		int currentID = blocks.size();
+		blocks.push_back(Block());
+		std::queue<coordinate> que;//BFS based on queue;
+		que.push({ m, n });
+		while (!que.empty())
+		{
+			coordinate curPos = que.front();
+			que.pop();
+			setBlockID(curPos,currentID);
+			blocks[currentID].member.push_back(curPos);
+			for (size_t i = 0; i < 4; i++)
+			{
+				if (isUnidedGround(curPos.x + DIR[i][0], curPos.y + DIR[i][1]))
+				{
+					que.push(curPos+i);
+					setBlockID(curPos+i,currentID);
+				}
+			}
+		}
+		return currentID;
+	}
+	else
+	{
+		return theBlockGroundBelongsTo[m][n];
+	}
+}
+
+inline int getBlockID(coordinate pos)
+{
+	return getBlockID(pos.x, pos.y);
+}
+
+std::set<BlockID>& getPossiblePortal(coordinate pos, std::set<BlockID>& ans)
+{
+	if (visibility[pos.x][pos.y])
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			int dis = 1;
+			while (visibility[pos.x + dis * DIR[i][0]][pos.y + dis * DIR[i][1]])
+			{
+				++dis;
+			}
+			--dis;
+			if (passable[pos.x + dis * DIR[i][0]][pos.y + dis * DIR[i][1]])
+			{
+				ans.insert(getBlockID(pos.x + dis * DIR[i][0], pos.y + dis * DIR[i][1]));
+			}
+		}
+	}
+	return ans;
+}
+
+inline bool nextToWall(coordinate pos)
+{
+	if (passable[pos.x][pos.y])
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (!visibility[pos.x + DIR[i][0]][pos.y + DIR[i][1]])
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+int main(void)
+{
+	long T = 0;
+	int m, n, sx = 0, sy = 0, tx = 0, ty = 0, ans = -1;
+	BlockID sBlock, tBlock;
+	//std::ios::sync_with_stdio(false);
+	std::cin >> T;
+	// std::cout<<0<<std::endl;
+	// std::cout<<T<<std::endl;
+	while(T--)
+	//while (std::cin >> m >> n)
+	{
+		//input
+		{
+			std::cin >> m >> n;
+		}
+
+		//ini
+		{
+			blocks.clear();
+			for (int i = 0; i < m; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					theBlockGroundBelongsTo[i][j] = VOIDBLOCK;
+					passable[i][j] = false;
+					visibility[i][j] = false;
+				}
+			}
+		}
+
+		//read map
+		{
+			for (int i = 0; i < m; i++)
+			{
+				std::string input;
+				std::cin >> input;
+				for (int j = 0; j < n; j++)
+				{
+					switch (input[j])
+					{
+					case '.':
+						visibility[i][j] = true;
+						passable[i][j] = false;
+						break;
+					case 'w':
+						visibility[i][j] = false;
+						passable[i][j] = false;
+						break;
+					case 'g':
+						visibility[i][j] = true;
+						passable[i][j] = true;
+						break;
+					case 'p':
+						visibility[i][j] = true;
+						passable[i][j] = true;
+						sx = i;
+						sy = j;
+						break;
+					case 'e':
+						visibility[i][j] = true;
+						passable[i][j] = true;
+						tx = i;
+						ty = j;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+
+		//BFS for connected Block
+		{
+			for (int i = 0; i < m; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					getBlockID(i, j);
+				}
+			}
+		}
+
+		//search for edges
+		{
+			for (BlockID id = 0; id < (int)blocks.size(); id++)
+			{
+				Block& currentBlock = blocks[id];
+				for (coordinate pos : currentBlock.member)
+				{
+					if (nextToWall(pos))
+					{
+						currentBlock.ableToLeaveViaPortal = true;
+						break;
+					}
+				}
+				if (blocks[id].ableToLeaveViaPortal)
+				{
+					for (coordinate pos : currentBlock.member)
+					{
+						getPossiblePortal(pos, currentBlock.edge);
+					}
+				}
+			}
+		}
+
+
+		//BFS for route
+		{
+			sBlock = getBlockID(sx, sy);
+			tBlock = getBlockID(tx, ty);
+			if (sBlock != tBlock)
+			{
+				if (blocks[sBlock].ableToLeaveViaPortal)
+				{
+					std::queue<BlockID> que;
+					que.push(sBlock);
+					blocks[sBlock].portalCount = 1;
+					blocks[sBlock].vistied = true;
+					while (!que.empty())
+					{
+						BlockID curBlockID = que.front();
+						Block& curBlock = blocks[curBlockID];
+						for (BlockID id : curBlock.edge)
+						{
+							if (!blocks[id].vistied)
+							{
+								blocks[id].portalFrom = curBlockID;
+								blocks[id].portalCount = curBlock.portalCount + 1;
+								blocks[id].vistied = true;
+								que.push(id);
+							}
+						}
+						que.pop();
+					}
+					ans = blocks[tBlock].portalCount;
+				}
+				else
+				{
+					ans = -1;
+				}
+			}
+			else
+			{
+				ans = 0;
+			}
+		}
+
+		//output result
+		{
+			std::cout << ans;
+			//if(T)
+			{
+				std::cout<<std::endl;
+			}
+		}
+		//std::cout<<0<<std::endl;
+
+// 		{
+// 			std::clog << "Report:" << std::endl;
+// 		}
+
+// 		{
+// 			std::clog << "BlockID:" << std::endl;
+// 			for (int i = 0; i < m; i++)
+// 			{
+// 				for (int j = 0; j < n; j++)
+// 				{
+// 					std::clog << std::setw(3) << getBlockID(i, j) << ' ';
+// 				}
+// 				std::clog << std::endl;
+// 			}
+// 		}//check connectedBlock
+
+// 		{
+// 			std::clog << "Edges:" << std::endl;
+// 			for (BlockID id = 0; id < (int)blocks.size(); id++)
+// 			{
+// 				std::clog << "BlockID:" << std::resetiosflags(std::ios::left | std::ios::right) << std::setiosflags(std::ios::left) << std::setw(3) << id << std::setiosflags(std::ios::right);
+// 				std::clog << "PortalCount:" << std::setw(3) << blocks[id].portalCount;
+// 				std::clog << "From:" << std::setw(3) << blocks[id].portalFrom;
+// 				std::clog << "Portal to:";
+// 				for (BlockID edge : blocks[id].edge)
+// 				{
+// 					std::clog << std::setw(3) << edge;
+// 				}
+// 				std::clog << std::endl;
+// 			}
+// 		}//check edge
+
+	}
+	return 0;
+}
+
+```
+
 ## H - 假·签到题
 判断一个数字有几个因子可以在 $O(n)$ 时间内处理，即穷举 $i\in [1,n]$ ,判断 $i$ 是否为 $n$ 的因子。这样可以用两重循环把结果统计出来。最终复杂度 $O(n^2)$ 。
 
