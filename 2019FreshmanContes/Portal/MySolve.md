@@ -31,9 +31,52 @@
 
 ```cpp
 int connectedBlockCount = 0;
-int BlockID[n][m] = {-1};
+int theBlockGroundBelongsTo[n][m] = {-1};
 ```
 
 约定, 
-- `BlockID[i][j]` 代表 $(i,j)$ 这片地面所对应的 连通块 的序号
-- `connectedBlockCount` 代表所有已知的  连通块的数量 , 它们编号为 $[0,connectedBlockCount)$ 中的正整数
+- `theBlockGroundBelongsTo[i][j]` 代表 $(i,j)$ 这片地面所对应的 连通块 的序号,为 $[0,connectedBlockCount)$ 中的正整数
+- `connectedBlockCount` 代表所有已知的  连通块的数量
+
+然后,我们对于所有的格子进行检查
+
+- 是地面吗?
+
+- 还没有编号吗?
+
+如果满足这两个条件,就 `connectedBlockCount++;` , 并且为这块路面 赋予编号
+
+在给一个格子赋予编号之后,检查其相邻的格子,如果也满足以上两个条件,则也赋予编号并进行这个检查
+
+```cpp
+int getBlockID(int m, int n)
+{
+	if (isUnidedGround(m, n))
+	{
+		int currentID = blocks.size();
+		blocks.push_back(Block());
+		std::queue<coordinate> que;//BFS based on queue;
+		que.push({ m, n });
+		while (!que.empty())
+		{
+			coordinate curPos = que.front();
+			que.pop();
+			setBlockID(curPos,currentID);
+			blocks[currentID].member.push_back(curPos);
+			for (size_t i = 0; i < 4; i++)
+			{
+				if (isUnidedGround(curPos.x + DIR[i][0], curPos.y + DIR[i][1]))
+				{
+					que.push(curPos+i);
+					setBlockID(curPos+i,currentID);
+				}
+			}
+		}
+		return currentID;
+	}
+	else
+	{
+		return theBlockGroundBelongsTo[m][n];
+	}
+}
+```
