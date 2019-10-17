@@ -4,7 +4,7 @@
 #include<cstdio>
 #include<vector>
 using ULL = unsigned long long;
-void buildRankVector(std::vector<size_t>& res, const char* tar, ULL n)//¿ªÍ·ÔÚiµÄºó×ºµÄÅÅÃû
+void buildRankVector(std::vector<size_t>& res, const char* tar, ULL n)//å¼€å¤´åœ¨içš„åç¼€çš„æ’å
 {
 	res.clear();
 	res.resize(n);
@@ -54,7 +54,7 @@ void buildRankVector(std::vector<size_t>& res, const char* tar, ULL n)//¿ªÍ·ÔÚiµ
 	}
 	return;
 }
-void buildSuffixVector(std::vector<size_t>& res, const char* tar, ULL n)//ÅÅÃûµÚiµÄºó×ºÊÇÄÄ¸ö
+void buildSuffixVector(std::vector<size_t>& res, const char* tar, ULL n)//æ’åç¬¬içš„åç¼€æ˜¯å“ªä¸ª
 {
 	std::vector<size_t> rank;
 	buildRankVector(rank, tar, n);

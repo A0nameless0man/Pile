@@ -14,6 +14,12 @@ bool User::login(PWD token)const
 	return pwd == hash(token);
 }
 
+bool User::setPWD(PWD newPWD)
+{
+	pwd = hash(newPWD);
+	return true;
+}
+
 ID User::getID()const
 {
 	return id;
@@ -33,11 +39,11 @@ Score::Score(SingleScore sig)
 	Points.insert(sig);
 }
 
-ExamPoint Score::getPoint(SubjectName subjectName)const
+Point Score::getPoint(SubjectName subjectName)const
 {
 	if (contains(subjectName))
 	{
-		return Points.find(subjectName)->second.getPoint();
+		return Points.find(subjectName)->second;
 	}
 	else
 	{
@@ -407,7 +413,7 @@ Student::Student(User user, StuGrade stuGrade, StuClass stuClass) :User(user), s
 {
 }
 
-StuClass Student::getStuClass()
+StuClass Student::getStuClass()const
 {
 	return stuClass;
 }
@@ -418,7 +424,7 @@ bool Student::setStuClass(StuClass newStuClass)
 	return true;
 }
 
-StuGrade Student::getStuGrade()
+StuGrade Student::getStuGrade()const
 {
 	return stuGrade;
 }
@@ -438,9 +444,42 @@ bool GoodResult::addRec(Record& newRec)
 	return true;
 }
 
-GoodResult::operator std::string() const//TODO
+KeyWordType::KeyWordType(BasicType bType, SubjectName sName):basicType(bType),subjectName(sName)
 {
 }
+
+KeyWordType::KeyWordType(std::string name):basicType(toType(name))
+{
+	if (basicType == score)
+	{
+		subjectName = name;
+	}
+}
+
+KeyWordType::BasicType KeyWordType::toType(const std::string& name)
+{
+	using Type = KeyWordType::BasicType;
+	std::unordered_map<std::string, BasicType> map =
+	{
+		{"name",Type::name},
+		{"id",Type::id},
+		{"sex",Type::sex},
+		{"class",Type::stuClass},
+		{"grade",Type::stuGrade}
+	};
+	if (map.contains(name))
+	{
+		return map.find(name)->second;
+	}
+	else
+	{
+		return Type::score;
+	}
+}
+
+GoodResult::operator std::string() const
+{
+}//TODO
 
 KeyWordType::operator BasicType() const
 {
@@ -589,7 +628,7 @@ IDVec WhereFilter::filt(const StudentList& list)
 	{
 		return {};
 	}
-}
+}//TODO
 
 ColumnFilter::ColumnFilter(std::string filter)
 {
@@ -811,7 +850,7 @@ KeyWord::KeyWord(KeyWordType type, std::string str): singleScore("", 0)
 		throw std::invalid_argument("unknow type");
 		break;
 	}
-}
+}//TODO?
 
 KeyWord::~KeyWord()
 {
@@ -823,7 +862,6 @@ std::string KeyWord::form(size_t width) const
 	std::string ans = operator std::string();
 	ans += std::string((ans.length() < width ? (width - ans.length()) : 0), ' ');
 	return ans;
-
 }
 
 KeyWord::operator Name()const
@@ -901,6 +939,67 @@ Key::Key(std::string str)
 
 Key::~Key()
 {
+}
+
+KeyWord Key::getKey(const Student& stu) const
+{
+	using Type = KeyWordType::BasicType;
+	switch (type.operator KeyWordType::BasicType())
+	{
+	case Type::id:
+		return KeyWord(stu.getID());
+		break;
+	case Type::name:
+		return KeyWord(stu.getName());
+		break;
+	case Type::score:
+		return KeyWord(SingleScore((SubjectName)type,stu.getPoint((SubjectName)type)));
+		break;
+	case Type::sex:
+		return KeyWord(stu.getSex());
+		break;
+	case Type::stuClass:
+		return KeyWord(stu.getStuClass());
+		break;
+	case Type::stuGrade:
+		return KeyWord(stu.getStuGrade());
+	default:
+		throw std::invalid_argument("unknowType");
+		break;
+	}
+}
+
+bool Key::setKey(Student& stu) const
+{
+	using Type = KeyWordType::BasicType;
+	switch (type.operator KeyWordType::BasicType())
+	{
+	case Type::id:
+		return false;
+		break;
+	case Type::name:
+		return false;
+		break;
+	case Type::score:
+		if (stu.contains((SubjectName)type))
+		{
+			return stu.setPoint(Score((SingleScore)data));
+		}
+		else
+		{
+			return stu.addSubject(Score((SingleScore)data));
+		}
+		break;
+	case Type::sex:
+		return false;
+		break;
+	case Type::stuClass:
+		break;
+	case Type::stuGrade:
+	default:
+		throw std::invalid_argument("unknowType");
+		break;
+	}
 }
 
 KeyWordType Key::getType() const

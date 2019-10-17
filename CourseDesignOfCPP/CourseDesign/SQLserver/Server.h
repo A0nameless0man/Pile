@@ -111,7 +111,7 @@ private:
 public:
 	Score();
 	Score(SingleScore sig);
-	ExamPoint getPoint(SubjectName subjectName)const;
+	Point getPoint(SubjectName subjectName)const;
 	bool setPoint(SubjectName subjectName, ExamPoint newPoint);
 	bool setPoint(const Score& newScore);
 	ClassHour getClassHour(SubjectName subjectName)const;
@@ -147,9 +147,9 @@ private:
 	StuGrade stuGrade;
 public:
 	Student(User user = User(), StuGrade stuGrade = 1960, StuClass stuClass = "");
-	StuClass getStuClass();
+	StuClass getStuClass()const;
 	bool setStuClass(StuClass newStuClass);
-	StuGrade getStuGrade();
+	StuGrade getStuGrade()const;
 	template<class Is>
 	friend Is& deFormat(Is& is, Student& Student);
 };
@@ -192,6 +192,7 @@ private:
 public:
 	KeyWordType(BasicType bType, SubjectName sName = "");
 	KeyWordType(std::string name = "");
+	static BasicType toType(const std::string& name);
 	operator std::string()const;
 	operator BasicType()const;
 	operator SubjectName()const;
