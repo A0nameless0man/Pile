@@ -236,36 +236,6 @@ bool operator<(const SingleScore& a, const SingleScore& b)
 	}
 }
 
-bool operator==(const Score& stu, const Score& stand)
-{
-	return (stu.contains(stand) && stu.compare(stand));
-}
-
-bool operator>=(const Score& stu, const Score& stand)
-{
-	return (stu.contains(stand) && stu.compare<std::greater_equal<ExamPoint> >(stand));
-}
-
-bool operator<=(const Score& stu, const Score& stand)
-{
-	return (stu.contains(stand) && stu.compare<std::less_equal<ExamPoint> >(stand));
-}
-
-bool operator!=(const Score& stu, const Score& stand)
-{
-	return (stu.contains(stand) && stu.compare<std::not_equal_to<ExamPoint> >(stand));
-}
-
-bool operator<(const Score& stu, const Score& stand)
-{
-	return (stu.contains(stand) && stu.compare<std::less<ExamPoint> >(stand));
-}
-
-bool operator>(const Score& stu, const Score& stand)
-{
-	return (stu.contains(stand) && stu.compare<std::greater<ExamPoint> >(stand));
-}
-
 IDVec operator&(const IDVec& a, const IDVec& b)
 {
 	IDVec aa = a, bb = b;
@@ -331,7 +301,8 @@ bool operator<(const KeyWord& a, const KeyWord& b)
 			return a.stuGrade < b.stuGrade;
 			break;
 		case KeyWordType::BasicType::score:
-			return a.singleScore < b.singleScore;
+			return a.singleScore.second < b.singleScore.second;
+			break;
 		default:
 			throw std::invalid_argument("unknow type");
 			break;
@@ -479,6 +450,19 @@ KeyWordType::BasicType KeyWordType::toType(const std::string& name)
 
 GoodResult::operator std::string() const
 {
+	if (head.size() == 1)
+	{
+		std::sort
+		(
+			rec.begin(), 
+			rec.end(),
+			[](const Record& a, const Record& b)->bool 
+			{
+				return a[0] < b[0]; 
+			}
+		);
+	}
+
 }//TODO
 
 KeyWordType::operator BasicType() const
@@ -994,8 +978,11 @@ bool Key::setKey(Student& stu) const
 		return false;
 		break;
 	case Type::stuClass:
+		return stu.setStuClass((StuClass)data);
 		break;
 	case Type::stuGrade:
+		//return stu.setStuGrade((StuGrade)data);
+		return false;
 	default:
 		throw std::invalid_argument("unknowType");
 		break;
@@ -1006,6 +993,36 @@ KeyWordType Key::getType() const
 {
 	return type;
 }
+//
+//bool operator==(const Score& stu, const Score& stand)
+//{
+//	return (stu.contains(stand) && stu.compare(stand));
+//}
+//
+//bool operator>=(const Score& stu, const Score& stand)
+//{
+//	return (stu.contains(stand) && stu.compare<std::greater_equal<ExamPoint> >(stand));
+//}
+//
+//bool operator<=(const Score& stu, const Score& stand)
+//{
+//	return (stu.contains(stand) && stu.compare<std::less_equal<ExamPoint> >(stand));
+//}
+//
+//bool operator!=(const Score& stu, const Score& stand)
+//{
+//	return (stu.contains(stand) && stu.compare<std::not_equal_to<ExamPoint> >(stand));
+//}
+//
+//bool operator<(const Score& stu, const Score& stand)
+//{
+//	return (stu.contains(stand) && stu.compare<std::less<ExamPoint> >(stand));
+//}
+//
+//bool operator>(const Score& stu, const Score& stand)
+//{
+//	return (stu.contains(stand) && stu.compare<std::greater<ExamPoint> >(stand));
+//}
 
 //const IDVec SexIndex::getEqByKey(KeyWord keyWord)
 //{

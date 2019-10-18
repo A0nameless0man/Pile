@@ -127,13 +127,6 @@ public:
 	ClassHour getTotalClassHour()const;
 	operator ScoreMap()const;
 };
-bool operator<(const SingleScore& a, const SingleScore& b);
-bool operator==(const Score& stu, const Score& stand);
-bool operator>=(const Score& stu, const Score& stand);
-bool operator<=(const Score& stu, const Score& stand);
-bool operator!=(const Score& stu, const Score& stand);
-bool operator<(const Score& stu, const Score& stand);
-bool operator>(const Score& stu, const Score& stand);
 template<>
 std::string format(const Score score);
 template<class Is = std::istream>
@@ -412,6 +405,14 @@ inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)const
 {
 	return IDVec();
 }
+
+//bool operator<(const SingleScore& a, const SingleScore& b);
+//bool operator==(const Score& stu, const Score& stand);
+//bool operator>=(const Score& stu, const Score& stand);
+//bool operator<=(const Score& stu, const Score& stand);
+//bool operator!=(const Score& stu, const Score& stand);
+//bool operator<(const Score& stu, const Score& stand);
+//bool operator>(const Score& stu, const Score& stand);
 
 //class BaseIndex
 //{
