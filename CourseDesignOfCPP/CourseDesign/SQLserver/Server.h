@@ -321,7 +321,7 @@ template<class Is>
 inline Is& deFormat(Is& is, Sex& sex)
 {
 	throw gcnew System::NotImplementedException();
-	// TODO: 在此处插入 return 语句
+	// TODO: 
 }
 
 template<class OP>
@@ -340,7 +340,7 @@ template<class Is>
 inline Is& deFormat(Is& is, User& user)
 {
 	throw gcnew System::NotImplementedException();
-	// TODO: 在此处插入 return 语句
+	// TODO:
 }
 
 template<class vec>
@@ -365,7 +365,7 @@ template<class Is>
 inline Is& deFormat(Is& is, Point& point)
 {
 	throw gcnew System::NotImplementedException();
-	// TODO: 在此处插入 return 语句
+	// TODO:
 }
 
 template<>
@@ -378,7 +378,7 @@ template<class Is>
 inline Is& deFormat(Is& is, Score& score)
 {
 	throw gcnew System::NotImplementedException();
-	// TODO: 在此处插入 return 语句
+	// TODO:
 }
 
 template<>
@@ -391,7 +391,7 @@ template<class Is>
 inline Is& deFormat(Is& is, Student& Student)
 {
 	throw gcnew System::NotImplementedException();
-	// TODO: 在此处插入 return 语句
+	// TODO: 
 }
 
 template<>
