@@ -1,6 +1,6 @@
 ```SQL
 select name , class where sex = male
-select name , grade("math") where class = "ComputerScience"
+select name , math where class = "ComputerScience"
 select distinct class where college = "Computer and Software"
 insert ("Wang Xuyang" , ...)
 #insert (name , ...) value ("Wang Xuyang")#insert at arbity order is not supported yet
