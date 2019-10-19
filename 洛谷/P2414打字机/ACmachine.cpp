@@ -13,8 +13,13 @@ private:
 
 public:
     template <class StringVec = std::vector<std::string>>
-    TireTree(StringVec vec,bool allowConflict = false);
+    TireTree(const StringVec& vec,bool allowConflict = false);
     bool contains(std::string str);
     bool erase(std::string);
     bool insert(std::string);
 };
+template <class StringVec>
+TireTree::TireTree(const StringVec& vec,bool allowConflict)
+{
+    
+}
