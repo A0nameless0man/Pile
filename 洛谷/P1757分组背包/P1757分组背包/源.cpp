@@ -2,9 +2,9 @@
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
-const int MAX_N = 1007;//物品数量
-const int MAX_M = 1007;//可用空间
-const int MAX_T = 107;//组数
+const int MAX_N = 1007;//鐗╁搧鏁伴噺
+const int MAX_M = 1007;//鍙敤绌洪棿
+const int MAX_T = 107;//缁勬暟
 struct item
 {
 	int Weight;
@@ -30,7 +30,7 @@ void ResetMEM(void)
 		NumOfTeams[i] = 0;
 	}
 }
-int DP(int i, int j)//TeamID，WeightUseable
+int DP(int i, int j)//TeamID锛學eightUseable
 {
 	if (i<0||j<0)
 	{

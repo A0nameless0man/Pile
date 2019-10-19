@@ -64,6 +64,8 @@
         "locale": "cpp",
         "random": "cpp",
         "xlocbuf": "cpp",
-        "xlocmes": "cpp"
+        "xlocmes": "cpp",
+        "concepts": "cpp",
+        "functional": "cpp"
     }
 }
