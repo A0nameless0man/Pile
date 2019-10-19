@@ -1,6 +1,8 @@
 #include <cstdio>
+#include <iostream>
 #include <vector>
 #include <array>
+#include <stack>
 #include <string>
 const char MIN_C = 'a';
 const char MAX_C = 'z';
@@ -24,6 +26,7 @@ private:
     {
         std::array<node *, Hasher::RANGE> next = {NULL};
         node *fail = NULL;
+        node *parent = NULL;
         int counter = 0;
     } root;
     bool allowConflict;
@@ -59,6 +62,7 @@ bool TireTree<Hasher, StringVec>::insert(const std::string &str)
         if (next == NULL)
         {
             next = new node;
+            next->parent = current;
         }
         current = next;
     }
@@ -104,4 +108,38 @@ bool TireTree<Hasher, StringVec>::erase(const std::string &str)
     {
         return false;
     }
+}
+
+template <class Hasher, class StringVec>
+TireTree<Hasher, StringVec>::~TireTree()
+{
+    std::stack<node *> stack;
+    for (size_t i = 0; i < Hasher::RANGE; i++)
+    {
+        if (root.next[i] != NULL)
+        {
+            stack.push(root.next[i]);
+        }
+    }
+    while (!stack.empty())
+    {
+        node *c = stack.top();
+        stack.pop();
+        for (size_t i = 0; i < Hasher::RANGE; i++)
+        {
+            if (c->next[i] != NULL)
+            {
+                stack.push(c->next[i]);
+            }
+        }
+        delete c;
+    }
+}
+int main(void)
+{
+    TireTree tree(std::vector<std::string>({"a", "abc", "cde"}));
+    std::cout << tree.contains("nams") << std::endl;
+    std::cout << tree.contains("ab") << std::endl;
+    std::cout << tree.contains("abc") << std::endl;
+    return 0;
 }
