@@ -1,5 +1,5 @@
 ```SQL
-select name , class where sex = male
+select name , class where sex = male and / or class = "ComputerScience"
 select name , math where class = "ComputerScience"
 select distinct class where college = "Computer and Software"
 insert ("Wang Xuyang" , ...)
