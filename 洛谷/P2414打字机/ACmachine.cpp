@@ -27,23 +27,30 @@ struct node
     size_t counter = 0;
     size_t id;
 };
-template <class Hasher = standLowerCaseCharHasher, class StringVec = std::vector<std::string &>>
-class TireTree
+struct ACmachineMatchRes
 {
-public:
+    size_t endPos;
+    size_t id;
+};
+template <class Hasher = standLowerCaseCharHasher, class StringVec = std::vector<std::string &>>
+class ACmachine
+{
+private:
     mutable node<Hasher, StringVec> root;
     bool allowConflict;
     Hasher hash;
-
 public:
-    TireTree(const StringVec &vec = {}, bool allowConflict = false);
-    ~TireTree();
+    ACmachine(const StringVec &vec = {}, bool allowConflict = false);
+    ~ACmachine();
     bool contains(const std::string &str) const;
     bool erase(const std::string &str);
     bool insert(const std::string &str, size_t id = 0);
+    bool buildFailTree();
+    bool removeFailTree();
+    std::vector<ACmachineMatchRes> match(const std::string &str);
 };
 template <class Hasher, class StringVec>
-TireTree<Hasher, StringVec>::TireTree(const StringVec &vec, bool allowConflict) : allowConflict(allowConflict)
+ACmachine<Hasher, StringVec>::ACmachine(const StringVec &vec, bool allowConflict) : allowConflict(allowConflict)
 {
     size_t i = 0;
     for (auto s : vec)
@@ -52,7 +59,7 @@ TireTree<Hasher, StringVec>::TireTree(const StringVec &vec, bool allowConflict) 
     }
 }
 template <class Hasher, class StringVec>
-bool TireTree<Hasher, StringVec>::insert(const std::string &str, size_t id)
+bool ACmachine<Hasher, StringVec>::insert(const std::string &str, size_t id)
 {
     if (!allowConflict && contains(str))
     {
@@ -62,7 +69,7 @@ bool TireTree<Hasher, StringVec>::insert(const std::string &str, size_t id)
     for (auto c : str)
     {
         size_t index = hash(c);
-        node<Hasher, StringVec> *&next = current->next[(hash(c))];
+        node<Hasher, StringVec> *&next = current->next[index];
         if (next == NULL)
         {
             next = new node<Hasher, StringVec>;
@@ -75,13 +82,13 @@ bool TireTree<Hasher, StringVec>::insert(const std::string &str, size_t id)
     return true;
 }
 template <class Hasher, class StringVec>
-bool TireTree<Hasher, StringVec>::contains(const std::string &str) const
+bool ACmachine<Hasher, StringVec>::contains(const std::string &str) const
 {
     node<Hasher, StringVec> *current = &root;
     for (auto c : str)
     {
         size_t index = hash(c);
-        node<Hasher, StringVec> *&next = current->next[(hash(c))];
+        node<Hasher, StringVec> *&next = current->next[index];
         if (next == NULL)
         {
             return false;
@@ -91,7 +98,7 @@ bool TireTree<Hasher, StringVec>::contains(const std::string &str) const
     return current->counter != 0;
 }
 template <class Hasher, class StringVec>
-bool TireTree<Hasher, StringVec>::erase(const std::string &str)
+bool ACmachine<Hasher, StringVec>::erase(const std::string &str)
 {
     node<Hasher, StringVec> *current = &root;
     for (auto c : str)
@@ -116,7 +123,7 @@ bool TireTree<Hasher, StringVec>::erase(const std::string &str)
 }
 
 template <class Hasher, class StringVec>
-TireTree<Hasher, StringVec>::~TireTree()
+ACmachine<Hasher, StringVec>::~ACmachine()
 {
     std::stack<node<Hasher, StringVec> *> stack;
     for (size_t i = 0; i < Hasher::RANGE; i++)
@@ -140,28 +147,6 @@ TireTree<Hasher, StringVec>::~TireTree()
         delete c;
     }
 }
-
-struct ACmachineMatchRes
-{
-    size_t endPos;
-    size_t id;
-};
-
-template <class Hasher = standLowerCaseCharHasher, class StringVec = std::vector<std::string &>>
-class ACmachine : public TireTree<Hasher, StringVec>
-{
-public:
-    ACmachine(const StringVec &vec = {}, bool allowConflict = false);
-    bool buildFailTree();
-    bool removeFailTree();
-    std::vector<ACmachineMatchRes> match(const std::string &str);
-};
-template <class Hasher, class StringVec>
-ACmachine<Hasher, StringVec>::ACmachine(const StringVec &vec, bool allowConflict) : TireTree<Hasher, StringVec>(vec, allowConflict)
-{
-    buildFailTree();
-}
-
 template <class Hasher, class StringVec>
 bool ACmachine<Hasher, StringVec>::removeFailTree()
 {
@@ -193,7 +178,7 @@ bool ACmachine<Hasher, StringVec>::removeFailTree()
             }
         }
         //delete c;
-        c.fail = NULL;
+        c->fail = NULL;
     }
     return true;
 }
@@ -202,32 +187,32 @@ template <class Hasher, class StringVec>
 bool ACmachine<Hasher, StringVec>::buildFailTree()
 {
     removeFailTree();
-    TireTree<Hasher, StringVec>::root.fail = &TireTree<Hasher, StringVec>::root;
+    root.fail = &root;
     std::queue<node<Hasher, StringVec> *> que;
-    que.push(&TireTree<Hasher, StringVec>::root);
+    que.push(&root);
     while (!que.empty())
     {
-        node<Hasher, StringVec> *cur = que.top(); //build cur's child's fail
+        node<Hasher, StringVec> *cur = que.front(); //build cur's child's fail
         que.pop();
         for (size_t i = 0; i < Hasher::RANGE; i++)
         {
             if (cur->next[i] != NULL)
             {
-                node<Hasher, StringVec> fail = cur->fail;
+                node<Hasher, StringVec> *fail = cur->fail;
                 do
                 {
-                    if (fail.next[i] != NULL)
+                    if (fail->next[i] != NULL)
                     {
-                        fail = fail.next[i];
+                        fail = fail->next[i];
                         break;
                     }
                     else
                     {
-                        fail = fail.fail;
+                        fail = fail->fail;
                     }
 
-                } while (fail != &TireTree<Hasher, StringVec>::root);
-                cur->next[i].fail = fail;
+                } while (fail != &root);
+                cur->next[i]->fail = fail;
             }
         }
     }
@@ -236,23 +221,24 @@ bool ACmachine<Hasher, StringVec>::buildFailTree()
 template <class Hasher, class StringVec>
 std::vector<ACmachineMatchRes> ACmachine<Hasher, StringVec>::match(const std::string &str)
 {
-    if (TireTree<Hasher, StringVec>::root.fail == NULL)
+    if (root.fail == NULL)
         buildFailTree();
     std::vector<ACmachineMatchRes> res;
     size_t pos = 0;
-    node<Hasher, StringVec> *cur = &TireTree<Hasher, StringVec>::root;
+    node<Hasher, StringVec> *cur = &root;
     while (pos < str.size())
     {
         if (cur->counter)
             res.push_back({pos, cur->id});
         if (cur->next[hash(str[pos])] != NULL)
         {
-            pos++;
             cur = cur->next[hash(str[pos])];
+            pos++;
+            //cur = cur->next[hash(str[pos])];
         }
         else
         {
-            if (cur == &TireTree<Hasher, StringVec>::root)
+            if (cur == &root)
             {
                 pos++;
             }
@@ -262,6 +248,7 @@ std::vector<ACmachineMatchRes> ACmachine<Hasher, StringVec>::match(const std::st
             }
         }
     }
+    return res;
 }
 int main(void)
 {
@@ -282,7 +269,9 @@ int main(void)
         checkCaseC =
             {
                 "asvdjsakvrnlawneifnwjeanvfanvjfwanevawegvnwanvejfvwav"};
-    ACmachine tree(testCase);auto res = tree.match(checkCaseC[0]);
+    ACmachine tree(testCase);
+    std::cout<<"built"<<std::endl;
+    auto res = tree.match(checkCaseC[0]);
     for(auto c:res)
     {
         std::cout<<c.endPos<<" "<<c.id<<std::endl;
