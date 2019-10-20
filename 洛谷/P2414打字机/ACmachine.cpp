@@ -25,7 +25,7 @@ struct node
     node *fail = NULL;
     node *parent = NULL;
     size_t counter = 0;
-    size_t id;
+    size_t id = -1;
 };
 struct ACmachineMatchRes
 {
@@ -190,20 +190,22 @@ bool ACmachine<Hasher, StringVec>::buildFailTree()
     root.fail = &root;
     std::queue<node<Hasher, StringVec> *> que;
     que.push(&root);
+    //std::cout<<&root<<"--fail-->"<<root.fail<<std::endl;
     while (!que.empty())
     {
         node<Hasher, StringVec> *cur = que.front(); //build cur's child's fail
         que.pop();
         for (size_t i = 0; i < Hasher::RANGE; i++)
         {
-            if (cur->next[i] != NULL)
+            if (cur->next[i] != NULL)//I have this child
             {
-                node<Hasher, StringVec> *fail = cur->fail;
+                node<Hasher, StringVec> *fail = cur->fail;//my fail ptr
                 do
                 {
                     if (fail->next[i] != NULL)
                     {
-                        fail = fail->next[i];
+                        if(fail!=cur)
+                            fail = fail->next[i];
                         break;
                     }
                     else
@@ -211,8 +213,11 @@ bool ACmachine<Hasher, StringVec>::buildFailTree()
                         fail = fail->fail;
                     }
 
-                } while (fail != &root);
+                }while (fail != &root);
                 cur->next[i]->fail = fail;
+                //std::cout<<cur->next[i]<<"--fail-->"<<cur->next[i]->fail<<std::endl;
+                //std::cout<<cur<<"--chile"<<i<<"-->"<<cur->next[i]<<std::endl;
+                que.push(cur->next[i]);
             }
         }
     }
@@ -225,28 +230,37 @@ std::vector<ACmachineMatchRes> ACmachine<Hasher, StringVec>::match(const std::st
         buildFailTree();
     std::vector<ACmachineMatchRes> res;
     size_t pos = 0;
+    size_t step = 0;//"<<step++<<"
     node<Hasher, StringVec> *cur = &root;
     while (pos < str.size())
     {
+        // std::cout<<"Debug:"<<std::endl;
+        // std::cout<<"Pos:\t"<<pos<<" "<<str[pos]<<std::endl;
+        // std::cout<<"Id:\t"<<cur->id<<std::endl;
+        // std::cout<<"Cur:\t"<<cur<<std::endl;
+        //std::cout<<cur<<"--fail-->"<<cur->fail<<std::endl;
+
+        // std::cout<<"Fail:\t"<<cur->fail<<std::endl;;
+        
         if (cur->counter)
             res.push_back({pos, cur->id});
         if (cur->next[hash(str[pos])] != NULL)
         {
+            //std::cout<<cur<<"-."<<step++<<"match'"<<str[pos]<<"'.->"<<cur->next[hash(str[pos])]<<std::endl;
             cur = cur->next[hash(str[pos])];
             pos++;
             //cur = cur->next[hash(str[pos])];
+            //std::cout<<"Match:\t"<<cur<<std::endl;;
         }
         else
         {
-            if (cur == &root)
-            {
-                pos++;
-            }
-            else
-            {
+            //std::cout<<cur<<"-."<<step++<<"fail'"<<str[pos]<<"'.->"<<cur->fail<<std::endl;
+            if(cur!=&root)
                 cur = cur->fail;
-            }
+            else
+                pos++;
         }
+        //std::cout<<std::endl;
     }
     return res;
 }
@@ -255,9 +269,9 @@ int main(void)
     std::vector<std::string>
         testCase =
             {
-                "abcdefghijk",
+                "abcdef",
                 "abcd",
-                "efg"
+                "efg",
                 "cdefg"},
         checkCaseA = testCase,
         checkCaseB =
@@ -268,9 +282,10 @@ int main(void)
                 "nams"},
         checkCaseC =
             {
-                "asvdjsakvrnlawneifnwjeanvfanvjfwanevawegvnwanvejfvwav"};
+                "abcdefgzefgzcdefg"
+            };
     ACmachine tree(testCase);
-    std::cout<<"built"<<std::endl;
+    //std::cout<<"built"<<std::endl;
     auto res = tree.match(checkCaseC[0]);
     for(auto c:res)
     {
