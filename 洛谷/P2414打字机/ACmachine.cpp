@@ -33,9 +33,9 @@ private:
     Hasher hash;
 
 public:
-    TireTree(const StringVec &vec, bool allowConflict = false);
+    TireTree(const StringVec &vec = {}, bool allowConflict = false);
     ~TireTree();
-    bool contains(const std::string &str);
+    bool contains(const std::string &str)const;
     bool erase(const std::string &str);
     bool insert(const std::string &str);
 };
@@ -70,7 +70,7 @@ bool TireTree<Hasher, StringVec>::insert(const std::string &str)
     return true;
 }
 template <class Hasher, class StringVec>
-bool TireTree<Hasher, StringVec>::contains(const std::string &str)
+bool TireTree<Hasher, StringVec>::contains(const std::string &str)const
 {
     node *current = &root;
     for (auto c : str)
@@ -135,6 +135,17 @@ TireTree<Hasher, StringVec>::~TireTree()
         delete c;
     }
 }
+
+template <class Hasher = standLowerCaseCharHasher, class StringVec = std::vector<std::string &>>
+class ACmachine: public TireTree<Hasher,StringVec>;
+{
+public:
+ACmachine(const StringVec &vec = {}, bool allowConflict = false);
+bool buildFailTree();
+}
+template <class Hasher = standLowerCaseCharHasher, class StringVec = std::vector<std::string &>>
+ACmachine
+
 int main(void)
 {
     TireTree tree(std::vector<std::string>({"a", "abc", "cde"}));
