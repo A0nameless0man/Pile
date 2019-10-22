@@ -89,7 +89,7 @@ private:
 	ExamPoint point;
 	ClassHour classHour;
 public:
-	Point(ExamPoint point, ClassHour classHour = 1);
+	Point(ExamPoint point = 0, ClassHour classHour = 1);
 	bool setPoint(ExamPoint newPoint);
 	ExamPoint getPoint()const;
 	ClassHour getClassHour()const;
@@ -113,6 +113,7 @@ public:
 	Score(SingleScore sig);
 	Point getPoint(SubjectName subjectName)const;
 	bool setPoint(SubjectName subjectName, ExamPoint newPoint);
+	bool setPoint(SubjectName subjectName, Point newPoint);
 	bool setPoint(const Score& newScore);
 	ClassHour getClassHour(SubjectName subjectName)const;
 	bool contains(SubjectName subjectName)const;
@@ -202,14 +203,14 @@ private:
 	Sex sex;
 	StuClass stuClass;
 	StuGrade stuGrade;
-	SingleScore singleScore;
+	Point point;
 public:
 	KeyWord(Name name);
 	KeyWord(ID id);
 	KeyWord(Sex sex);
 	KeyWord(StuClass stuClass);
 	KeyWord(StuGrade stuGrade);
-	KeyWord(SingleScore singleSore);
+	KeyWord(Point singleSore);
 	KeyWord();
 	KeyWord(KeyWordType type, std::string str);
 	~KeyWord();
@@ -218,7 +219,7 @@ public:
 	operator ID()const;
 	operator Sex()const;
 	operator StuClass()const;
-	operator SingleScore()const;
+	operator Point()const;
 	operator KeyWordType()const;
 	operator std::string()const;
 	friend bool operator<(const KeyWord& a, const KeyWord& b);
@@ -314,14 +315,34 @@ std::string form(Record kwyWord, std::vector<size_t>& width);//empty width or in
 template<>
 inline std::string format(const Sex sex)
 {
-	return std::string();
+	switch (sex)
+	{
+	case male:
+		return "male";
+		break;
+	case female:
+		return "female";
+		break;
+	default:
+		break;
+	}
 }
 
 template<class Is>
 inline Is& deFormat(Is& is, Sex& sex)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: 
+	std::string str;
+	is >> str;
+	if (str == "male")
+	{
+		sex = male;
+	}
+	else
+	{
+		sex = female;
+	}
+	break;
+	return is;
 }
 
 template<class OP>

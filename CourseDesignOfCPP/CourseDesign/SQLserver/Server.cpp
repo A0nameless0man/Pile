@@ -1,6 +1,6 @@
 #include"Server.h"
 #include"md5.h"
-User::User(ID id, PWD pwd = "", Name name, Sex sex) :name(name), id(id), sex(sex), pwd(pwd)
+User::User(ID id, PWD pwd, Name name, Sex sex) :name(name), id(id), sex(sex), pwd(pwd)
 {
 }
 
@@ -56,6 +56,19 @@ bool Score::setPoint(SubjectName subjectName, ExamPoint newPoint)
 	if (contains(subjectName))
 	{
 		return Points.find(subjectName)->second.setPoint(newPoint);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Score::setPoint(SubjectName subjectName, Point newPoint)
+{
+	if (contains(subjectName))
+	{
+		Points[subjectName] = newPoint;
+		return true;
 	}
 	else
 	{
@@ -301,7 +314,7 @@ bool operator<(const KeyWord& a, const KeyWord& b)
 			return a.stuGrade < b.stuGrade;
 			break;
 		case KeyWordType::BasicType::score:
-			return a.singleScore.second < b.singleScore.second;
+			return a.point < b.point;
 			break;
 		default:
 			throw std::invalid_argument("unknow type");
@@ -566,6 +579,7 @@ IDVec WhereFilter::filt(const StudentList& list)
 			if (!ops.contains(buf))
 			{
 				IDVec num = {};//TODO
+				
 				IDs.push(num);
 			}
 			else
@@ -769,72 +783,67 @@ std::string SQLrequest::exec(StudentList& list)
 	}
 }
 
-KeyWord::KeyWord(Name name) :type(KeyWordType::BasicType::name), name(name), singleScore("", 0)
+KeyWord::KeyWord(Name name) :type(KeyWordType::BasicType::name), name(name)
 {
 
 }
 
-KeyWord::KeyWord(ID id) : type(KeyWordType::BasicType::id), id(id), singleScore("", 0)
+KeyWord::KeyWord(ID id) : type(KeyWordType::BasicType::id), id(id)
 {
 
 }
 
-KeyWord::KeyWord(Sex sex) : type(KeyWordType::BasicType::sex), sex(sex), singleScore("", 0)
+KeyWord::KeyWord(Sex sex) : type(KeyWordType::BasicType::sex), sex(sex)
 {
 
 }
 
-KeyWord::KeyWord(StuClass stuClass) : type(KeyWordType::BasicType::stuClass), stuClass(stuClass), singleScore("", 0)
+KeyWord::KeyWord(StuClass stuClass) : type(KeyWordType::BasicType::stuClass), stuClass(stuClass)
 {
 
 }
 
-KeyWord::KeyWord(StuGrade stuGrade) : type(KeyWordType::BasicType::stuGrade), stuGrade(stuGrade), singleScore("", 0)
+KeyWord::KeyWord(StuGrade stuGrade) : type(KeyWordType::BasicType::stuGrade), stuGrade(stuGrade)
 {
 
 }
 
-KeyWord::KeyWord(SingleScore singleSore) : type(KeyWordType::BasicType::score), singleScore(singleScore)
+KeyWord::KeyWord(Point singleSore) : type(KeyWordType::BasicType::score),point(singleSore)
 {
 
 }
 
-KeyWord::KeyWord(): singleScore("", 0)
+KeyWord::KeyWord()
 {
 }
 
-KeyWord::KeyWord(KeyWordType type, std::string str): singleScore("", 0)
+KeyWord::KeyWord(KeyWordType type, std::string str)
 {
+	std::stringstream ss(str);
 	switch ((KeyWordType::BasicType)type)
 	{
 	case KeyWordType::BasicType::id:
 		id = str;
 		break;
 	case KeyWordType::BasicType::sex:
-		if (str == "male")
-		{
-			sex = male;
-		}
-		else
-		{
-			sex = female;
-		}
-		break;
+		deFormat(ss, sex);
 	case KeyWordType::BasicType::stuClass:
 		stuClass = str;
 		break;
 	case KeyWordType::BasicType::stuGrade:
-		
+		ss >> stuGrade;
 		break;
 	case KeyWordType::BasicType::score:
+		deFormat(ss, point);
 		break;
 	case KeyWordType::BasicType::name:
+		name = str;
 		break;
 	default:
 		throw std::invalid_argument("unknow type");
 		break;
 	}
-}//TODO?
+}
 
 KeyWord::~KeyWord()
 {
@@ -868,9 +877,9 @@ KeyWord::operator StuClass()const
 	return stuClass;
 }
 
-KeyWord::operator SingleScore()const
+KeyWord::operator Point()const
 {
-	return singleScore;
+	return point;
 }
 
 KeyWord::operator KeyWordType()const
@@ -895,7 +904,7 @@ KeyWord::operator std::string()const
 		return std::to_string(stuGrade);
 		break;
 	case KeyWordType::BasicType::score:
-		return std::to_string(singleScore.second.getPoint());
+		return format(point);
 		break;
 	case KeyWordType::BasicType::name:
 		return name;
@@ -937,7 +946,7 @@ KeyWord Key::getKey(const Student& stu) const
 		return KeyWord(stu.getName());
 		break;
 	case Type::score:
-		return KeyWord(SingleScore((SubjectName)type,stu.getPoint((SubjectName)type)));
+		return KeyWord(stu.getPoint((SubjectName)type));
 		break;
 	case Type::sex:
 		return KeyWord(stu.getSex());
@@ -967,11 +976,11 @@ bool Key::setKey(Student& stu) const
 	case Type::score:
 		if (stu.contains((SubjectName)type))
 		{
-			return stu.setPoint(Score((SingleScore)data));
+			return stu.setPoint((SubjectName)type,((Point)data));
 		}
 		else
 		{
-			return stu.addSubject(Score((SingleScore)data));
+			return stu.addSubject((SubjectName)type,(Point)data);
 		}
 		break;
 	case Type::sex:
