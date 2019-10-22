@@ -552,7 +552,7 @@ IDVec WhereFilter::filt(const StudentList& list)
 				IDVec a = IDs.top();
 				IDs.pop();
 				IDVec b = IDs.top();
-				IDs.pop;
+				IDs.pop();
 				switch (nextOp)
 				{
 				case left:
