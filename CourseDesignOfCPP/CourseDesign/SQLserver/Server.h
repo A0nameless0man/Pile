@@ -12,12 +12,16 @@
 
 using ExamPoint = double;
 using ClassHour = double;
-using ID = std::string;
+//using ID = std::string;
+class ID;
 using PWD = std::string;
-using Name = std::string;
-using StuClass = std::string;
+//using Name = std::string;
+class Name;
+//using StuClass = std::string;
+class StuClass;
 using StuGrade = size_t;
-using SubjectName = std::string;
+//using SubjectName = std::string;
+class SubjectName;
 enum Sex :char;
 //class RWlock;//giveup thread safety
 class User;
@@ -59,6 +63,30 @@ std::string format(const Sex sex);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Sex& sex);
 
+class Name :public std::string
+{
+public:
+	Name() {  }
+	Name(std::string str) :std::string(str) {}
+};
+class ID :public std::string
+{
+public:
+	ID() {  }
+	ID(std::string str) :std::string(str) {}
+};
+class StuClass :public std::string
+{
+public:
+	StuClass() {  }
+	StuClass(std::string str) :std::string(str) {}
+};
+class SubjectName :public std::string
+{
+public:
+	SubjectName() {  }
+	SubjectName(std::string str) :std::string(str) {}
+};
 class User
 {
 private:
@@ -67,7 +95,7 @@ private:
 	Sex sex;
 	PWD pwd;
 public:
-	User(ID id = "", PWD pwd = "", Name name = "John Doe", Sex sex = unKnown);
+	User(ID id =ID(""), PWD pwd = "", Name name = Name("John Doe"), Sex sex = unKnown);
 	Name getName()const;
 	//bool setName(Name newName);
 	bool login(PWD token)const;
@@ -140,7 +168,7 @@ private:
 	StuClass stuClass;
 	StuGrade stuGrade;
 public:
-	Student(User user = User(), StuGrade stuGrade = 1960, StuClass stuClass = "");
+	Student(User user = User(), StuGrade stuGrade = 1960, StuClass stuClass = StuClass(""));
 	StuClass getStuClass()const;
 	bool setStuClass(StuClass newStuClass);
 	StuGrade getStuGrade()const;
@@ -184,7 +212,7 @@ private:
 	BasicType basicType;
 	SubjectName subjectName;
 public:
-	KeyWordType(BasicType bType, SubjectName sName = "");
+	KeyWordType(BasicType bType, SubjectName sName =SubjectName (""));
 	KeyWordType(std::string name = "");
 	static BasicType toType(const std::string& name);
 	operator std::string()const;
@@ -324,6 +352,7 @@ inline std::string format(const Sex sex)
 		return "female";
 		break;
 	default:
+	return "";
 		break;
 	}
 }

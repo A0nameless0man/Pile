@@ -823,12 +823,12 @@ KeyWord::KeyWord(KeyWordType type, std::string str)
 	switch ((KeyWordType::BasicType)type)
 	{
 	case KeyWordType::BasicType::id:
-		id = str;
+		id = ID(str);
 		break;
 	case KeyWordType::BasicType::sex:
 		deFormat(ss, sex);
 	case KeyWordType::BasicType::stuClass:
-		stuClass = str;
+		stuClass = StuClass(str);
 		break;
 	case KeyWordType::BasicType::stuGrade:
 		ss >> stuGrade;
@@ -837,7 +837,7 @@ KeyWord::KeyWord(KeyWordType type, std::string str)
 		deFormat(ss, point);
 		break;
 	case KeyWordType::BasicType::name:
-		name = str;
+		name = Name(str);
 		break;
 	default:
 		throw std::invalid_argument("unknow type");
@@ -946,7 +946,7 @@ KeyWord Key::getKey(const Student& stu) const
 		return KeyWord(stu.getName());
 		break;
 	case Type::score:
-		return KeyWord(stu.getPoint((SubjectName)type));
+		return KeyWord(stu.getPoint(type.operator SubjectName()));
 		break;
 	case Type::sex:
 		return KeyWord(stu.getSex());
@@ -974,20 +974,20 @@ bool Key::setKey(Student& stu) const
 		return false;
 		break;
 	case Type::score:
-		if (stu.contains((SubjectName)type))
+		if (stu.contains(type.operator SubjectName()))
 		{
-			return stu.setPoint((SubjectName)type,((Point)data));
+			return stu.setPoint(type.operator SubjectName(),(data.operator Point()));
 		}
 		else
 		{
-			return stu.addSubject((SubjectName)type,(Point)data);
+			return stu.addSubject(type.operator SubjectName(),data.operator Point());
 		}
 		break;
 	case Type::sex:
 		return false;
 		break;
 	case Type::stuClass:
-		return stu.setStuClass((StuClass)data);
+		return stu.setStuClass(data.operator StuClass());
 		break;
 	case Type::stuGrade:
 		//return stu.setStuGrade((StuGrade)data);

@@ -33,7 +33,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-g",
                 "-Wall",
-                "-std=c++17",
+                "-std=c++2z",
                 //"-O2"
             ],
             "problemMatcher": [
