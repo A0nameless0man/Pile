@@ -1,4 +1,5 @@
 //#include<bits/stdc++.h>
+#define _CRT_SECURE_NO_WARNINGS
 #include<cstring>
 #include<cstdio>
 #include<string>
