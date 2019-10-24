@@ -46,4 +46,30 @@ For each test case print one integer in single line — the number of stack exte
 
 ## Solve
 
-To solve this query,we caculate array $count$ that $count_i$
+To solve this query,we calculate an array $count$ that
+
+$$count_i = \lbrace len\mid len > 0 \land a_{i \cdots i+len-1 }\textrm{is stack exterminable}\rbrace.size()$$
+
+To calculate $count$, we calculate another array $next$ that
+
+$$next_i = \min(\lbrace r \mid r - i > 0 \land a_{i \cdots r-1 }\textrm{is stack exterminable} \rbrace+\lbrace -1\rbrace)$$
+
+then
+
+$$count_i = \begin{cases}
+    0&next_i=-1\\
+    1+count_{next_{(i+1)}}&next_i\neq -1\\
+\end{cases}
+$$
+
+We calculate $next$ with this algorithm
+
+$$
+next_i = \begin{cases}
+    i+2&a_i = a_{i+1}\\
+    1+next_{i+1}&a_i = a_{next_{(i+1)}}\\
+    1+next_{next_{(i+1)}}&a_{i}=a_{next_{(next_{(i+1)})}}\\
+    \cdots&\cdots\\
+    -1&others\\
+\end{cases}
+$$
