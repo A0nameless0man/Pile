@@ -273,7 +273,7 @@ int main(void)
 			a = std::min(a, sa);
 			b = std::min(b, sb);
 		}
-		long long ans = qpow(2, a) * qpow(3, b);
+		long long ans = (qpow(2, a) * qpow(3, b))%MOD;
 		printf("%lld\n", ans);
 	}
 }
