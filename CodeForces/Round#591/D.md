@@ -73,3 +73,32 @@ next_i = \begin{cases}
     -1&others\\
 \end{cases}
 $$
+
+However , this can be slow when facing string like $aabbccddee\cdots$
+
+Let's make things simpler and assume that we have many map $X_i$ that:
+
+$$
+X_i[c]=\min(\lbrace r \mid r - i > 0 \land a_{i \cdots r-1 }\textrm{is stack exterminable}\land a_i = c \rbrace+\lbrace -1\rbrace)
+$$
+
+than
+
+$$next_i=X_{i+1}[a_i]+1$$
+
+and
+
+$$
+X_i[c]=
+
+\begin{cases}
+X_{next_i}[c]&c!=a_{next_i}\\
+next_i&c=a_{next_i}\\
+\end{cases}
+$$
+
+another important fact is that it's proveable that every $X_i$ will be requested for at most once
+
+so
+
+instead of the slowly `operator=` we can use `swap()`
