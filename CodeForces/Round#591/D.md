@@ -112,4 +112,4 @@ another important fact is that it's proveable that every $X_i$ will be requested
 
 so
 
-instead of the slowly `operator=` we can use `swap()`
+rather than the slowly `operator=` we can use `swap()` instead
