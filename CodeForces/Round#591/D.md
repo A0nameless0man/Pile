@@ -9,6 +9,7 @@ Let's look at the following process: initially you have an empty stack and an ar
 If after this process the stack remains empty, the array s is considered stack exterminable.
 
 There are samples of stack exterminable arrays:
+
 $$
 [1,1];\\
 [2,1,1,2];\\
@@ -18,6 +19,7 @@ $$
 [3,3,3,3,3,3];\\
 [5,1,2,2,1,4,4,5];\\
 $$
+
 Let's consider the changing of stack more details if $s=[5,1,2,2,1,4,4,5]$ (the top of stack is highlighted).
 
 after pushing $s_1=5$ the stack turn into $[5]$;
