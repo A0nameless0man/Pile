@@ -1,7 +1,6 @@
 #include<iostream>
 #include<vector>
 #include<map>
-unsigned long long  n;
 using NextX = std::map< unsigned long long , unsigned long long >;
 int main(void)
 {
@@ -9,6 +8,8 @@ int main(void)
     std::cin>>q;
     while(q--)
     {
+        int  n;
+        std::cin>>n;
         std::vector< unsigned long long > raw;
         std::vector< unsigned long long > next;//next[l] is the number of r that raw[l:r) is leagel
         std::vector<NextX> nextX;
@@ -16,7 +17,6 @@ int main(void)
         count.resize(n+1);
         next.resize(n+1);
         nextX.resize(n+1);    
-        std::cin>>n;
         //raw.clear();
         for( unsigned long long  i = 0 ;i<n;i++)
         {
@@ -24,7 +24,6 @@ int main(void)
             std::cin>>buf;
             raw.push_back(buf);
         }
-
         unsigned long long sum = 0;
         {
             //unsigned long long i = n;
