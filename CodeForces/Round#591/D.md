@@ -86,17 +86,26 @@ $$
 
 than
 
-$$next_i=X_{i+1}[a_i]+1$$
+$$
+next_i=
+\begin{cases}
+    X_{i+1}[a_i]+1&a_i\in X_{i+1}\\
+    -1
+\end{cases}
+$$
 
 and
 
 $$
 X_i[c]=
-
 \begin{cases}
-X_{next_i}[c]&c!=a_{next_i}\\
-next_i&c=a_{next_i}\\
+    \begin{cases}
+        X_{next_i}[c]&c!=a_{next_i}\\
+        next_i&c=a_{next_i}\\
+    \end{cases}&next_i\neq -1\\
+\   emptyset&next_i = -1\\
 \end{cases}
+
 $$
 
 another important fact is that it's proveable that every $X_i$ will be requested for at most once
