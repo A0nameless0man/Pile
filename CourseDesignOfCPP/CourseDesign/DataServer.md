@@ -4,10 +4,6 @@ classDiagram
 class Student
 class StudentList
 class Key
-class BaseIndex
-class MapIndex
-class OtherIndex
-class preBuildHashFun
 class Point
 class Grade
 class User
@@ -38,27 +34,15 @@ StudentList : public list searchEqualBy(KeyName,KeyVal)
 StudentList : public list searchGreaterBy(KeyName,KeyVal)
 StudentList : public list searchLesserBy(KeyName,KeyVal)
 StudentList o-- Student
-StudentList o-- BaseIndex
-StudentList --> preBuildHashFun : buildIndex(name)
 
 Key : name
 Key : std::function getKey
 Key : std::function setKey
 Key : //key is't Student's friend class ,it get&set via Student's public method
 
-BaseIndex : Key myKey
-BaseIndex : public vec of hashStuID  search(key)
-BaseIndex : public pure virtual BaseIndex(StudentList,getKey(Student))
-BaseIndex : public getKey(Student)
-BaseIndex : public indexStu(Student)
-BaseIndex : public unindexStu(Student)
-BaseIndex <|-- MapIndex
-BaseIndex <|-- OtherIndex
-BaseIndex o-- Key
 
-preBuildHashFun : map : name Key
 
-MapIndex : private map key hashStuID
+
 
 Point : grade
 Point : classHour

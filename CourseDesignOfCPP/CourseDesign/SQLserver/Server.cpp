@@ -1,6 +1,6 @@
 #include"Server.h"
 #include"md5.h"
-User::User(ID id, PWD pwd, Name name, Sex sex) :name(name), id(id), sex(sex), pwd(pwd)
+User::User(ID id, PWD pwd, Name name, Sex sex) :name(name), id(id), sex(sex), hashedPWD(pwd)
 {
 }
 
@@ -11,13 +11,18 @@ Name User::getName()const
 
 bool User::login(PWD token)const
 {
-	return pwd == hash(token);
+	return hashedPWD == hash(token);
 }
 
 bool User::setPWD(PWD newPWD)
 {
-	pwd = hash(newPWD);
+	hashedPWD = hash(newPWD);
 	return true;
+}
+
+PWD User::getHashedPwd() const
+{
+	return hashedPWD;
 }
 
 ID User::getID()const
@@ -83,7 +88,7 @@ bool Score::setPoint(const Score& newScore)
 	{
 		for (auto p : (ScoreMap)newScore)
 		{
-			Points.find(p.first)->second.setPoint(p.second.getPoint());
+			Points.find(p.first)->second.setPoint(p.second.getRawPoint());
 		}
 	}
 	return haveThenAll;
@@ -187,7 +192,7 @@ ExamPoint Score::getGPA()const
 	double sum = 0;
 	for (auto p : Points)
 	{
-		sum += p.second.getPoint() * p.second.getClassHour();
+		sum += p.second.getRawPoint() * p.second.getClassHour();
 	}
 	sum /= getTotalClassHour();
 }
@@ -217,7 +222,7 @@ bool Point::setPoint(ExamPoint newPoint)
 	return true;
 }
 
-ExamPoint Point::getPoint()const
+ExamPoint Point::getRawPoint()const
 {
 	return point;
 }
@@ -428,11 +433,11 @@ bool GoodResult::addRec(Record& newRec)
 	return true;
 }
 
-KeyWordType::KeyWordType(BasicType bType, SubjectName sName):basicType(bType),subjectName(sName)
+KeyWordType::KeyWordType(BasicType bType, SubjectName sName) :basicType(bType), subjectName(sName)
 {
 }
 
-KeyWordType::KeyWordType(std::string name):basicType(toType(name))
+KeyWordType::KeyWordType(std::string name) : basicType(stringToBasicType(name))
 {
 	if (basicType == score)
 	{
@@ -440,7 +445,7 @@ KeyWordType::KeyWordType(std::string name):basicType(toType(name))
 	}
 }
 
-KeyWordType::BasicType KeyWordType::toType(const std::string& name)
+KeyWordType::BasicType KeyWordType::stringToBasicType(const std::string& name)
 {
 	using Type = KeyWordType::BasicType;
 	std::unordered_map<std::string, BasicType> map =
@@ -467,11 +472,11 @@ GoodResult::operator std::string() const
 	{
 		std::sort
 		(
-			rec.begin(), 
+			rec.begin(),
 			rec.end(),
-			[](const Record& a, const Record& b)->bool 
+			[](const Record& a, const Record& b)->bool
 			{
-				return a[0] < b[0]; 
+				return a[0] < b[0];
 			}
 		);
 	}
@@ -578,9 +583,67 @@ IDVec WhereFilter::filt(const StudentList& list)
 		{
 			if (!ops.contains(buf))
 			{
-				IDVec num = {};//TODO
-				
-				IDs.push(num);
+				std::string keyName = buf;
+				std::string op, keyVal;
+				enum compareOp
+				{
+					eq,
+					neq,
+					ge,
+					geq,
+					le,
+					leq
+				};
+				std::map<std::string, compareOp> Cmap =
+				{
+					{"==",eq},
+					{"!=",neq},
+					{">",ge},
+					{">=",geq},
+					{"<",le},
+					{"<=",eq}
+				};
+				cmd >> op >> keyVal;
+				if (!Cmap.contains(op))
+				{
+					throw std::invalid_argument
+					(
+						"UnKnown opewrator " + op + " in express\n"
+						+ keyName + " " + op + " " + keyVal
+					);
+				}
+				else
+				{
+					compareOp p = Cmap[op];
+					switch (p)
+					{
+					case eq:
+						IDs.push(list.getByKey(keyName, KeyWord(KeyWordType(keyName), keyVal)));
+						break;
+					case neq:
+						IDs.push(list.getByKey<std::not_equal_to<KeyWord>>(keyName, KeyWord(KeyWordType(keyName), keyVal)));
+						break;
+					case ge:
+						IDs.push(list.getByKey<std::greater<KeyWord>>(keyName, KeyWord(KeyWordType(keyName), keyVal)));
+						break;
+					case geq:
+						IDs.push(list.getByKey<std::greater_equal<KeyWord>>(keyName, KeyWord(KeyWordType(keyName), keyVal)));
+						break;
+					case le:
+						IDs.push(list.getByKey<std::less<KeyWord>>(keyName, KeyWord(KeyWordType(keyName), keyVal)));
+						break;
+					case leq:
+						IDs.push(list.getByKey<std::less_equal<KeyWord>>(keyName, KeyWord(KeyWordType(keyName), keyVal)));
+						break;
+					default:
+						throw std::invalid_argument
+						(
+							"UnKnown opewrator " + op + " after explan express\n"
+							+ keyName + " " + op + " " + keyVal
+						);
+						break;
+					}
+				}
 			}
 			else
 			{
@@ -626,7 +689,7 @@ IDVec WhereFilter::filt(const StudentList& list)
 	{
 		return {};
 	}
-}//TODO
+}
 
 ColumnFilter::ColumnFilter(std::string filter)
 {
@@ -808,7 +871,7 @@ KeyWord::KeyWord(StuGrade stuGrade) : type(KeyWordType::BasicType::stuGrade), st
 
 }
 
-KeyWord::KeyWord(Point singleSore) : type(KeyWordType::BasicType::score),point(singleSore)
+KeyWord::KeyWord(Point singleSore) : type(KeyWordType::BasicType::score), point(singleSore)
 {
 
 }
@@ -926,7 +989,7 @@ Key::Key(std::string str)
 	type = KeyWordType(name);
 	if (str.find('=') != std::string::npos)
 	{
-		data = KeyWord(type, str.substr(str.find('=')+1, str.size()));
+		data = KeyWord(type, str.substr(str.find('=') + 1, str.size()));
 	}
 }
 
@@ -976,11 +1039,11 @@ bool Key::setKey(Student& stu) const
 	case Type::score:
 		if (stu.contains(type.operator SubjectName()))
 		{
-			return stu.setPoint(type.operator SubjectName(),(data.operator Point()));
+			return stu.setPoint(type.operator SubjectName(), (data.operator Point()));
 		}
 		else
 		{
-			return stu.addSubject(type.operator SubjectName(),data.operator Point());
+			return stu.addSubject(type.operator SubjectName(), data.operator Point());
 		}
 		break;
 	case Type::sex:

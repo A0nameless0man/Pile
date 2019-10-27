@@ -9,7 +9,7 @@
 #include<functional>
 #include"Format.h"
 #include"Format.cpp"
-
+const double ex = 0.0000006;
 using ExamPoint = double;
 using ClassHour = double;
 //using ID = std::string;
@@ -93,17 +93,20 @@ private:
 	Name name;
 	ID id;
 	Sex sex;
-	PWD pwd;
+	PWD hashedPWD;
 public:
-	User(ID id =ID(""), PWD pwd = "", Name name = Name("John Doe"), Sex sex = unKnown);
+	User(ID id = ID(""), PWD pwd = "", Name name = Name("John Doe"), Sex sex = unKnown);
 	Name getName()const;
 	//bool setName(Name newName);
 	bool login(PWD token)const;
 	bool setPWD(PWD newPWD);
+	PWD getHashedPwd()const;
 	ID getID()const;
 	Sex getSex()const;
 	template<class Is>
 	friend Is& deFormat(Is& is, User& user);
+	template<>
+	friend std::string format(const User user);
 };
 template<>
 std::string format(const User user);
@@ -119,7 +122,7 @@ private:
 public:
 	Point(ExamPoint point = 0, ClassHour classHour = 1);
 	bool setPoint(ExamPoint newPoint);
-	ExamPoint getPoint()const;
+	ExamPoint getRawPoint()const;
 	ClassHour getClassHour()const;
 	bool operator<(const Point& b)const;
 };
@@ -212,9 +215,9 @@ private:
 	BasicType basicType;
 	SubjectName subjectName;
 public:
-	KeyWordType(BasicType bType, SubjectName sName =SubjectName (""));
+	KeyWordType(BasicType bType, SubjectName sName = SubjectName(""));
 	KeyWordType(std::string name = "");
-	static BasicType toType(const std::string& name);
+	static BasicType stringToBasicType(const std::string& name);
 	operator std::string()const;
 	operator BasicType()const;
 	operator SubjectName()const;
@@ -283,7 +286,6 @@ public:
 	std::vector<KeyName> getHeads()const;
 	GoodResult getVal(const IDVec& vec, const StudentList& list)const;
 	bool applyVal(const IDVec& vec, StudentList& list)const;
-
 };
 
 class WhereFilter
@@ -352,7 +354,7 @@ inline std::string format(const Sex sex)
 		return "female";
 		break;
 	default:
-	return "";
+		return "";
 		break;
 	}
 }
@@ -383,26 +385,96 @@ inline bool Score::compare(const Score& stand)const
 template<>
 inline std::string format(const User user)
 {
-	return std::string();
+	return "{ name : " + user.getName() + " , id : " + user.getID() + " , sex : " + format(user.getSex()) + " , pwd : " + user.getHashedPwd() + " }";
 }
 
 template<class Is>
 inline Is& deFormat(Is& is, User& user)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO:
+	enum NextObj
+	{
+		unknown,
+		name,
+		id,
+		sex,
+		pwd,
+	};
+	std::map<std::string, NextObj> map =
+	{
+		{"name",name},
+		{"id",id},
+		{"sex",sex},
+		{"pwd",pwd}
+	};
+	while (true)
+	{
+		while (isspace(is.peek()) || is.peek() == '{' || is.peek == ',')is.get();
+		std::string buf[2];
+		is >> buf[0];
+		while (isspace(is.peek()) || is.peek() == ":")is.get();
+		is >> buf[1];
+		if(map.contains(buf[0]))
+		{
+			NextObj next = map[buf[0]];
+			switch (next)
+			{
+			case unknown:
+				break;
+			case name:
+				user.name = buf[1];
+				break;
+			case id:
+				user.id = buf[1];
+				break;
+			case sex:
+				deFormat(std::stringstream(buf[1]), user.sex);
+				break;
+			case pwd:
+				user.hashedPWD = buf[1];
+				break;
+			default:
+				break;
+			}
+		}
+		while (isspace(is.peek()))is.get();
+		if (is.peek() == "}")
+		{
+			is.get();
+			break;
+		}
+	}
 }
 
 template<class vec>
-inline ExamPoint getGPA(vec)
+inline ExamPoint getGPA(vec v)
 {
-	return ExamPoint();
+	ExamPoint sumP = 0;
+	ClassHour sumC = 0;
+	for (auto p : v)
+	{
+		sumP += p.getClassHour() * p.getRawPoint();
+		sumC += p.getClassHour();
+	}
+	if (sumC > ex)
+	{
+		return sumP / sumC;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 template<class vec>
-inline ExamPoint getTotalClassHour(vec)
+inline ExamPoint getTotalClassHour(vec v)
 {
-	return ExamPoint();
+	//return ExamPoint();
+	ClassHour sumC;
+	for (auto p : v)
+	{
+		sumC += p.getClassHour();
+	}
+	return sumC;
 }
 
 template<>
