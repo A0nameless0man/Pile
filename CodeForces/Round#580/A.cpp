@@ -16,6 +16,19 @@ inline int fun(int pos, int n)
 
     //return base + 1;
 }
+inline void print(char* c)
+{
+    while(*c)
+    {
+        putchar(*c);
+        ++c;
+    }
+    
+}
+inline void read(int & n)
+{
+    ;
+}
 int main(void)
 {
     int n;
@@ -25,7 +38,7 @@ int main(void)
         if (n % 2 != 0)
         {
             //std::cout << "YES" << std::endl;
-            printf("YES\n");
+            print("YES\n");
             for ( int i = 0; i < n * 2; i++)
             {
                 //std::cout << fun(i, n);
@@ -45,7 +58,8 @@ int main(void)
         else
         {
             //std::cout << "NO" << std::endl;
-            printf("NO\n");
+            print("NO\n");
         }
     }
+    return 0;
 }
