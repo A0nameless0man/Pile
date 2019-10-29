@@ -52,7 +52,14 @@ Point Score::getPoint(SubjectName subjectName)const
 	}
 	else
 	{
-		return 0;
+		if (subjectName == "GPA")//consider GPA as a subjectName
+		{
+			return Point(getGPA());
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
 

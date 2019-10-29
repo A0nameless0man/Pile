@@ -125,6 +125,8 @@ public:
 	ExamPoint getRawPoint()const;
 	ClassHour getClassHour()const;
 	bool operator<(const Point& b)const;
+	template<class Is>
+	friend Is& deFormat(Is& is, Point& point);;
 };
 template<class vec = std::vector<Point> >
 ExamPoint getGPA(const vec);
@@ -443,6 +445,7 @@ inline Is& deFormat(Is& is, User& user)
 			break;
 		}
 	}
+	return is;
 }
 
 template<class vec>
@@ -480,33 +483,83 @@ inline ExamPoint getTotalClassHour(vec v)
 template<>
 inline std::string format(const Point point)
 {
-	return std::string();
+	//return std::string();
+	return "{ point : " + std::to_string(point.getRawPoint()) + " , classHour : " + std::to_string(point.getClassHour()) + " }";
 }
 
 template<class Is>
 inline Is& deFormat(Is& is, Point& point)
 {
-	throw gcnew System::NotImplementedException();
+	enum NextObj
+	{
+		point,
+		classHour,
+		unKnown
+	};
+	std::map<std::string, NextObj> map =
+	{
+		{"point",NextObj::point},
+		{"classHour",classHour}
+	};
+	while (true)
+	{
+		while (isspace(is.peek()) || is.peek() == '{' || is.peek == ',')is.get();
+		std::string buf[2];
+		is >> buf[0];
+		while (isspace(is.peek()) || is.peek() == ":")is.get();
+		is >> buf[1];
+		if (map.contains(buf[0]))
+		{
+			NextObj next = map[buf[0]];
+			switch (next)
+			{
+			case NextObj::point:
+				std::stringstream ss(buf[1]);
+				ss >> point.point;
+				break;
+			case classHour:
+				std::stringstream ss(buf[1]);
+				ss >> point.classHour;
+				break;
+			case unKnown:
+				break;
+			default:
+				break;
+			}
+		}
+		while (isspace(is.peek()))is.get();
+		if (is.peek() == "}")
+		{
+			is.get();
+			break;
+		}
+	}
+	return is;
+	//throw gcnew System::NotImplementedException();
 	// TODO:
 }
 
 template<>
 inline std::string format(const Score score)
 {
-	return std::string();
+	//return std::string();
+	return format<SubjectName, Point, std::map<SubjectName, Point> >(score.operator ScoreMap());
 }
 
 template<class Is>
 inline Is& deFormat(Is& is, Score& score)
 {
-	throw gcnew System::NotImplementedException();
+	deFormatMap(is, score.Points());
+	return is;
+	//throw gcnew System::NotImplementedException();
 	// TODO:
 }
 
 template<>
-inline std::string format(const Student Student)
+inline std::string format(const Student student)
 {
-	return std::string();
+	//return std::string();
+	return "{ User : " + format((User)student) + " , ";
 }
 
 template<class Is>
