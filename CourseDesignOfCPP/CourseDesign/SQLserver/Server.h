@@ -559,7 +559,7 @@ template<>
 inline std::string format(const Student student)
 {
 	//return std::string();
-	return "{ User : " + format((User)student) + " , ";
+	return "{ User : " + format((User)student) + " , ";//TODO
 }
 
 template<class Is>
