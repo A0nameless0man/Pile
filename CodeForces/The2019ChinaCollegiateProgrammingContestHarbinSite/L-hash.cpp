@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <unordered_set>
 const long long HASH_A = 234578197;
-const long long HASH_B = 4238972569;
+const long long HASH_B = 423872569;
 const long long HASH_C = 19260817;
-const long long MOD = 100000007;
+const long long MODDER = 1000000007;
 int main(void)
 {
     int t;
@@ -29,11 +29,20 @@ int main(void)
             long long m;
             std::cin >> m;
             long long hash = 0;
+            bool noZ = true;
             for (int j = 0; j < m; j++)
             {
                 long long buf;
                 std::cin >> buf;
-                hash = (hash * HASH_A + buf * HASH_B + HASH_C) % MOD;
+                if(noZ&&buf)
+                {
+                    hash = (hash * HASH_A + buf * HASH_B + HASH_C) % MODDER;
+                }
+                else
+                {
+                    noZ=false;
+                }
+                
             }
             hashQue.insert({hash, i});
         }
@@ -48,7 +57,7 @@ int main(void)
                 {
                     //ULA.push_back(raw[j]);
                     inULA.insert(raw[j]);
-                    prefixHash = (prefixHash * HASH_A + raw[j] * HASH_B + HASH_C) % MOD;
+                    prefixHash = (prefixHash * HASH_A + raw[j] * HASH_B + HASH_C) % MODDER;
                     if (hashQue.find(prefixHash) != hashQue.end())
                     {
                         ok[hashQue[prefixHash]] = true;
