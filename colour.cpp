@@ -9,7 +9,7 @@ int main(void)
     {
         // std::cout << "i:\t" << i << "\t";
         std::cout << std::flush << "\033[48;5;" << i << "m" << std::flush;
-        std::cout << " "<< "\033[0m" << std::flush;
+        std::cout <<i<< "\t\033[0m" << std::flush;
         if (i && !((i + 3) % 6))
         {
             std::cout << "\n";
