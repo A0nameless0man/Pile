@@ -1,4 +1,6 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<set>
+#include<vector>
 const int MAX_N = 20007*2+10;
 const int MAX_M = MAX_N;
 int n;
@@ -154,8 +156,18 @@ int main(void)
 }
 /*
 1
-7 5
+7 15
 4 3 4 2 3 1 4
+1 0
+2 0 0
+1 4
+2 3 4
+2 3 0
+2 4 0
+3 3 4 0
+4 3 4 0 0 
+4 3 2 4 0
+4 4 1 3 2
 1 4
 2 2 3
 3 3 2 1
