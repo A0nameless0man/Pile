@@ -3,6 +3,7 @@
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 const long long HASH_A = 234578197;
 const long long HASH_B = 423872569;
 const long long HASH_C = 19260817;
@@ -44,6 +45,7 @@ int main(void)
                 }
                 
             }
+            if(!noZ)hash = (hash*HASH_A+HASH_C)%MODDER;
             hashQue.insert({hash, i});
         }
         for (int i = 0; i < n; i++)
