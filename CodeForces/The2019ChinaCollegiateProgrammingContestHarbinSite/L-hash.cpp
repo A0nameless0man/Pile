@@ -7,118 +7,81 @@
 #include <unordered_set>
 #include <algorithm>
 #define CHECK(x) std::cout << #x << " is : " << (x) << std::endl;
-const int HASH_A = 19301;
-const int HASH_B = 19889;
-const int HASH_C = 817;
-const int MODDER = 1000007;
-const int MAX_N = 5007;
-int raw[MAX_N];
-int rawHash[MAX_N][MAX_N];
-int rawHashCount[MAX_N];
-int rawCount = 0;
-inline void Read(int &p)
+const long long HASH_A = 19301;
+const long long HASH_B = 19889;
+const long long HASH_C = 817;
+const long long MODDER = 1000000007;
+const long long MAX_N = 5007;
+int show[MAX_N];//
+long long raw[MAX_N];//
+long long rawHash[MAX_N][MAX_N];
+long long rawHashCount[MAX_N];//
+long long rawCount = 0;//
+inline void Read(long long &p)
 {
     p = 0;
     char c = getchar();
-    while (!isdigit(c))
+    // while (!isdigit(c))
+    while (c < '0' || c > '9')
         c = getchar();
-    while (isdigit(c))
+    while (c >= '0' && c <= '9')
         p = p * 10 + (c - '0'), c = getchar();
 }
 int main(void)
 {
-    int t;
-    // std::cin >> t;
-    //scanf("%d",&t);
+    long long t;
     Read(t);
     while (t--)
     {
-        int n, q;
-        // scanf("%d%d",&n,&q);
+        long long n, q;
         Read(n);
         Read(q);
-        // std::cin >> n >> q;
-        // std::vector<int> raw;
-        rawCount = 0;
-        for(int i = 0;i<n+5;i++)rawHashCount[i]=0;
-        // raw.reserve(n+5);
-        //std::unordered_map<int, std::vector<int>> hashQue;
-        // std::vector<std::vector<int>> hashRaw;
-        // hashRaw.resize(n + 5);
-        int buf;
-        std::vector<bool> ok(q, false);
-        for (int i = 0; i < n; i++)
+        for (long long i = 0; i < n + 5; i++)
         {
-            //std::cin >> buf;
-            // scanf("%d",&buf);
-            Read(raw[rawCount]);
-            ++rawCount;
-            // raw.push_back(buf);
+            rawHashCount[i] = 0;
+            // memset(rawHash[i],0,(n+1)*sizeof(long long));
+        }
+        long long buf;
+        // std::vector<bool> ok(q, false);
+        for (long long i = 0; i < n; i++)
+        {
+            Read(raw[n - i - 1]);
         } //O(n)
-        std::reverse(raw, raw + rawCount);
-        // raw.push_back(0);
-        raw[rawCount] = 0;
-        ++rawCount;
-        for (int i = 0; i < rawCount; i++)
+        // std::reverse(raw, raw + rawCount);
+        raw[n] = 0;
+        rawCount = n + 1;
+        for (long long i = 0; i < rawCount; i++)
         {
-            std::unordered_set<int> inULA;
-            //std::vector<int> ULA;
-            int prefixHash = 0;
-            for (int j = i; j < rawCount; j++)
+            long long prefixHash = 0;
+            // memset(show,0,(n+1)*sizeof(int));
+            for(int i = 0;i<n+5;i++)show[i]=0;
+            for (long long j = i; j < rawCount; j++)
             {
-                if (inULA.find(raw[j]) == inULA.end())
+                if (show[raw[j]] == 0)
                 {
-                    //ULA.push_back(raw[j]);
-                    inULA.insert(raw[j]);
+                    show[raw[j]] = 1;
                     prefixHash = (prefixHash * HASH_A + raw[j]) % MODDER;
-                    //hashRaw[i].push_back(prefixHash);
-                    rawHash[i][rawHashCount[i]]=prefixHash;
+                    rawHash[i][rawHashCount[i]] = prefixHash;
+                    // CHECK(rawHash[i][rawHashCount[i]]);
                     ++rawHashCount[i];
-                    // if (hashs.find(prefixHash)==hashs.end()&&hashQue.find(prefixHash) != hashQue.end())
-                    // {
-                    //     // // std::cout<<i<<" "<<j<<":\n"<<std::endl;
-                    //     // //ok[hashQue[prefixHash]] = true;
-                    //     // for (auto i : hashQue[prefixHash])
-                    //     // {
-                    //     //     // std::cout<<i<<" ";
-                    //     //     ok[i] = true;
-                    //     // }
-                    //     // // std::cout<<std::endl;
-                    //     hashs.insert(prefixHash);
-                    // }
                 }
             }
-        } //o(n^2)
-        // for (auto i : hashRaw)
-        // {
-        //     for (auto j : i)
-        //     {
-        //         std::cout << j << " ";
-        //     }
-        //     std::cout << std::endl;
-        // }
-        for (int i = 0; i < q; i++)
+        }
+        for (long long i = 0; i < q; i++)
         {
-            int m;
-            // scanf("%d",&m);
+            long long m;
             Read(m);
-            // std::cin >> m;
-            int hash = 0;
+            long long hash = 0;
             bool noZ = true;
-            int cnt = 0;
-            int j;
+            long long cnt = 0;
+            long long j;
             for (j = 0; j < m; j++)
             {
-                //int buf;
-                // scanf("%d", &buf);
                 Read(buf);
-                // std::cin >> buf;
                 if (noZ && buf != 0)
                 {
                     hash = (hash * HASH_A + buf) % MODDER;
                     cnt++;
-                    // CHECK(hash);
-                    // CHECK(buf)
                 }
                 else
                 {
@@ -130,45 +93,26 @@ int main(void)
                 hash = (hash * HASH_A) % MODDER;
                 cnt++;
             }
+            cnt--;
+            bool ok = false;
+            for (long long i = 0; i < rawCount && !ok; i++)
+            {
+                ok = ok || (hash == rawHash[i][cnt]);
+                // CHECK(i);
+                // CHECK(rawHash[i][cnt]);
+            }
             // CHECK(hash);
             // CHECK(cnt);
-            cnt--;
-            //j--;
-            //hashQue.insert({hash, i});
-            //hashQue[hash].push_back(i);
-            bool ok = false;
-            for (int i = 0; i < n+1&&!ok; i++)
-            {
-                ok |= (cnt< rawHashCount[i]&& hash == rawHash[i][cnt]);
-            }
             if (ok)
             {
-                // std::cout << "Yes" << std::endl;
                 printf("Yes\n");
             }
             else
             {
-                // std::cout << "No" << std::endl;
                 printf("No\n");
             }
         }
-        //std::unordered_set<int> hashs;
-        // std::cout<<"hash:\n";
-        // for(auto hash:hashQue){std::cout<<hash.first<<":\n";for(auto i:hash.second)std::cout<<i<<" ";std::cout<<std::endl;}
-        // std::cout<<std::endl;
-        // for (auto b : ok)
-        // {
-        //     if (b)
-        //     {
-        //         // std::cout << "Yes" << std::endl;
-        //         printf("Yes\n");
-        //     }
-        //     else
-        //     {
-        //         // std::cout << "No" << std::endl;
-        //         printf("No\n");
-        //     }
-        // }
+        // for(int i = 0;i<rawCount;i++)std::cout<<raw[i]<<" ";std::cout<<std::endl;
     }
     return 0;
 }
@@ -208,4 +152,30 @@ No
 No
 Yes
 Yes
+*/
+/*
+1
+50 2
+32 19 44 29 38 33 40 36 34 13 29 1 43 46 18 24 29 39 27 17 49 38 1 46 42 37 17 17 9 35 29 22 6 10 22 9 33 37 2 23 46 38 21 2 3 37 50 33 27 42
+1 44
+2 29 13
+*/
+/*
+2
+50 10
+23 30 34 20 27 11 21 29 12 7 21 42 45 48 8 15 6 16 19 35 16 14 29 11 31 18 22 4 45 22 14 4 13 40 43 48 27 15 15 15 15 10 15 11 31 37 34 34 50 14
+1 25
+2 23 6
+3 29 21 11
+4 12 29 18 39
+5 29 21 11 27 20
+6 21 10 9 3 34 14
+7 49 36 36 43 50 50 35
+8 12 29 21 11 27 20 34 30
+9 11 27 20 34 30 23 0 0 0
+10 21 34 1 44 20 50 28 14 16 41
+50 2
+32 19 44 29 38 33 40 36 34 13 29 1 43 46 18 24 29 39 27 17 49 38 1 46 42 37 17 17 9 35 29 22 6 10 22 9 33 37 2 23 46 38 21 2 3 37 50 33 27 42
+1 44
+2 29 13
 */
