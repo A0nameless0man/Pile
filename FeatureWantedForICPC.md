@@ -9,3 +9,4 @@
 |`std::hash<std::string>>`|maybe|
 |`[&]()->size_t{/**/}`|lamba|
 |`std::lldiv`|alittle quicker|
+|`size_t`|ul/ull/ui?|
