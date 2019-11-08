@@ -7,5 +7,5 @@
 |`auto i = vec.begin()`|short code|
 |will turn out PE?will it take time?||
 |`std::hash<std::string>>`|maybe|
-|`[&]()->sizt_t{/**/}`|lamba|
+|`[&]()->size_t{/**/}`|lamba|
 |`std::lldiv`|alittle quicker|
