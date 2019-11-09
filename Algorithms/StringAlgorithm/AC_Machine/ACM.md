@@ -1,3 +1,4 @@
+```cpp
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstring>
 #include <iostream>
@@ -60,17 +61,17 @@ struct Trie
             {
                 if (nodes[tar].next[i] == INF)
                 {
-                    nodes[tar].next[i] = tar==root?root:nodes[nodes[tar].fail].next[i];
+                    nodes[tar].next[i] = tar == root ? root : nodes[nodes[tar].fail].next[i];
                 }
                 else
                 {
-                    nodes[nodes[tar].next[i]].fail = tar==root?root:nodes[nodes[tar].fail].next[i];
+                    nodes[nodes[tar].next[i]].fail = tar == root ? root : nodes[nodes[tar].fail].next[i];
                     que.push(nodes[tar].next[i]);
                 }
             }
         };
         op(root);
-        while(!que.empty())
+        while (!que.empty())
         {
             op(que.front());
             que.pop();
@@ -80,14 +81,14 @@ struct Trie
     {
         ULL len = strlen(buf);
         ULL cur = root;
-        ULL ans =0;
+        ULL ans = 0;
         for (ULL i = 0; i < len; i++)
         {
             cur = nodes[cur].next[ctoi(buf[i])];
             ULL tmp = cur;
-            while (tmp!=root)
+            while (tmp != root)
             {
-                ans+=nodes[tmp].count;
+                ans += nodes[tmp].count;
                 tmp = nodes[tmp].fail;
             }
         }
@@ -95,12 +96,12 @@ struct Trie
     }
     void debug(void)
     {
-        for(ULL i = 0;i<cnt;i++)
+        for (ULL i = 0; i < cnt; i++)
         {
-            printf("{\"id\" : %3llu , \"fail\" : %3llu , \"chi\" : [",i,nodes[i].fail);
-            for(ULL j = 0;j<MAX_M;j++)
+            printf("{\"id\" : %3llu , \"fail\" : %3llu , \"chi\" : [", i, nodes[i].fail);
+            for (ULL j = 0; j < MAX_M; j++)
             {
-                printf(" %3llu ,",nodes[i].next[j]);
+                printf(" %3llu ,", nodes[i].next[j]);
             }
             printf("],\n");
         }
@@ -111,26 +112,26 @@ Trie acm;
 int main(void)
 {
     int n;
-    scanf("%d",&n);
-    while(n--)
+    scanf("%d", &n);
+    while (n--)
     {
         int m;
-        scanf("%d",&m);
+        scanf("%d", &m);
         acm.Tire();
-        while(m--)
+        while (m--)
         {
-            scanf("%s",buf);
+            scanf("%s", buf);
             acm.insert(buf);
         }
         acm.buildFailTree();
-        scanf("%s",buf);
-        printf("%d match found.\n",acm.query(buf));
+        scanf("%s", buf);
+        printf("%d match found.\n", acm.query(buf));
         // acm.debug();
     }
     return 0;
 }
 /*
-10
+1
 10
 a
 b
@@ -144,3 +145,4 @@ f
 ef
 abcdef
 */
+```
