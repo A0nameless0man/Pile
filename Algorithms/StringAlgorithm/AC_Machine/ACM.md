@@ -20,7 +20,7 @@ struct Trie
         ULL count;
     } nodes[MAX_N];
     ULL root, cnt;
-    void Tire(ULL n = MAX_N)
+    void clear(void)
     {
         cnt = 0;
         root = newNode();

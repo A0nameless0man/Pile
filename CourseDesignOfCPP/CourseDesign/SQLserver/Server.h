@@ -387,7 +387,10 @@ inline bool Score::compare(const Score& stand)const
 template<>
 inline std::string format(const User user)
 {
-	return "{ name : " + user.getName() + " , id : " + user.getID() + " , sex : " + format(user.getSex()) + " , pwd : " + user.getHashedPwd() + " }";
+	return "{ name : " + user.getName()
+		+ " , id : " + user.getID()
+		+ " , sex : " + format(user.getSex())
+		+ " , pwd : " + user.getHashedPwd() + " }";
 }
 
 template<class Is>
@@ -484,7 +487,8 @@ template<>
 inline std::string format(const Point point)
 {
 	//return std::string();
-	return "{ point : " + std::to_string(point.getRawPoint()) + " , classHour : " + std::to_string(point.getClassHour()) + " }";
+	return "{ point : " + std::to_string(point.getRawPoint())
+		+ " , classHour : " + std::to_string(point.getClassHour()) + " }";
 }
 
 template<class Is>
@@ -559,7 +563,7 @@ template<>
 inline std::string format(const Student student)
 {
 	//return std::string();
-	return "{ User : " + format((User)student) + " , ";//TODO
+	return "{ User : " + format((User)student) + " , Score : "+format((Score)student)+" , StuClass : "+ ;//TODO
 }
 
 template<class Is>
