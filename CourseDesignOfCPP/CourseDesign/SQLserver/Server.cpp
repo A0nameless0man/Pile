@@ -41,14 +41,14 @@ Score::Score()
 
 Score::Score(SingleScore sig)
 {
-	Points.insert(sig);
+	points.insert(sig);
 }
 
 Point Score::getPoint(SubjectName subjectName)const
 {
 	if (contains(subjectName))
 	{
-		return Points.find(subjectName)->second;
+		return points.find(subjectName)->second;
 	}
 	else
 	{
@@ -67,7 +67,7 @@ bool Score::setPoint(SubjectName subjectName, ExamPoint newPoint)
 {
 	if (contains(subjectName))
 	{
-		return Points.find(subjectName)->second.setPoint(newPoint);
+		return points.find(subjectName)->second.setPoint(newPoint);
 	}
 	else
 	{
@@ -79,7 +79,7 @@ bool Score::setPoint(SubjectName subjectName, Point newPoint)
 {
 	if (contains(subjectName))
 	{
-		Points[subjectName] = newPoint;
+		points[subjectName] = newPoint;
 		return true;
 	}
 	else
@@ -95,7 +95,7 @@ bool Score::setPoint(const Score& newScore)
 	{
 		for (auto p : (ScoreMap)newScore)
 		{
-			Points.find(p.first)->second.setPoint(p.second.getRawPoint());
+			points.find(p.first)->second.setPoint(p.second.getRawPoint());
 		}
 	}
 	return haveThenAll;
@@ -105,7 +105,7 @@ ClassHour Score::getClassHour(SubjectName subjectName)const
 {
 	if (contains(subjectName))
 	{
-		return Points.find(subjectName)->second.getClassHour();
+		return points.find(subjectName)->second.getClassHour();
 	}
 	else
 	{
@@ -115,7 +115,7 @@ ClassHour Score::getClassHour(SubjectName subjectName)const
 
 bool Score::contains(SubjectName subjectName)const
 {
-	return Points.contains(subjectName);
+	return points.contains(subjectName);
 }
 
 bool Score::contains(const Score& newScore) const
@@ -140,7 +140,7 @@ bool Score::addSubject(SubjectName subjectName, Point point)
 {
 	try
 	{
-		Points.insert(SingleScore(subjectName, point));
+		points.insert(SingleScore(subjectName, point));
 	}
 	catch (...)
 	{
@@ -155,7 +155,7 @@ bool Score::addSubject(const Score& newScore)
 	{
 		for (auto p : (ScoreMap)newScore)
 		{
-			Points.insert(p);
+			points.insert(p);
 		}
 	}
 	catch (...)
@@ -169,7 +169,7 @@ bool Score::removeSubject(SubjectName subjectName)
 {
 	if (contains(subjectName))
 	{
-		Points.erase(subjectName);
+		points.erase(subjectName);
 		return true;
 	}
 	else
@@ -184,7 +184,7 @@ bool Score::removeSubject(const Score& newScore)
 	{
 		for (auto p : (ScoreMap)newScore)
 		{
-			Points.erase(p.first);
+			points.erase(p.first);
 		}
 		return true;
 	}
@@ -197,7 +197,7 @@ bool Score::removeSubject(const Score& newScore)
 ExamPoint Score::getGPA()const
 {
 	double sum = 0;
-	for (auto p : Points)
+	for (auto p : points)
 	{
 		sum += p.second.getRawPoint() * p.second.getClassHour();
 	}
@@ -207,7 +207,7 @@ ExamPoint Score::getGPA()const
 ClassHour Score::getTotalClassHour()const
 {
 	double sum = 0;
-	for (auto p : Points)
+	for (auto p : points)
 	{
 		sum += p.second.getClassHour();
 	}
@@ -216,7 +216,7 @@ ClassHour Score::getTotalClassHour()const
 
 Score::operator ScoreMap() const
 {
-	return Points;
+	return points;
 }
 
 Point::Point(ExamPoint point, ClassHour classHour) :point(point), classHour(classHour)

@@ -140,7 +140,7 @@ Is& deFormat(Is& is, Point& point);
 class Score
 {
 private:
-	ScoreMap Points;
+	ScoreMap points;
 public:
 	Score();
 	Score(SingleScore sig);
@@ -418,7 +418,7 @@ inline Is& deFormat(Is& is, User& user)
 		is >> buf[0];
 		while (isspace(is.peek()) || is.peek() == ":")is.get();
 		is >> buf[1];
-		if(map.contains(buf[0]))
+		if (map.contains(buf[0]))
 		{
 			NextObj next = map[buf[0]];
 			switch (next)
@@ -553,7 +553,7 @@ inline std::string format(const Score score)
 template<class Is>
 inline Is& deFormat(Is& is, Score& score)
 {
-	deFormatMap(is, score.Points());
+	deFormatMap(is, score.points);
 	return is;
 	//throw gcnew System::NotImplementedException();
 	// TODO:
@@ -563,26 +563,93 @@ template<>
 inline std::string format(const Student student)
 {
 	//return std::string();
-	return "{ User : " + format((User)student) + " , Score : "+format((Score)student)+" , StuClass : "+ ;//TODO
+	return "{ User : " + format((User)student)
+		+ " , Score : " + format((Score)student)
+		+ " , StuClass : " + student.getStuClass()
+		+ " , StuGrade : " + std::to_string(student.getStuGrade()) + " }";
 }
 
 template<class Is>
-inline Is& deFormat(Is& is, Student& Student)
+inline Is& deFormat(Is& is, Student& student)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: 
+	enum NextObj
+	{
+		user,
+		score,
+		stuClass,
+		stuGrade,
+		unknow
+	};
+	std::unordered_map<std::string, NextObj> map =
+	{
+		{"User",user},
+		{"Score",score},
+		{"StuClass",stuClass},
+		{"StuGrade",stuGrade}
+	};
+	while (true)
+	{
+		while (isspace(is.peek()) || is.peek() == '{' || is.peek == ',')is.get();
+		std::string buf[2];
+		is >> buf[0];
+		while (isspace(is.peek()) || is.peek() == ":")is.get();
+		is >> buf[1];
+		if (map.contains(buf[0]))
+		{
+			NextObj next = map[buf[0]];
+			switch (next)
+			{
+			case user:
+				deFormat(is, (User)student);
+				break;
+			case score:
+				deFormat(is, (Score)student);
+				break;
+			case stuClass:
+				student.setStuClass(buf[1]);
+				break;
+			case stuGrade:
+				StuGrade s;
+				deFormat(std::stringstream(buf[1]), s);
+				student.stuGrade = s;
+				break;
+			case unknow:
+				break;
+			default:
+				break;
+			}
+		}
+		while (isspace(is.peek()))is.get();
+		if (is.peek() == "}")
+		{
+			is.get();
+			break;
+		}
+	}
+	return is;
+
 }
 
 template<>
 inline std::string format(const KeyWord keyWord)
 {
-	return std::string();
+	return keyWord.operator std::string();
 }
 
 template<class OP>
 inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)const
 {
-	return IDVec();
+	KeyWordType requestType(name);
+	Key requestKey(requestType, keyWord);
+	IDVec ans;
+	for (auto s : data)
+	{
+		if (OP(requestKey.getKey(s.second), keyWord))
+		{
+			ans.push_back(s.first);
+		}
+	}
+	return ans;
 }
 
 //bool operator<(const SingleScore& a, const SingleScore& b);
