@@ -499,13 +499,20 @@ GoodResult::operator std::string() const
 		res += h+"|";
 	}
 	res += '\n';
+	size_t cnt = 0;
 	for (auto r : rec)
 	{
+		auto i = std::to_string(++cnt);
+		if (i.length() < FIXED_WIDTH)
+		{
+			res += std::string(FIXED_WIDTH - i.length(), ' ');
+		}
+		res += i;
 		res += form(r, width);
 		res += "\n";
 	}
 	return res;
-}//TODO
+}
 
 KeyWordType::operator BasicType() const
 {
