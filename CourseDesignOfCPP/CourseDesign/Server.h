@@ -61,9 +61,9 @@ enum Sex :char
 	male, female, unKnown
 };
 template<>
-std::string format(const Sex sex);
+std::string format(const Sex& sex);
 template<class Is = std::istream>
-Is& deFormat(Is& is, Sex& sex);
+Is& deFormatSex(Is& is, Sex& sex);
 
 class Name :public std::string
 {
@@ -106,14 +106,12 @@ public:
 	ID getID()const;
 	Sex getSex()const;
 	template<class Is>
-	friend Is& deFormat(Is& is, User& user);
-	template<>
-	friend std::string format(const User user);
+	friend Is& deFormatUser(Is& is, User& user);
+	friend std::string formatUser(const User& user);
 };
-template<>
-std::string format(const User user);
+std::string formatUser(const User& user);
 template<class Is = std::istream>
-Is& deFormat(Is& is, User& user);
+Is& deFormatUser(Is& is, User& user);
 PWD hash(const PWD& in);
 
 class Point
@@ -135,7 +133,7 @@ ExamPoint getGPA(const vec);
 template<class vec = std::vector<Point> >
 ExamPoint getTotalClassHour(const vec);
 template<>
-std::string format(const Point point);
+std::string format(const Point& point);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Point& point);
 
@@ -162,11 +160,13 @@ public:
 	ExamPoint getGPA()const;
 	ClassHour getTotalClassHour()const;
 	operator ScoreMap()const;
+	friend std::string formatScore(const Score& score);
+	template<class Is>
+	friend Is& deFormatScore(Is& is, Score& score);
 };
-template<>
-std::string format(const Score score);
+std::string formatScore(const Score& score);
 template<class Is = std::istream>
-Is& deFormat(Is& is, Score& score);
+Is& deFormatScore(Is& is, Score& score);
 
 
 class Student :public User, public Score
@@ -183,7 +183,7 @@ public:
 	friend Is& deFormat(Is& is, Student& Student);
 };
 template<>
-std::string format(const Student Student);
+std::string format(const Student& Student);
 template<class Is = std::istream>
 Is& deFormat(Is& is, Student& Student);
 
@@ -260,7 +260,7 @@ public:
 	friend bool operator<(const KeyWord& a, const KeyWord& b);
 };
 template<>
-std::string format(const KeyWord keyWord);
+std::string format(const KeyWord& keyWord);
 
 class Key
 {
@@ -346,8 +346,7 @@ public:
 
 std::string form(Record kwyWord, std::vector<size_t>& width);//empty width or insufficent length means auto(2times  avg of top 5)
 
-template<>
-inline std::string format(const Sex sex)
+std::string formatSex(const Sex& sex)
 {
 	switch (sex)
 	{
@@ -364,7 +363,7 @@ inline std::string format(const Sex sex)
 }
 
 template<class Is>
-inline Is& deFormat(Is& is, Sex& sex)
+Is& deFormatSex(Is& is, Sex& sex)
 {
 	std::string str;
 	is >> str;
@@ -376,7 +375,6 @@ inline Is& deFormat(Is& is, Sex& sex)
 	{
 		sex = female;
 	}
-	break;
 	return is;
 }
 
@@ -386,17 +384,16 @@ inline bool Score::compare(const Score& stand)const
 	return false;
 }
 
-template<>
-inline std::string format(const User user)
+std::string formatUser(const User& user)
 {
 	return "{ name : " + user.getName()
 		+ " , id : " + user.getID()
-		+ " , sex : " + format(user.getSex())
+		+ " , sex : " + format<Sex>(user.getSex())
 		+ " , pwd : " + user.getHashedPwd() + " }";
 }
 
 template<class Is>
-inline Is& deFormat(Is& is, User& user)
+Is& deFormatUser(Is& is, User& user)
 {
 	enum NextObj
 	{
@@ -415,14 +412,15 @@ inline Is& deFormat(Is& is, User& user)
 	};
 	while (true)
 	{
-		while (isspace(is.peek()) || is.peek() == '{' || is.peek == ',')is.get();
+		while (isspace(is.peek()) || is.peek() == '{' || is.peek() == ',')is.get();
 		std::string buf[2];
 		is >> buf[0];
-		while (isspace(is.peek()) || is.peek() == ":")is.get();
+		while (isspace(is.peek()) || is.peek() == ':')is.get();
 		is >> buf[1];
 		if (map.contains(buf[0]))
 		{
 			NextObj next = map[buf[0]];
+			std::stringstream s(buf[1]);
 			switch (next)
 			{
 			case unknown:
@@ -434,7 +432,7 @@ inline Is& deFormat(Is& is, User& user)
 				user.id = buf[1];
 				break;
 			case sex:
-				deFormat(std::stringstream(buf[1]), user.sex);
+				deFormatSex(s, user.sex);
 				break;
 			case pwd:
 				user.hashedPWD = buf[1];
@@ -444,7 +442,7 @@ inline Is& deFormat(Is& is, User& user)
 			}
 		}
 		while (isspace(is.peek()))is.get();
-		if (is.peek() == "}")
+		if (is.peek() == '}')
 		{
 			is.get();
 			break;
@@ -486,7 +484,7 @@ inline ExamPoint getTotalClassHour(vec v)
 }
 
 template<>
-inline std::string format(const Point point)
+std::string format(const Point& point)
 {
 	//return std::string();
 	return "{ point : " + std::to_string(point.getRawPoint())
@@ -494,37 +492,36 @@ inline std::string format(const Point point)
 }
 
 template<class Is>
-inline Is& deFormat(Is& is, Point& point)
+Is& deFormat(Is& is, Point& point)
 {
 	enum NextObj
 	{
-		point,
+		points,
 		classHour,
 		unKnown
 	};
 	std::map<std::string, NextObj> map =
 	{
-		{"point",NextObj::point},
+		{"point",NextObj::points},
 		{"classHour",classHour}
 	};
 	while (true)
 	{
-		while (isspace(is.peek()) || is.peek() == '{' || is.peek == ',')is.get();
+		while (isspace(is.peek()) || is.peek() == '{' || is.peek() == ',')is.get();
 		std::string buf[2];
 		is >> buf[0];
-		while (isspace(is.peek()) || is.peek() == ":")is.get();
+		while (isspace(is.peek()) || is.peek() == ':')is.get();
 		is >> buf[1];
 		if (map.contains(buf[0]))
 		{
 			NextObj next = map[buf[0]];
+			std::stringstream ss(buf[1]);
 			switch (next)
 			{
-			case NextObj::point:
-				std::stringstream ss(buf[1]);
-				ss >> point.point;
+			case NextObj::points:
+				ss >> (point.point);
 				break;
 			case classHour:
-				std::stringstream ss(buf[1]);
 				ss >> point.classHour;
 				break;
 			case unKnown:
@@ -534,7 +531,7 @@ inline Is& deFormat(Is& is, Point& point)
 			}
 		}
 		while (isspace(is.peek()))is.get();
-		if (is.peek() == "}")
+		if (is.peek() == '}')
 		{
 			is.get();
 			break;
@@ -543,32 +540,31 @@ inline Is& deFormat(Is& is, Point& point)
 	return is;
 }
 
-template<>
-inline std::string format(const Score score)
+std::string formatScore(const Score& score)
 {
 	//return std::string();
-	return format<SubjectName, Point, std::map<SubjectName, Point> >(score.operator ScoreMap());
+	return formatMap<SubjectName, Point, std::map<SubjectName, Point> >(score.operator ScoreMap());
 }
 
 template<class Is>
-inline Is& deFormat(Is& is, Score& score)
+Is& deFormatScore(Is& is, Score& score)
 {
-	deFormatMap(is, score.points);
+	deFormatMap<SubjectName, Point>(is, score.points);
 	return is;
 }
 
 template<>
-inline std::string format(const Student student)
+std::string format(const Student& student)
 {
 	//return std::string();
-	return "{ User : " + format((User)student)
-		+ " , Score : " + format((Score)student)
+	return "{ User : " + formatUser((User)student)
+		+ " , Score : " + formatScore(student)
 		+ " , StuClass : " + student.getStuClass()
 		+ " , StuGrade : " + std::to_string(student.getStuGrade()) + " }";
 }
 
 template<class Is>
-inline Is& deFormat(Is& is, Student& student)
+Is& deFormat(Is& is, Student& student)
 {
 	enum NextObj
 	{
@@ -587,10 +583,10 @@ inline Is& deFormat(Is& is, Student& student)
 	};
 	while (true)
 	{
-		while (isspace(is.peek()) || is.peek() == '{' || is.peek == ',')is.get();
+		while (isspace(is.peek()) || is.peek() == '{' || is.peek() == ',')is.get();
 		std::string buf[2];
 		is >> buf[0];
-		while (isspace(is.peek()) || is.peek() == ":")is.get();
+		while (isspace(is.peek()) || is.peek() == ':')is.get();
 		is >> buf[1];
 		if (map.contains(buf[0]))
 		{
@@ -598,18 +594,28 @@ inline Is& deFormat(Is& is, Student& student)
 			switch (next)
 			{
 			case user:
-				deFormat(is, (User)student);
+			{
+				//User u;
+				deFormatUser(is, student);
+				//student = u;
+			}
 				break;
 			case score:
-				deFormat(is, (Score)student);
+			{
+				Score s;
+				deFormatScore(is, student);
+				//student = s;
+			}
 				break;
 			case stuClass:
 				student.setStuClass(buf[1]);
 				break;
 			case stuGrade:
+			{
 				StuGrade s;
-				deFormat(std::stringstream(buf[1]), s);
+				std::stringstream(buf[1])>> s;
 				student.stuGrade = s;
+			}
 				break;
 			case unknow:
 				break;
@@ -618,7 +624,7 @@ inline Is& deFormat(Is& is, Student& student)
 			}
 		}
 		while (isspace(is.peek()))is.get();
-		if (is.peek() == "}")
+		if (is.peek() == '}')
 		{
 			is.get();
 			break;
@@ -629,20 +635,25 @@ inline Is& deFormat(Is& is, Student& student)
 }
 
 template<>
-inline std::string format(const KeyWord keyWord)
+std::string format(const KeyWord& keyWord)
 {
 	return keyWord.operator std::string();
 }
-
+template<>
+std::string format(const SubjectName& name)
+{
+	return name;
+}
 template<class OP>
 inline IDVec StudentList::getByKey(KeyName name, KeyWord keyWord)const
 {
 	KeyWordType requestType(name);
 	Key requestKey(requestType, keyWord);
 	IDVec ans;
+	OP cmper;
 	for (auto s : data)
 	{
-		if (OP(requestKey.getKey(s.second), keyWord))
+		if (cmper(requestKey.getKey(s.second), keyWord))
 		{
 			ans.push_back(s.first);
 		}

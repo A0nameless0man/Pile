@@ -4,9 +4,9 @@ namespace Docs
 {
 	using CS = const std::string;
 	CS help = R"()";
-	CS loginTypeNote = R"(ÇëÑ¡ÔñµÇÂ½ÓÃ»§ÀàĞÍ:
-a:	¹ÜÀíÔ±
-s:	Ñ§Éú
+	CS loginTypeNote = R"(è¯·é€‰æ‹©ç™»é™†ç”¨æˆ·ç±»å‹:
+a:	ç®¡ç†å‘˜
+s:	å­¦ç”Ÿ
 )";
-	CS unKnowLoginTypeNote = R"(µÇÂ½ÓÃ»§ÀàĞÍ´íÎó,ÇëÖØÊÔ)";
+	CS unKnowLoginTypeNote = R"(ç™»é™†ç”¨æˆ·ç±»å‹é”™è¯¯,è¯·é‡è¯•)";
 }

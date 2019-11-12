@@ -201,6 +201,7 @@ ExamPoint Score::getGPA()const
 		sum += p.second.getRawPoint() * p.second.getClassHour();
 	}
 	sum /= getTotalClassHour();
+	return sum;
 }
 
 ClassHour Score::getTotalClassHour()const
@@ -476,15 +477,15 @@ GoodResult::operator std::string() const
 {
 	if (head.size() == 1)
 	{
-		std::sort
-		(
-			rec.begin(),
-			rec.end(),
-			[](const Record& a, const Record& b)->bool
-			{
-				return a[0] < b[0];
-			}
-		);
+		//std::sort
+		//(
+		//	rec.begin(),
+		//	rec.end(),
+		//	[](const Record& a, const Record& b)->bool
+		//	{
+		//		return a[0] < b[0];
+		//	}
+		//);
 	}
 	const size_t FIXED_WIDTH = 8;
 	std::vector<size_t> width(head.size(), FIXED_WIDTH);
@@ -920,7 +921,7 @@ KeyWord::KeyWord(KeyWordType type, std::string str)
 		id = ID(str);
 		break;
 	case KeyWordType::BasicType::sex:
-		deFormat(ss, sex);
+		deFormatSex(ss, sex);
 	case KeyWordType::BasicType::stuClass:
 		stuClass = StuClass(str);
 		break;
@@ -989,7 +990,7 @@ KeyWord::operator std::string()const
 		return id;
 		break;
 	case KeyWordType::BasicType::sex:
-		return format(sex);
+		return formatSex(sex);
 		break;
 	case KeyWordType::BasicType::stuClass:
 		return stuClass;

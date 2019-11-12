@@ -24,7 +24,7 @@ const std::map<char, char> RevTransformChar
 };
 
 template<class Key, class Val, class Map>
-std::string format(Map map)
+std::string formatMap(const Map& map)
 {
 	std::string res;
 	res += "{";
@@ -41,7 +41,7 @@ std::string format(Map map)
 }
 
 template<class T>
-std::string format(T dat)
+std::string format(const T& dat)
 {
 	return std::to_string(dat);
 	//std::to_chars(str, str + 107, dat);
@@ -49,7 +49,7 @@ std::string format(T dat)
 }
 
 template<>
-std::string format(std::string string)
+std::string format(const std::string& string)
 {
 	std::string res;
 	res += "\"";
@@ -69,7 +69,7 @@ std::string format(std::string string)
 }
 
 template<>
-std::string format(char c)
+std::string format(const char& c)
 {
 	if (TransformChar.find(c) != TransformChar.end())
 	{
@@ -142,12 +142,12 @@ Is& deFormat(Is& is, char& c)
 	return is;
 }
 
-template<class Key, class Val, class Is>
-Is& deFormat(Is& is, std::map<Key, Val>& map)
-{
-	deFormatMap<Key,Val,Is,std::map<Key,Val> >(is, map);
-	return is;
-}
+//template<class Key, class Val, class Is>
+//Is& deFormat(Is& is, std::map<Key, Val>& map)
+//{
+//	deFormatMap<Key,Val,Is,std::map<Key,Val> >(is, map);
+//	return is;
+//}
 
 template<class Is>
 Is& deFormat(Is& is, std::string& str)
@@ -159,7 +159,7 @@ Is& deFormat(Is& is, std::string& str)
 	while (is.peek() != '\"')
 	{
 		char c;
-		deFormat(is, c);
+		c = is.get();
 		str.push_back(c);
 	}
 	is.get();

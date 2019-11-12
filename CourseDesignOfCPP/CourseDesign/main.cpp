@@ -25,7 +25,7 @@ int colourtest(void)
 	return 0;
 }
 StudentList MainList;
-std::unordered_map<ID, User> admins;
+std::map<ID, User> admins;
 int main(int argCnt, char** arg)
 {
 	std::vector<std::string> rawArgs;
