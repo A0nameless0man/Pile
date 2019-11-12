@@ -7,6 +7,8 @@
 #include<string>
 #include<sstream>
 #include<functional>
+#include"md5.h"
+#include<algorithm>
 #include"Format.h"
 #include"Format.cpp"
 const double ex = 0.0000006;
@@ -539,8 +541,6 @@ inline Is& deFormat(Is& is, Point& point)
 		}
 	}
 	return is;
-	//throw gcnew System::NotImplementedException();
-	// TODO:
 }
 
 template<>
@@ -555,8 +555,6 @@ inline Is& deFormat(Is& is, Score& score)
 {
 	deFormatMap(is, score.points);
 	return is;
-	//throw gcnew System::NotImplementedException();
-	// TODO:
 }
 
 template<>

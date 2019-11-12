@@ -1,5 +1,4 @@
 #include"Server.h"
-#include"md5.h"
 User::User(ID id, PWD pwd, Name name, Sex sex) :name(name), id(id), sex(sex), hashedPWD(pwd)
 {
 }
@@ -487,7 +486,25 @@ GoodResult::operator std::string() const
 			}
 		);
 	}
-
+	const size_t FIXED_WIDTH = 8;
+	std::vector<size_t> width(head.size(), FIXED_WIDTH);
+	std::string res;
+	res += "|rank    |";
+	for (auto h : head)
+	{
+		if (h.length() < FIXED_WIDTH)
+		{
+			res += std::string(FIXED_WIDTH - h.length(),' ');
+		}
+		res += h+"|";
+	}
+	res += '\n';
+	for (auto r : rec)
+	{
+		res += form(r, width);
+		res += "\n";
+	}
+	return res;
 }//TODO
 
 KeyWordType::operator BasicType() const
