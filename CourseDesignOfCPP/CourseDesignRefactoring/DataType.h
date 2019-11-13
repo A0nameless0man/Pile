@@ -12,14 +12,16 @@ using ID = std::string;
 using IDVec = std::vector<ID>;
 using IDset = std::set<ID>;
 using PWD = std::string;
+using UserName = std::string;
+class User;
 using PointOfExam = double;
 using ClassHourOfCourse = double;
 using CourseName = std::string;
 class Course;
 //using Course = std::pair<CourseName, ScoreOnOneCourse>;
 using CoursesRecord = std::map<CourseName, Course>;
-using UserName = std::string;
-class User;
+using StudentClassName = std::string;
+using StudentGrade = size_t;
 class Student;
 
 
@@ -75,11 +77,20 @@ public:
 	void setSex(Sex naeSex);
 	ID id()const;
 	bool login(PWD token)const;
-	bool setPWD(PWD newPWD);
-	
+	void setPWD(PWD newPWD);
+	std::string Serialize()const;
+	template<class Is = stdIstream>
+	static User UnSerializ(Is& is);
+	template<class Is = stdIstream, class Os = stdOstream>
+	static User InteractiveBuild(Is& is, Os& os);
 };
 class Student :public User
 {
 private:
+	CoursesRecord myCourseRecord;
+	StudentClassName myClass;
+	StudentGrade myStartYear;
+public:
+	Student(User user, StudentClassName className, StudentGrade startYear);
 
 };
