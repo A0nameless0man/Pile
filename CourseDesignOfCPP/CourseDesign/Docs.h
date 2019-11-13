@@ -2,7 +2,7 @@
 #include<string>
 namespace Docs
 {
-	using CS = const std::string;
+	using CS = std::string;
 	CS help = R"()";
 	CS loginTypeNote = R"(请选择登陆用户类型:
 a:	管理员
