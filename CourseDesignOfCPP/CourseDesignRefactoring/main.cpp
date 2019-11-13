@@ -17,8 +17,7 @@ int colourtest(void)
 		}
 		else
 		{
-			std::cout << std::flush//<<"\t"<<std::flush;
-				;
+			std::cout << std::flush;
 		}
 
 	}
@@ -27,7 +26,6 @@ int colourtest(void)
 std::map<ID, User> admins;
 int main(int argCnt, char** arg)
 {
-	std::vector<std::string> rawArgs;
 	std::map<std::string, std::vector<std::string>> args =
 	{
 		{"rubbish",{}},
@@ -36,34 +34,40 @@ int main(int argCnt, char** arg)
 		{"-p",{}},
 		{"-f",{}},
 	};
-	for (int i = 0; i < argCnt; i++)
-	{
-		rawArgs.push_back(std::move(std::string(arg[i])));
-	}
-	std::string option = "rubbish";
-	for (auto i = rawArgs.begin(); i != rawArgs.end(); i++)
-	{
-		if (args.contains(*i))
-		{
-			option = *i;
-		}
-		else
-		{
-			args[option].push_back(*i);
-		}
-	}
-	enum LoginType
+	enum class LoginType
 	{
 		admin, student
-	}loginType;
+	};
+	LoginType loginType;
 	{
-		std::map<std::string, LoginType> map =
+		std::vector<std::string> rawArgs;
+		for (int i = 0; i < argCnt; i++)
 		{
-			{"admin",admin},
-			{"a",admin},
-			{"student",student},
-			{"s",student},
-			{"stu",student}
+			rawArgs.push_back(std::move(std::string(arg[i])));
+		}
+		std::string optionInArgs = "rubbish";
+		for (auto i = rawArgs.begin(); i != rawArgs.end(); i++)
+		{
+			if (args.contains(*i))
+			{
+				optionInArgs = *i;
+			}
+			else
+			{
+				args[optionInArgs].push_back(*i);
+			}
+		}
+	}
+	//deal with command line args
+
+	{
+		const std::map<std::string, LoginType> map =
+		{
+			{"admin",LoginType::admin},
+			{"a",LoginType::admin},
+			{"student",LoginType::student},
+			{"s",LoginType::student},
+			{"stu",LoginType::student}
 		};
 		while (true)
 		{
@@ -80,7 +84,7 @@ int main(int argCnt, char** arg)
 			}
 			if (map.contains(loginTypeInput))
 			{
-				loginType = map[loginTypeInput];
+				loginType = map.at(loginTypeInput);
 				break;
 			}
 			else
@@ -89,5 +93,6 @@ int main(int argCnt, char** arg)
 			}
 		}
 	}
+	//get userType
 	return 0;
 }
