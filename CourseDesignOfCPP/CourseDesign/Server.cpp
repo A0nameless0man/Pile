@@ -876,6 +876,7 @@ std::string SQLrequest::exec(StudentList& list)
 		throw std::invalid_argument("unknow sql type");
 		break;
 	}
+	return "Segment fault";
 }
 
 KeyWord::KeyWord(Name name) :type(KeyWordType::BasicType::name), name(name)

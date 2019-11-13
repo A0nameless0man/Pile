@@ -3,10 +3,10 @@
 namespace Docs
 {
 	using CS = std::string;
-	CS help = R"()";
-	CS loginTypeNote = R"(è¯·é€‰æ‹©ç™»é™†ç”¨æˆ·ç±»å‹:
-a:	ç®¡ç†å‘˜
-s:	å­¦ç”Ÿ
-)";
-	CS unKnowLoginTypeNote = R"(ç™»é™†ç”¨æˆ·ç±»å‹é”™è¯¯,è¯·é‡è¯•)";
+	const CS help = "";//R"()";
+	const CS loginTypeNote = "";//R"(ÇëÑ¡ÔñµÇÂ½ÓÃ»§ÀàĞÍ:
+// a:	¹ÜÀíÔ±
+// s:	Ñ§Éú
+// )";
+	const CS unKnowLoginTypeNote = "";//R"(µÇÂ½ÓÃ»§ÀàĞÍ´íÎó,ÇëÖØÊÔ)";
 }
