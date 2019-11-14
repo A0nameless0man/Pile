@@ -129,7 +129,7 @@
     <ClCompile Include="Condition.cpp" />
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="CourseSelectionRecord.cpp" />
-    <ClCompile Include="DataType.cpp" />
+    <ClCompile Include="Student.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ThirdPartyLib\md5.cpp" />
@@ -139,7 +139,7 @@
     <ClInclude Include="Condition.h" />
     <ClInclude Include="Course.h" />
     <ClInclude Include="CourseSelectionRecord.h" />
-    <ClInclude Include="DataType.h" />
+    <ClInclude Include="Student.h" />
     <ClInclude Include="Docs.h" />
     <ClInclude Include="SerializationAid.h" />
     <ClInclude Include="Server.h" />

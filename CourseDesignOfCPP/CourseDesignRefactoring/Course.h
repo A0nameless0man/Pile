@@ -6,6 +6,7 @@
 class Course
 {
 public:
+	using CourseID = unsigned long long;
 	using ClassHourOfCourse = double;
 	using CourseName = std::string;
 	Course(CourseName name,ClassHourOfCourse classHour = 1.0);

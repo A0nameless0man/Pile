@@ -1,19 +1,13 @@
 #pragma once
 #include<string>
 #include"SerializationAid.h"
-using ID = std::string;
-using PWD = std::string;
-using UserName = std::string;
-class User;
-PWD hash(const PWD& in);
+
 enum class enumGender
 {
 	male, female, unknow
 };
 class Gender
 {
-private:
-	enumGender mySex;
 public:
 	Gender(enumGender sex = enumGender::unknow);
 	Gender(const json& js);
@@ -21,16 +15,16 @@ public:
 	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Gender interactiveBuild(Is& is, Os& os);
+private:
+	enumGender mySex;
 };
 
 class User
 {
-private:
-	Gender mySex;
-	UserName myName;
-	ID myID;
-	PWD hashedPWD;
 public:
+	using ID = std::string;
+	using PWD = std::string;
+	using UserName = std::string;
 	User(ID id, UserName name, Gender = Gender());
 	UserName name()const;
 	void setName(UserName newName);
@@ -43,4 +37,11 @@ public:
 	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static User interactiveBuild(Is& is, Os& os);
+private:
+	Gender mySex;
+	UserName myName;
+	ID myID;
+	PWD hashedPWD;
 };
+
+User::PWD hash(const User::PWD& in);

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DataType.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -39,11 +36,11 @@
     <ClCompile Include="CourseSelectionRecord.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Student.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataType.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Docs.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -69,6 +66,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CourseSelectionRecord.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Student.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

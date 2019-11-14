@@ -87,16 +87,6 @@ int __main__(int argCnt, char** arg)
 	//get userType
 	return 0;
 }
-int test(void)
-{
-	std::cout << Gender().serialize().dump(4) << std::endl;
-	json js = "{ \"sex\" : 0 }"_json;
-	json js2 = "{ \"sex\" : 0 }"_json;
-	Gender sex(js);
-	std::cout << sex.serialize().dump(4) << std::endl;
-	std::cout << (js["sex"] < js2["sex"]) << std::endl;
-	return 0;
-}
 int main(void)
 {
 	return colourtest();
