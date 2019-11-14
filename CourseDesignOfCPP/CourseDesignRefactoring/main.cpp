@@ -58,7 +58,7 @@ int main(int argCnt, char** arg)
 		}
 	}
 	//deal with command line args
-
+	
 	{
 		const std::map<std::string, LoginType> LoginUserTypeMap =
 		{
