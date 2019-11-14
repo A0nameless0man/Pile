@@ -4,6 +4,8 @@
 #include<set>
 #include<map>
 #include<algorithm>
+#include"json.hpp"
+using json = nlohmann::json;
 class Sex;
 using stdIstream = std::basic_istream<char, std::char_traits<char> >;
 using stdOstream = std::basic_ostream<char, std::char_traits<char> >;
@@ -25,7 +27,7 @@ class Student;
 
 
 PWD hash(const PWD& in);
-enum enumSex
+enum class enumSex
 {
 	male,female,unknow
 };
@@ -34,10 +36,10 @@ class Sex
 private:
 	enumSex mySex;
 public:
-	Sex(enumSex sex = unknow);
-	std::string serialize()const;
-	template<class Is = stdIstream>
-	static Sex unSerializ(Is& is);
+	Sex(enumSex sex = enumSex::unknow);
+	Sex(const json& js);
+	json serialize()const;
+	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Sex interactiveBuild(Is& is, Os& os);
 };
@@ -55,9 +57,8 @@ public:
 	void resetPoint(PointOfExam newPoint);
 	ClassHourOfCourse getClassHour()const;
 	void resetClassHour(ClassHourOfCourse newClassHour);
-	std::string serialize()const;
-	template<class Is = stdIstream>
-	static Course unSerializ(Is& is);
+	json serialize()const;
+	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Course interactiveBuild(Is& is, Os& os);
 };
@@ -77,9 +78,8 @@ public:
 	ID id()const;
 	bool login(PWD token)const;
 	void setPWD(PWD newPWD);
-	std::string serialize()const;
-	template<class Is = stdIstream>
-	static User unSerializ(Is& is);
+	json serialize()const;
+	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static User interactiveBuild(Is& is, Os& os);
 };
@@ -98,9 +98,9 @@ public:
 	void setCourse(Course&& newCourse);
 	StudentClassName getClass()const;
 	StudentGrade getStartYear();
-	std::string serialize()const;
-	template<class Is = stdIstream>
-	static Student unSerializ(Is& is);
+	json serialize()const;
+	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Student interactiveBuild(Is& is, Os& os);
 };
+

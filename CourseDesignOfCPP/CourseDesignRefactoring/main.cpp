@@ -23,7 +23,7 @@ int colourtest(void)
 	}
 	return 0;
 }
-int main(int argCnt, char** arg)
+int __main(int argCnt, char** arg)
 {
 	std::map<std::string, std::vector<std::string>> args =
 	{
@@ -94,4 +94,16 @@ int main(int argCnt, char** arg)
 	}
 	//get userType
 	return 0;
+}
+int test(void)
+{
+	std::cout << Sex().serialize().dump(4) << std::endl;
+	json js = "{ \"sex\" : 0 }"_json;
+	Sex sex(js);
+	std::cout << sex.serialize().dump(4) << std::endl;
+	return 0;
+}
+int main(void)
+{
+	return test();
 }
