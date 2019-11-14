@@ -21,10 +21,13 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="md5.cpp">
+    <ClCompile Include="Server.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Server.cpp">
+    <ClCompile Include="Condition.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdPartyLib\md5.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,16 +38,16 @@
     <ClInclude Include="Docs.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="md5.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Server.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="json.hpp">
+    <ClInclude Include="Condition.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
+    <ClInclude Include="ThirdPartyLib\md5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdPartyLib\colourStream.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

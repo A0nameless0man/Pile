@@ -1,29 +1,21 @@
 #include <iostream>
-#include"main.h"
+#include"DataType.h"
+#include"Docs.h"
+
+#include "ThirdPartyLib/colourStream.h"
+
+
 //#include<windows.h>
 const int BUF_SIZE = 128 * 1024;
 char buf[BUF_SIZE];
 int colourtest(void)
 {
-	//setvbuf(stdout, buf, _IOFBF, BUF_SIZE);
-	for (int i = 0; i < 256; i++)
-	{
-		// std::cout << "i:\t" << i << "\t";
-		std::cout << std::flush << "\033[38;5;" << i << "m" << "\033[48;5;" << 255 - i << "m" << std::flush;
-		std::cout << "Hello World!" << "\033[0m" << std::flush;
-		if (i && !((i + 3) % 6))
-		{
-			std::cout << "\n";
-		}
-		else
-		{
-			std::cout << std::flush;
-		}
 
-	}
+	using namespace kerbal::utility::costream;
+	costream<std::cout>(LIGHT_RED) << 123 << std::endl;
 	return 0;
 }
-int __main(int argCnt, char** arg)
+int __main__(int argCnt, char** arg)
 {
 	std::map<std::string, std::vector<std::string>> args =
 	{
@@ -42,7 +34,7 @@ int __main(int argCnt, char** arg)
 		std::vector<std::string> rawArgs;
 		for (int i = 0; i < argCnt; i++)
 		{
-			rawArgs.push_back(std::move(std::string(arg[i])));
+			rawArgs.emplace_back(arg[i]);
 		}
 		std::string optionInArgs = "rubbish";
 		for (auto i = rawArgs.begin(); i != rawArgs.end(); i++)
@@ -58,7 +50,7 @@ int __main(int argCnt, char** arg)
 		}
 	}
 	//deal with command line args
-	
+
 	{
 		const std::map<std::string, LoginType> LoginUserTypeMap =
 		{
@@ -97,13 +89,15 @@ int __main(int argCnt, char** arg)
 }
 int test(void)
 {
-	std::cout << Sex().serialize().dump(4) << std::endl;
+	std::cout << Gender().serialize().dump(4) << std::endl;
 	json js = "{ \"sex\" : 0 }"_json;
-	Sex sex(js);
+	json js2 = "{ \"sex\" : 0 }"_json;
+	Gender sex(js);
 	std::cout << sex.serialize().dump(4) << std::endl;
+	std::cout << (js["sex"] < js2["sex"]) << std::endl;
 	return 0;
 }
 int main(void)
 {
-	return test();
+	return colourtest();
 }

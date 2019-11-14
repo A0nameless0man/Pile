@@ -4,14 +4,12 @@
 #include<set>
 #include<map>
 #include<algorithm>
-#include"json.hpp"
+#include"ThirdPartyLib/json.hpp"
 using json = nlohmann::json;
-class Sex;
+class Gender;
 using stdIstream = std::basic_istream<char, std::char_traits<char> >;
 using stdOstream = std::basic_ostream<char, std::char_traits<char> >;
 using ID = std::string;
-using IDVec = std::vector<ID>;
-using IDset = std::set<ID>;
 using PWD = std::string;
 using UserName = std::string;
 class User;
@@ -27,21 +25,21 @@ class Student;
 
 
 PWD hash(const PWD& in);
-enum class enumSex
+enum class enumGender
 {
 	male,female,unknow
 };
-class Sex
+class Gender
 {
 private:
-	enumSex mySex;
+	enumGender mySex;
 public:
-	Sex(enumSex sex = enumSex::unknow);
-	Sex(const json& js);
+	Gender(enumGender sex = enumGender::unknow);
+	Gender(const json& js);
 	json serialize()const;
 	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
-	static Sex interactiveBuild(Is& is, Os& os);
+	static Gender interactiveBuild(Is& is, Os& os);
 };
 class Course
 {
@@ -65,16 +63,16 @@ public:
 class User
 {
 private:
-	Sex mySex;
+	Gender mySex;
 	UserName myName;
 	ID myID;
 	PWD hashedPWD;
 public:
-	User(ID id, UserName name, Sex = Sex());
+	User(ID id, UserName name, Gender = Gender());
 	UserName name()const;
 	void setName(UserName newName);
-	Sex sex()const;
-	void setSex(Sex naeSex);
+	Gender sex()const;
+	void setSex(Gender naeSex);
 	ID id()const;
 	bool login(PWD token)const;
 	void setPWD(PWD newPWD);

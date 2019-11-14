@@ -1,10 +1,9 @@
 #pragma once
 #include<map>
 #include"DataType.h"
-#include"md5.h"
+#include"ThirdPartyLib/md5.h"
 #include"Docs.h"
-class Server;
-class Condition;
+
 class Server
 {
 private:
@@ -27,15 +26,4 @@ public:
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Server interactiveBuild(Is& is, Os& os);
 
-};
-class Condition
-{
-public:
-	Condition(const std::string& str);
-	Condition(std::string&& str);
-	bool operator()(const Student& student)const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static Condition interactiveBuild(Is& is, Os& os);
-private:
-	/*Not Ready Yet*/
 };

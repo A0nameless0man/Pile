@@ -1,33 +1,33 @@
 #include"DataType.h"
-#include"md5.h"
+#include"ThirdPartyLib/md5.h"
 #include"Docs.h"
-#include"json.hpp"
-Sex::Sex(enumSex sex):mySex(sex)
+#include"ThirdPartyLib/json.hpp"
+Gender::Gender(enumGender sex):mySex(sex)
 {
 }
 
-Sex::Sex(const json& js):mySex(js["sex"])
+Gender::Gender(const json& js):mySex(js["gender"])
 {
 }
 
-json Sex::serialize() const
+json Gender::serialize() const
 {
 	json js;
-	js["sex"] = mySex;
-	return std::move(js);
+	js["gender"] = mySex;
+	return js;
 }
 
-std::string Sex::to_string() const
+std::string Gender::to_string() const
 {
 	switch (mySex)
 	{
-	case enumSex::male:
+	case enumGender::male:
 		return "male";
 		break;
-	case enumSex::female:
+	case enumGender::female:
 		return "female";
 		break;
-	case enumSex::unknow:
+	case enumGender::unknow:
 		return "unknow";
 		break;
 	default:
