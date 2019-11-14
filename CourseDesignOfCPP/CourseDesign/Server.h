@@ -10,7 +10,6 @@
 #include"md5.h"
 #include<algorithm>
 #include"Format.h"
-#include"Format.cpp"
 const double ex = 0.0000006;
 using ExamPoint = double;
 using ClassHour = double;

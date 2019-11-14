@@ -8,6 +8,7 @@ int main(void)
     veci.resize(10);
     vecb.resize(10);
     vecv.resize(10);
+
     int cnt = 0;
     for(auto i:veci)
     {
