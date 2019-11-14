@@ -30,6 +30,15 @@
     <ClCompile Include="ThirdPartyLib\md5.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="User.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Course.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CourseSelectionRecord.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataType.h">
@@ -48,6 +57,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ThirdPartyLib\colourStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializationAid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Course.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CourseSelectionRecord.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
