@@ -3,7 +3,9 @@
 namespace Docs
 {
 	using S = const std::string;
+	S hashSalt = "mySpecialSalt";
 	S help = R"()";
+	S argForLoginType = "-t";
 	S loginTypeNote = R"(请选择登陆用户类型:
 a:	管理员
 s:	学生)";

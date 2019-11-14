@@ -23,13 +23,12 @@ int colourtest(void)
 	}
 	return 0;
 }
-std::map<ID, User> admins;
 int main(int argCnt, char** arg)
 {
 	std::map<std::string, std::vector<std::string>> args =
 	{
 		{"rubbish",{}},
-		{"-t",{}},
+		{Docs::argForLoginType,{}},
 		{"-u",{}},
 		{"-p",{}},
 		{"-f",{}},
@@ -61,7 +60,7 @@ int main(int argCnt, char** arg)
 	//deal with command line args
 
 	{
-		const std::map<std::string, LoginType> map =
+		const std::map<std::string, LoginType> LoginUserTypeMap =
 		{
 			{"admin",LoginType::admin},
 			{"a",LoginType::admin},
@@ -72,19 +71,19 @@ int main(int argCnt, char** arg)
 		while (true)
 		{
 			std::string loginTypeInput;
-			if (!(args["-t"].empty()))
+			if (!(args[Docs::argForLoginType].empty()))
 			{
-				loginTypeInput = args["-t"][0];
-				args["-t"].clear();
+				loginTypeInput = args[Docs::argForLoginType][0];
+				args[Docs::argForLoginType].clear();
 			}
 			else
 			{
 				std::cout << Docs::loginTypeNote << std::endl;
 				std::cin >> loginTypeInput;
 			}
-			if (map.contains(loginTypeInput))
+			if (LoginUserTypeMap.contains(loginTypeInput))
 			{
-				loginType = map.at(loginTypeInput);
+				loginType = LoginUserTypeMap.at(loginTypeInput);
 				break;
 			}
 			else

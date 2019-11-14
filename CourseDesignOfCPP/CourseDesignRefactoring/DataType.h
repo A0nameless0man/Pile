@@ -4,7 +4,6 @@
 #include<set>
 #include<map>
 #include<algorithm>
-#include"md5.h"
 class Sex;
 using stdIstream = std::basic_istream<char, std::char_traits<char> >;
 using stdOstream = std::basic_ostream<char, std::char_traits<char> >;
@@ -36,11 +35,11 @@ private:
 	enumSex mySex;
 public:
 	Sex(enumSex sex = unknow);
-	std::string Serialize()const;
+	std::string serialize()const;
 	template<class Is = stdIstream>
-	static Sex UnSerializ(Is& is);
+	static Sex unSerializ(Is& is);
 	template<class Is = stdIstream, class Os = stdOstream>
-	static Sex InteractiveBuild(Is& is, Os& os);
+	static Sex interactiveBuild(Is& is, Os& os);
 };
 class Course
 {
@@ -56,11 +55,11 @@ public:
 	void resetPoint(PointOfExam newPoint);
 	ClassHourOfCourse getClassHour()const;
 	void resetClassHour(ClassHourOfCourse newClassHour);
-	std::string Serialize()const;
+	std::string serialize()const;
 	template<class Is = stdIstream>
-	static Course UnSerializ(Is& is);
+	static Course unSerializ(Is& is);
 	template<class Is = stdIstream, class Os = stdOstream>
-	static Course InteractiveBuild(Is& is, Os& os);
+	static Course interactiveBuild(Is& is, Os& os);
 };
 class User
 {
@@ -78,11 +77,11 @@ public:
 	ID id()const;
 	bool login(PWD token)const;
 	void setPWD(PWD newPWD);
-	std::string Serialize()const;
+	std::string serialize()const;
 	template<class Is = stdIstream>
-	static User UnSerializ(Is& is);
+	static User unSerializ(Is& is);
 	template<class Is = stdIstream, class Os = stdOstream>
-	static User InteractiveBuild(Is& is, Os& os);
+	static User interactiveBuild(Is& is, Os& os);
 };
 class Student :public User
 {
@@ -92,5 +91,16 @@ private:
 	StudentGrade myStartYear;
 public:
 	Student(User user, StudentClassName className, StudentGrade startYear);
-
+	const CoursesRecord& getCoureseRecord()const;
+	Course getCouresByName(CourseName courseName)const;
+	void containsCourse(const CourseName& courseName)const;
+	void setCourse(const Course& newCourse);
+	void setCourse(Course&& newCourse);
+	StudentClassName getClass()const;
+	StudentGrade getStartYear();
+	std::string serialize()const;
+	template<class Is = stdIstream>
+	static Student unSerializ(Is& is);
+	template<class Is = stdIstream, class Os = stdOstream>
+	static Student interactiveBuild(Is& is, Os& os);
 };
