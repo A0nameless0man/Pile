@@ -23,11 +23,8 @@ private:
 	std::map<User::LogicID, User> admin;
 	std::map<Student::LogicID, Student> students;
 	std::map<Student::StudentClassName, Student::LogicID> placementRecord;
+	std::map<Student::UserName, Student::LogicID> studentNameRecord;
+	std::map<Student::ID, Student::LogicID> studentIDRecord;
 	std::map<Course::CourseID, Course> courses;
-	std::map
-	<
-		CourseSelectionRecord::CourseSelectionRecordID,
-		CourseSelectionRecord
-	>
-		courseSelectionRecords;
+	std::map<CourseSelectionRecord::CourseSelectionRecordID,CourseSelectionRecord>courseSelectionRecords;
 };
