@@ -11,18 +11,18 @@
 
 class Student :public User
 {
-private:
+public:
 	using StudentClassName = std::string;
 	using StudentGrade = size_t;
-	StudentClassName myClass;
-	StudentGrade myStartYear;
-public:
 	Student(User user, StudentClassName className, StudentGrade startYear);
+	Student(const json& js);
 	StudentClassName getClass()const;
 	StudentGrade getStartYear();
 	json serialize()const;
-	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Student interactiveBuild(Is& is, Os& os);
+private:
+	StudentClassName myClass;
+	StudentGrade myStartYear;
 };
 

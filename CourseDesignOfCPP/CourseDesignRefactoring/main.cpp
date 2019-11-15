@@ -1,7 +1,8 @@
-#include <iostream>
-#include"DataType.h"
+#include<iostream>
+#include<map>
+#include"User.h"
+#include"Student.h"
 #include"Docs.h"
-
 #include "ThirdPartyLib/colourStream.h"
 
 

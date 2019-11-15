@@ -9,36 +9,37 @@ enum class enumGender
 class Gender
 {
 public:
-	Gender(enumGender sex = enumGender::unknow);
+	Gender(enumGender gender = enumGender::unknow);
 	Gender(const json& js);
 	json serialize()const;
 	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Gender interactiveBuild(Is& is, Os& os);
 private:
-	enumGender mySex;
+	enumGender myGender;
 };
 
 class User
 {
 public:
+	using LogicID = unsigned long long;
 	using ID = std::string;
 	using PWD = std::string;
 	using UserName = std::string;
-	User(ID id, UserName name, Gender = Gender());
-	UserName name()const;
-	void setName(UserName newName);
-	Gender sex()const;
-	void setSex(Gender naeSex);
-	ID id()const;
-	bool login(PWD token)const;
-	void setPWD(PWD newPWD);
+	User(ID id, UserName name, Gender gender = Gender());
+	User(const json& js);
+	User::UserName getName()const;
+	void setName(User::UserName newName);
+	Gender getGender()const;
+	void setGender(Gender newGender);
+	User::ID getID()const;
+	bool login(User::PWD token)const;
+	void setPWD(User::PWD newPWD);
 	json serialize()const;
-	std::string to_string()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static User interactiveBuild(Is& is, Os& os);
 private:
-	Gender mySex;
+	Gender myGender;
 	UserName myName;
 	ID myID;
 	PWD hashedPWD;

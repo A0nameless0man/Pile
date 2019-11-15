@@ -6,13 +6,13 @@ namespace Docs
 	S hashSalt = "mySpecialSalt";
 	S help = R"()";
 	S argForLoginType = "-t";
-	S loginTypeNote = R"(ÇëÑ¡ÔñµÇÂ½ÓÃ»§ÀàĞÍ:
-a:	¹ÜÀíÔ±
-s:	Ñ§Éú)";
-	S unKnowLoginTypeNote = R"(µÇÂ½ÓÃ»§ÀàĞÍ´íÎó,ÇëÖØÊÔ)";
-	S sexTypeNote = R"(ÇëÊäÈëĞÔ±ğ:
-m:	ÄĞ
-f:	Å®
-u:	²»Ã÷)";
-	S unKnowSexTypeNote = R"(ĞÔ±ğÀàĞÍ´íÎó,ÇëÖØÊÔ)";
+	S loginTypeNote = R"(è¯·é€‰æ‹©ç™»é™†ç”¨æˆ·ç±»å‹:
+a:	ç®¡ç†å‘˜
+s:	å­¦ç”Ÿ)";
+	S unKnowLoginTypeNote = R"(ç™»é™†ç”¨æˆ·ç±»å‹é”™è¯¯,è¯·é‡è¯•)";
+	S genderTypeNote = R"(è¯·è¾“å…¥æ€§åˆ«:
+m:	ç”·
+f:	å¥³
+u:	ä¸æ˜)";
+	S unKnowGenderTypeNote = R"(æ€§åˆ«ç±»å‹é”™è¯¯,è¯·é‡è¯•)";
 }
