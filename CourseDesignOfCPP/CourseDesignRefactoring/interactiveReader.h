@@ -6,17 +6,17 @@ namespace iReader
 	using stdIstream = std::basic_istream<char, std::char_traits<char> >;
 	using stdOstream = std::basic_ostream<char, std::char_traits<char> >;
 
-	//¿ÉÄÜÓ¦µ±²ğ½â
+	//å¯èƒ½åº”å½“æ‹†è§£
 
 
-	//ĞòÁĞ»¯Æ÷
+	//åºåˆ—åŒ–å™¨
 	template<class T>
 	class ToString
 	{
 	public:
 		std::string operator()(const T& t)const;
 	};
-	//·´ĞòÁĞ»¯Æ÷
+	//ååºåˆ—åŒ–å™¨
 	template<class T, class Is = stdIstream>
 	class StdIstreamReader
 	{
@@ -24,7 +24,7 @@ namespace iReader
 		T	read(Is& is)const;
 	};
 
-	//ÏŞÖÆÆ÷
+	//é™åˆ¶å™¨
 	template<class T, class Serializer = ToString<T> >
 	class Restricter
 	{
@@ -83,7 +83,7 @@ namespace iReader
 	};
 
 
-	//¶ÁÈ¡Æ÷
+	//è¯»å–å™¨
 	template
 		<
 		class T,
@@ -113,8 +113,8 @@ namespace iReader
 	};
 
 
-	//ÒÔÏÂÎªÊµÏÖ
-	//ĞòÁĞ»¯Æ÷
+	//ä»¥ä¸‹ä¸ºå®ç°
+	//åºåˆ—åŒ–å™¨
 
 	template<class T>
 	inline std::string ToString<T>::operator()(const T& t)const
@@ -128,7 +128,7 @@ namespace iReader
 		return t;
 	}
 
-	//·´ĞòÁĞ»¯Æ÷
+	//ååºåˆ—åŒ–å™¨
 
 	template<class T, class Is>
 	inline T StdIstreamReader<T, Is>::read(Is& is)const
@@ -138,7 +138,7 @@ namespace iReader
 		return t;
 	}
 
-	//ÏŞÖÆÆ÷
+	//é™åˆ¶å™¨
 
 	template<class T, class Serializer>
 	inline bool NoRestrict<T, Serializer>::operator()(const T&)const
@@ -149,7 +149,7 @@ namespace iReader
 	template<class T, class Serializer>
 	inline std::string NoRestrict<T, Serializer>::explainRestriction()const
 	{
-		return "³ıÁËÀàĞÍÓ¦µ±Îª" + typeid(T).name() + "ÒÔÍâ,Ã»ÓĞÆäËüÏŞÖÆ";
+		return "é™¤äº†ç±»å‹åº”å½“ä¸º" + typeid(T).name() + "ä»¥å¤–,æ²¡æœ‰å…¶å®ƒé™åˆ¶";
 	}
 
 	template<class T, class Serializer, class Compare>
@@ -178,9 +178,9 @@ namespace iReader
 	inline std::string InRange<T, Serializer, Compare>::explainRestriction()const
 	{
 		return
-			"ÀàĞÍÓ¦µ±Îª" + std::string(typeid(T).name()) +
-			",ÇÒ·¶Î§ÔÚ" + serializer(lowerBound) +
-			"µ½" + serializer(upperBound) + "Ö®¼ä";
+			"ç±»å‹åº”å½“ä¸º" + std::string(typeid(T).name()) +
+			",ä¸”èŒƒå›´åœ¨" + serializer(lowerBound) +
+			"åˆ°" + serializer(upperBound) + "ä¹‹é—´";
 	}
 
 	template<class T, class Serializer, class Compare, class Allocator>
@@ -203,12 +203,12 @@ namespace iReader
 	template<class T, class Serializer, class Compare, class Allocator>
 	inline std::string WithIn<T, Serializer, Compare, Allocator>::explainRestriction() const
 	{
-		std::string ans("ÊäÈëÓ¦µ±Îª:\n");
+		std::string ans("è¾“å…¥åº”å½“ä¸º:\n");
 		for (auto i = set.begin(); i != set.end(); ++i)
 		{
 			ans.append("\t" + serializer(*i) + ",\n");
 		}
-		ans.append("Ö®Ò»");
+		ans.append("ä¹‹ä¸€");
 		return ans;
 	}
 
@@ -218,7 +218,7 @@ namespace iReader
 		set.insert(t);
 	}
 
-	//¶ÁÈ¡Æ÷
+	//è¯»å–å™¨
 
 	template<class T, class Restriction, class Serializer, class UnSerializer>
 	inline InteractiveReader<T, Restriction, Serializer, UnSerializer>::InteractiveReader
@@ -243,7 +243,7 @@ namespace iReader
 	{
 		while (true)
 		{
-			os << "ÇëÊäÈë" << variableNameRequired << ":\n";
+			os << "è¯·è¾“å…¥" << variableNameRequired << ":\n";
 			os << restriction.explainRestriction() << std::endl;
 			T t = (unSerializer.read(is));
 			if (restriction(t))
@@ -252,7 +252,7 @@ namespace iReader
 			}
 			else
 			{
-				os << "ÊäÈë²»·ûºÏÒªÇó,ÇëÖØÊÔ" << std::endl;
+				os << "è¾“å…¥ä¸ç¬¦åˆè¦æ±‚,è¯·é‡è¯•" << std::endl;
 			}
 		}
 	}
