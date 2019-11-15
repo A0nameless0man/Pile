@@ -22,7 +22,7 @@ int __main__(int argCnt, char** arg)
 }
 int readerTest(void)
 {
-	iReader::InteractiveReader<int, iReader::WithIn<int>> reader("just int", iReader::WithIn<int>({1,2,5,9}));
+	iReader::InteractiveReader<std::string, iReader::WithIn<std::string>> reader("just int", iReader::WithIn<std::string>({"male","female"}));
 	std::cout << reader.read(std::cin, std::cout) << std::endl;
 	return 0;
 }
