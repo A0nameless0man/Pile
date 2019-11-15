@@ -201,7 +201,7 @@ inline bool WithIn<T, Serializer, Compare, Allocator>::operator()(const T& t)con
 template<class T, class Serializer, class Compare, class Allocator>
 inline std::string WithIn<T, Serializer, Compare, Allocator>::explainRestriction() const
 {
-	std::string ans("输入应当为:");
+	std::string ans("输入应当为:\n");
 	for (auto i = set.begin(); i != set.end(); ++i)
 	{
 		ans.append("\t" + serializer(*i) + ",\n");

@@ -22,8 +22,8 @@ int __main__(int argCnt, char** arg)
 }
 int readerTest(void)
 {
-	InteractiveReader<int,InRange<int>> reader("just int",InRange<int>(0,10));
-	reader.read(std::cin, std::cout);
+	InteractiveReader<int, WithIn<int>> reader("just int", WithIn<int>({1,2,5,9}));
+	std::cout << reader.read(std::cin, std::cout) << std::endl;
 	return 0;
 }
 int main(void)
