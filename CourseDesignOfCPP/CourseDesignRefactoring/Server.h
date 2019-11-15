@@ -17,13 +17,13 @@ public:
 	};
 	Server(const json& js);
 	json serialize()const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static Server interactiveBuild(Is& is, Os& os);
+	void addStudent(const Student& student);
+
 private:
 	std::map<User::LogicID, User> admin;
 	std::map<Student::LogicID, Student> students;
-	std::map<Student::StudentClassName, Student::LogicID> placementRecord;
-	std::map<Student::UserName, Student::LogicID> studentNameRecord;
+	std::multimap<Student::StudentClassName, Student::LogicID> placementRecord;
+	std::multimap<Student::UserName, Student::LogicID> studentNameRecord;
 	std::map<Student::ID, Student::LogicID> studentIDRecord;
 	std::map<Course::CourseID, Course> courses;
 	std::map<CourseSelectionRecord::CourseSelectionRecordID,CourseSelectionRecord>courseSelectionRecords;
