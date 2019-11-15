@@ -129,6 +129,7 @@
     <ClCompile Include="Condition.cpp" />
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="CourseSelectionRecord.cpp" />
+    <ClCompile Include="myAssert.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Condition.h" />
     <ClInclude Include="Course.h" />
     <ClInclude Include="CourseSelectionRecord.h" />
+    <ClInclude Include="myAssert.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="Docs.h" />
     <ClInclude Include="SerializationAid.h" />

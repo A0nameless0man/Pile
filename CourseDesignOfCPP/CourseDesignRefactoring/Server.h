@@ -7,6 +7,7 @@
 #include"CourseSelectionRecord.h"
 #include"ThirdPartyLib/md5.h"
 #include"Docs.h"
+#include"myAssert.h"
 
 class Server
 {
@@ -17,14 +18,19 @@ public:
 	};
 	Server(const json& js);
 	json serialize()const;
-	void addStudent(const Student& student);
-
+	CmdResalt addStudent(const Student& student);
+	
 private:
 	std::map<User::LogicID, User> admin;
+	User::LogicID adminCount;
 	std::map<Student::LogicID, Student> students;
+	Student::LogicID studentCount;
+	std::map<Course::CourseID, Course> courses;
+	Course::CourseID courseCount;
+	std::map<CourseSelectionRecord::CourseSelectionRecordID, CourseSelectionRecord>courseSelectionRecords;
+	CourseSelectionRecord::CourseSelectionRecordID courseSelectionCount;
 	std::multimap<Student::StudentClassName, Student::LogicID> placementRecord;
 	std::multimap<Student::UserName, Student::LogicID> studentNameRecord;
 	std::map<Student::ID, Student::LogicID> studentIDRecord;
-	std::map<Course::CourseID, Course> courses;
-	std::map<CourseSelectionRecord::CourseSelectionRecordID,CourseSelectionRecord>courseSelectionRecords;
 };
+

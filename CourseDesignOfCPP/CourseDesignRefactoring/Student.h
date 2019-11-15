@@ -16,8 +16,9 @@ public:
 	using StudentGrade = size_t;
 	Student(User user, StudentClassName className, StudentGrade startYear);
 	Student(const json& js);
-	StudentClassName getClass()const;
-	StudentGrade getStartYear();
+	Student::StudentClassName getClass()const;
+	void setClassName(Student::StudentClassName newClass);
+	Student::StudentGrade getStartYear()const;
 	json serialize()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Student interactiveBuild(Is& is, Os& os);

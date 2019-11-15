@@ -15,4 +15,5 @@ m:	男
 f:	女
 u:	不明)";
 	S unKnowGenderTypeNote = R"(性别类型错误,请重试)";
+	S studentIDconfilctNote = "学号发生冲突,请检查是否已经存在此学生";
 }
