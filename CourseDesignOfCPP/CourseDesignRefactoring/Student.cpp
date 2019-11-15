@@ -3,7 +3,7 @@
 #include"Docs.h"
 #include"SerializationAid.h"
 
-Student::Student(User user, StudentClassName className, StudentGrade startYear) :
+Student::Student(User user, StudentClassLogicalID className, StudentGrade startYear) :
 	User(user),
 	myClass(className),
 	myStartYear(startYear)
@@ -17,12 +17,12 @@ Student::Student(const json& js) :
 {
 }
 
-Student::StudentClassName Student::getClass() const
+Student::StudentClassLogicalID Student::getClass() const
 {
 	return myClass;
 }
 
-void Student::setClassName(Student::StudentClassName newClass)
+void Student::setClassName(Student::StudentClassLogicalID newClass)
 {
 	myClass = newClass;
 }

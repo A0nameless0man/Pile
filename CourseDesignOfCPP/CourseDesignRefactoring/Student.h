@@ -12,18 +12,19 @@
 class Student :public User
 {
 public:
+	using StudentClassLogicalID = unsigned long long;
 	using StudentClassName = std::string;
 	using StudentGrade = size_t;
-	Student(User user, StudentClassName className, StudentGrade startYear);
+	Student(User user, StudentClassLogicalID className, StudentGrade startYear);
 	Student(const json& js);
-	Student::StudentClassName getClass()const;
-	void setClassName(Student::StudentClassName newClass);
+	Student::StudentClassLogicalID getClass()const;
+	void setClassName(Student::StudentClassLogicalID newClass);
 	Student::StudentGrade getStartYear()const;
 	json serialize()const;
 	template<class Is = stdIstream, class Os = stdOstream>
 	static Student interactiveBuild(Is& is, Os& os);
 private:
-	StudentClassName myClass;
+	StudentClassLogicalID myClass;
 	StudentGrade myStartYear;
 };
 

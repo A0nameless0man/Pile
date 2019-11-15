@@ -3198,10 +3198,10 @@ void from_json(const BasicJsonType& j, std::tuple<Args...>& t)
     from_json_tuple_impl(j, t, index_sequence_for<Args...> {});
 }
 
-template <typename BasicJsonType, typename Key, typename Value, typename Compare, typename Allocator,
+template <typename BasicJsonType, typename T, typename Value, typename Compare, typename Allocator,
           typename = enable_if_t<not std::is_constructible<
-                                     typename BasicJsonType::string_t, Key>::value>>
-void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allocator>& m)
+                                     typename BasicJsonType::string_t, T>::value>>
+void from_json(const BasicJsonType& j, std::map<T, Value, Compare, Allocator>& m)
 {
     if (JSON_HEDLEY_UNLIKELY(not j.is_array()))
     {
@@ -3214,14 +3214,14 @@ void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allocator>&
         {
             JSON_THROW(type_error::create(302, "type must be array, but is " + std::string(p.type_name())));
         }
-        m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
+        m.emplace(p.at(0).template get<T>(), p.at(1).template get<Value>());
     }
 }
 
-template <typename BasicJsonType, typename Key, typename Value, typename Hash, typename KeyEqual, typename Allocator,
+template <typename BasicJsonType, typename T, typename Value, typename Hash, typename KeyEqual, typename Allocator,
           typename = enable_if_t<not std::is_constructible<
-                                     typename BasicJsonType::string_t, Key>::value>>
-void from_json(const BasicJsonType& j, std::unordered_map<Key, Value, Hash, KeyEqual, Allocator>& m)
+                                     typename BasicJsonType::string_t, T>::value>>
+void from_json(const BasicJsonType& j, std::unordered_map<T, Value, Hash, KeyEqual, Allocator>& m)
 {
     if (JSON_HEDLEY_UNLIKELY(not j.is_array()))
     {
@@ -3234,7 +3234,7 @@ void from_json(const BasicJsonType& j, std::unordered_map<Key, Value, Hash, KeyE
         {
             JSON_THROW(type_error::create(302, "type must be array, but is " + std::string(p.type_name())));
         }
-        m.emplace(p.at(0).template get<Key>(), p.at(1).template get<Value>());
+        m.emplace(p.at(0).template get<T>(), p.at(1).template get<Value>());
     }
 }
 

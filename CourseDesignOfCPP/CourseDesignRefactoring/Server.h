@@ -19,17 +19,25 @@ public:
 	Server(const json& js);
 	json serialize()const;
 	CmdResalt addStudent(const Student& student);
-	
 private:
+	//Section 1: data
 	std::map<User::LogicID, User> admin;
 	User::LogicID adminCount;
+
 	std::map<Student::LogicID, Student> students;
 	Student::LogicID studentCount;
+
 	std::map<Course::CourseID, Course> courses;
 	Course::CourseID courseCount;
+
 	std::map<CourseSelectionRecord::CourseSelectionRecordID, CourseSelectionRecord>courseSelectionRecords;
 	CourseSelectionRecord::CourseSelectionRecordID courseSelectionCount;
-	std::multimap<Student::StudentClassName, Student::LogicID> placementRecord;
+
+	std::map<Student::StudentClassLogicalID, Student::StudentClassName> classes;
+	Student::StudentClassLogicalID classesCount;
+
+	//Section 2 : indexs
+	std::multimap<Student::StudentClassLogicalID, Student::LogicID> placementRecord;
 	std::multimap<Student::UserName, Student::LogicID> studentNameRecord;
 	std::map<Student::ID, Student::LogicID> studentIDRecord;
 };
