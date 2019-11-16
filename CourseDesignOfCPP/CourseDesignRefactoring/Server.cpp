@@ -1,4 +1,6 @@
 ﻿#include"Server.h"
+#include"ThirdPartyLib/colourStream.h"
+#include<cstdlib>
 Server::Server() :
 	studentCount(0),
 	courseCount(0),
@@ -7,6 +9,57 @@ Server::Server() :
 {
 	addUser(User("0", "Admin"));
 	setPasswardOfUser("0", "admin");
+}
+Server::Server(const json& js) :
+	UnSerialize(js, studentCount),
+	UnSerialize(js, courseCount),
+	UnSerialize(js, courseSelectionCount),
+	UnSerialize(js, classesCount)
+{
+	auto stull = [](const std::string& str)->unsigned long long {return std::strtoull(str.c_str(), NULL, 0); };
+#define Auto(i,js,x) if(js.contains(#x))for(auto i = js[#x].begin();i!=js[#x].end();i++)
+
+	Auto(i, js, admin)admin.insert({ i.key(), User(*i) });
+	Auto(i, js, students)students.insert({ stull(i.key()),Student(*i) });
+	Auto(i, js, courses)courses.insert({ stull(i.key()),Course(*i) });
+	Auto(i, js, courseSelectionRecords)courseSelectionRecords.insert({ stull(i.key()), CourseSelectionRecord(*i) });
+
+#undef Auto
+}
+json Server::serialize() const
+{
+	json js;
+	Serialize(js, classNameIndex);
+	Serialize(js, placementIndex);
+	Serialize(js, studentNameIndex);
+	Serialize(js, studentIdIndex);
+	Serialize(js, courseNameIndex);
+	Serialize(js, courseSelectionIndex);
+	Serialize(js, studentCount);
+	Serialize(js, courseCount);
+	Serialize(js, courseSelectionCount);
+	Serialize(js, classesCount);
+	for (auto& i : admin)
+	{
+		js["admin"][i.first] = i.second.serialize();
+	}
+	for (auto& i : students)
+	{
+		js["students"][std::to_string(i.first)] = i.second.serialize();
+	}
+	for (auto& i : courses)
+	{
+		js["courses"][std::to_string(i.first)] = i.second.serialize();
+	}
+	for (auto& i : courseSelectionRecords)
+	{
+		js["courseSelectionRecords"][std::to_string(i.first)] = i.second.serialize();
+	}
+	for (auto& i : classes)
+	{
+		js["classes"][std::to_string(i.first)] = i.second;
+	}
+	return js;
 }
 CmdResalt Server::loginAsStudent(const Student::ID& id, const Student::PWD& pwd) const
 {
@@ -57,9 +110,17 @@ CmdResalt Server::addCourseSelectionRecord(const Student::LogicID& stuId, const 
 	RunTimeAssert(students.contains(stuId), Docs::studentLogicIDNotExistError);
 	RunTimeAssert(courses.contains(course), Docs::courseLogicIdNotExistError);
 	courseSelectionRecords.insert({ courseSelectionCount,CourseSelectionRecord(stuId,0,course) });
-	auto iter = courseSelectionIndex[stuId];
-	iter.insert({ course,courseSelectionCount });
-	//++courseSelectionCount;
+	courseSelectionIndex[stuId].insert({ course,courseSelectionCount });
+	++courseSelectionCount;
+	return CmdResalt(true, std::to_string(1) + Docs::insertSuccessNoteSuffix);
+}
+
+CmdResalt Server::addCourse(const Course& course)
+{
+	RunTimeAssert(!courseNameIndex.contains(course.getName()), Docs::courseNameConflictError);
+	courses.insert({ courseCount,course });
+	courseNameIndex.insert({ course.getName(),courseCount });
+	++courseCount;
 	return CmdResalt(true, std::to_string(1) + Docs::insertSuccessNoteSuffix);
 }
 

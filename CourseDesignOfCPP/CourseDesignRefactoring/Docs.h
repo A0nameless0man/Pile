@@ -19,6 +19,7 @@ namespace Docs
 	S studentClassNameNotExistError = "找不到此班级,请确认已经创建该班级";
 	S studentClassNameConflictError = "此班级已存在,请确认";
 	S courseNameNotExistError = "找不到这个课程,请确认后再试";
+	S courseNameConflictError = "这个课程已存在,请确认后再试";
 	S noCourseSelectionRecordForThisStudentError = "找不到该学生的选课记录,请查证后重试";
 	S noSuchCourseSelectionRecordForThisStudentError = "该学生未选择本课程,请查证后重试";
 	//InnerError

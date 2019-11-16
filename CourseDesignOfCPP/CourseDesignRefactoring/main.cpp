@@ -45,18 +45,17 @@ int __main__(void)
 int test(void)
 {
 	Server myServer;
+	std::cout << "start" << std::endl;
 	myServer.addClass("2b");
 	myServer.addStudent(Student(User("123", "hh"), 0, 2019));
+	myServer.addCourse(Course("lm",1.0));
+	myServer.addCourseSelectionRecord(*(myServer.getStudentLogicIdByName("hh").begin()), myServer.getCourseIdByCourseName("lm"));
 	auto s = myServer.getStudentLogicIdByClass(
 	myServer.getClassLogicalIdByClassName("2b")
 	);
-	for (auto i : s)
-	{
-		const Student& s = myServer.getStudentByLogicId(i);
-		std::cout << s.serialize().dump(4) << std::endl;
-		std::cout<<(std::string)myServer.removeStudentByLogicId(i) << std::endl;
-	}
-	std::cout << (std::string)myServer.loginAsUser("0", "admin") << std::endl;
+	using namespace kerbal::utility::costream;
+	costream<std::cout>(LIGHT_RED) << Server(myServer.serialize()).serialize().dump(4) << std::endl;
+	std::cout << myServer.serialize().dump(4) << std::endl;
 	return 0;
 }
 int main(void)
