@@ -42,8 +42,23 @@ int __main__(void)
 	}
 
 }
+int test(void)
+{
+	Server myServer;
+	myServer.addClass("2b");
+	myServer.addStudent(Student(User("123", "hh"), 0, 2019));
+	auto s = myServer.getStudentLogicIdByClass(
+	myServer.getClassLogicalIdByClassName("2b")
+	);
+	for (auto i : s)
+	{
+		std::cout<<(std::string)myServer.removeStudentByLogicId(i) << std::endl;
+	}
+	return 0;
+}
 int main(void)
 {
+	test();
 	return 	__main__();
 
 }

@@ -10,16 +10,18 @@ namespace Docs
 	//Warning
 	S pwdNotMatchWarrning = "密码错误";
 	//Error
-	S studentIDNotExistError = "该学号不存在,请确认后再试";
+	S studentIDNotExistError = "找不到该学号对应的学生,请确认后再试";
 	S studentIDconflictError = "学号发生冲突,请检查是否已经存在此学生";
 	S studentNameNotExistError = "找不到该姓名的学生,请确认后再试";
+	S studentClassNameNotExistError = "找不到此班级,请确认已经创建该班级";
 	S studentClassNameConflictError = "此班级已存在,请确认";
 	S courseNameNotExistError = "找不到这个课程,请确认后再试";
 	S noCourseSelectionRecordForThisStudentError = "找不到该学生的选课记录,请查证后重试";
 	S noSuchCourseSelectionRecordForThisStudentError = "该学生未选择本课程,请查证后重试";
 	//InnerError
 	S studentLogicIDNotExistError = "该学生不存在,请确认后再试";
-	S studentClassLogicalIdNotExistError = "找不到此班级,请确认已经创建该班级";
+	S studentClassLogicalIdNotExistError = "该班级不存在,请确认已经创建该班级";
+	S courseLogicIdNotExistError = "该课程不存在,请确认";
 	//other
 	S hashSalt = "mySpecialSalt";
 }

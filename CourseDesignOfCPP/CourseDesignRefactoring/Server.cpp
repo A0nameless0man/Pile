@@ -41,11 +41,15 @@ CmdResalt Server::addClass(const Student::StudentClassName& className)
 	return CmdResalt(true, std::to_string(1) + Docs::insertSuccessNoteSuffix);
 }
 
-CmdResalt Server::removeStudentById(const Student::ID& id)
+CmdResalt Server::addCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& course)
 {
-	RunTimeAssert(studentIdIndex.contains(id), Docs::studentIDNotExistError);
-	Student::LogicID logicId = studentIdIndex[id];
-	return removeStudentByLogicId(logicId);
+	RunTimeAssert(students.contains(stuId), Docs::studentLogicIDNotExistError);
+	RunTimeAssert(courses.contains(course), Docs::courseLogicIdNotExistError);
+	courseSelectionRecords.insert({ courseSelectionCount,CourseSelectionRecord(stuId,0,course) });
+	auto iter = courseSelectionIndex[stuId];
+	iter.insert({ course,courseSelectionCount });
+	//++courseSelectionCount;
+	return CmdResalt(true, std::to_string(1) + Docs::insertSuccessNoteSuffix);
 }
 
 CmdResalt Server::removeStudentByLogicId(const Student::LogicID& logicId)
@@ -69,6 +73,7 @@ CmdResalt Server::removeStudentByLogicId(const Student::LogicID& logicId)
 	return CmdResalt(true, std::to_string(1) + Docs::removeSuccessNoteSuffix);
 }
 
+
 const CourseSelectionRecord::CourseSelectionRecordID Server::getCourseSelectionRecordIdByStudentIdAndCourseID(const Student::LogicID& stuId, const Course::CourseID& courseId) const
 {
 	auto iter = courseSelectionIndex.find(stuId);
@@ -80,7 +85,14 @@ const CourseSelectionRecord::CourseSelectionRecordID Server::getCourseSelectionR
 
 const Server::CourseSelectionRecordIdSet Server::getCourseSelectionRecordIdByStudentId(const Student::LogicID& stuId) const
 {
-	
+	auto iter = courseSelectionIndex.find(stuId);
+	RunTimeAssert(iter != courseSelectionIndex.end(), Docs::noCourseSelectionRecordForThisStudentError);
+	Server::CourseSelectionRecordIdSet ans;
+	for (auto i : iter->second)
+	{
+		ans.insert(i.second);
+	}
+	return ans;
 }
 
 const Server::StudentIdSet Server::getStudentLogicIdByClass(const Student::StudentClassLogicalID& classid) const
@@ -92,7 +104,9 @@ const Server::StudentIdSet Server::getStudentLogicIdByClass(const Student::Stude
 
 const Student Server::getStudentByLogicId(const Student::LogicID& id) const
 {
-
+	auto iter = students.find(id);
+	RunTimeAssert(iter != students.end(), Docs::studentLogicIDNotExistError);
+	return iter->second;
 }
 
 const Course::CourseID Server::getCourseIdByCourseName(const Course::CourseName& courseName) const
@@ -114,4 +128,11 @@ const Server::StudentIdSet Server::getStudentLogicIdByID(const Student::ID& id) 
 	auto iter = studentIdIndex.find(id);
 	RunTimeAssert(iter != studentIdIndex.end(), Docs::studentIDNotExistError);
 	return Server::StudentIdSet();
+}
+
+const Student::StudentClassLogicalID Server::getClassLogicalIdByClassName(const Student::StudentClassName& className) const
+{
+	auto iter = classNameIndex.find(className);
+	RunTimeAssert(iter != classNameIndex.end(), Docs::studentClassNameNotExistError);
+	return iter->second;
 }

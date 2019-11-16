@@ -42,11 +42,14 @@ public:
 	//add
 	[[maybe_unused]] CmdResalt addStudent(const Student& student);
 	[[maybe_unused]] CmdResalt addClass(const Student::StudentClassName& className);
+	[[maybe_unused]] CmdResalt addCourseSelectionRecord(const Student::LogicID& stuId,const Course::CourseID& course);
+
+	//set
 
 	//remove
-	[[nodiscard]] CmdResalt removeStudentById(const Student::ID& id);
 	[[nodiscard]] CmdResalt removeStudentByLogicId(const Student::LogicID& logicId);
-
+	[[nodiscard]] CmdResalt removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& course);
+	
 	//getByID
 	[[nodiscard]] const CourseSelectionRecord::CourseSelectionRecordID getCourseSelectionRecordIdByStudentIdAndCourseID(const Student::LogicID& stuId, const Course::CourseID& courseId)const;
 	[[nodiscard]] const Server::CourseSelectionRecordIdSet getCourseSelectionRecordIdByStudentId(const Student::LogicID& stuId)const;
@@ -57,6 +60,7 @@ public:
 	[[nodiscard]] const Course::CourseID getCourseIdByCourseName(const Course::CourseName& courseName)const;
 	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByName(const Student::UserName& name)const;
 	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByID(const Student::ID& id)const;
+	[[nodiscard]] const Student::StudentClassLogicalID getClassLogicalIdByClassName(const Student::StudentClassName& className)const;
 private:
 	//Section 1: data
 	AdminRecord admin;
