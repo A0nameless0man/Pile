@@ -145,6 +145,7 @@
     <ClInclude Include="SerializationAid.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="ThirdPartyLib\colourStream.h" />
+    <ClInclude Include="ThirdPartyLib\json.hpp" />
     <ClInclude Include="ThirdPartyLib\md5.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>

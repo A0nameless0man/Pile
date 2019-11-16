@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include<string>
 class CmdResalt
 {
@@ -14,5 +14,5 @@ private:
 #define RunTimeAssert(condition,msg) \
 if(!(condition)) \
 {\
-	return CmdResalt(false,msg);\
+	throw CmdResalt(false,msg);\
 }

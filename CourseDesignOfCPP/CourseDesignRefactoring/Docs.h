@@ -3,9 +3,23 @@
 namespace Docs
 {
 	using S = const std::string;
-	S hashSalt = "mySpecialSalt";
+	//Note
 	S insertSuccessNoteSuffix = " 行数据已被插入";
+	S removeSuccessNoteSuffix = " 行数据已被移除";
+	S successLoginNote = "登陆成功";
+	//Warning
+	S pwdNotMatchWarrning = "密码错误";
+	//Error
+	S studentIDNotExistError = "该学号不存在,请确认后再试";
 	S studentIDconflictError = "学号发生冲突,请检查是否已经存在此学生";
-	S studentClassLogicalIdNotExistError = "找不到此班级,请确认已经创建该班级";
+	S studentNameNotExistError = "找不到该姓名的学生,请确认后再试";
 	S studentClassNameConflictError = "此班级已存在,请确认";
+	S courseNameNotExistError = "找不到这个课程,请确认后再试";
+	S noCourseSelectionRecordForThisStudentError = "找不到该学生的选课记录,请查证后重试";
+	S noSuchCourseSelectionRecordForThisStudentError = "该学生未选择本课程,请查证后重试";
+	//InnerError
+	S studentLogicIDNotExistError = "该学生不存在,请确认后再试";
+	S studentClassLogicalIdNotExistError = "找不到此班级,请确认已经创建该班级";
+	//other
+	S hashSalt = "mySpecialSalt";
 }

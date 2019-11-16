@@ -1,11 +1,11 @@
-#include"Student.h"
+﻿#include"Student.h"
 #include"ThirdPartyLib/md5.h"
 #include"Docs.h"
 #include"SerializationAid.h"
 
-Student::Student(User user, StudentClassLogicalID className, StudentGrade startYear) :
+Student::Student(User user, StudentClassLogicalID classId, StudentGrade startYear) :
 	User(user),
-	myClass(className),
+	myClass(classId),
 	myStartYear(startYear)
 {
 }

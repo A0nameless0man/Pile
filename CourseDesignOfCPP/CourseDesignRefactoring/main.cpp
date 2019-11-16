@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 #include<map>
 #include"User.h"
 #include"Student.h"
@@ -10,37 +10,40 @@
 //#include<windows.h>
 const int BUF_SIZE = 128 * 1024;
 char buf[BUF_SIZE];
-int colourtest(void)
+int asStudent(void)
 {
-
-	using namespace kerbal::utility::costream;
-	costream<std::cout>(LIGHT_RED) << 123 << std::endl;
-	return 0;
+	return 1;
+}
+int asAdmin(void)
+{
+	return 2;
 }
 int __main__(void)
 {
 	Server myServer;
-	myServer.addClass("no");
-	myServer.addStudent(Student(User("123", "jk"), 0, 2019));
-	//std::cout << (std::string)b << std::endl;
-	return 0;
-}
-int readerTest(void)
-{
-	using namespace kerbal::utility::costream;
-	while (true)
+	std::string logintype = iReader::InteractiveReader
+		<
+		std::string,
+		iReader::WithIn<std::string>
+		>
+		("登陆类型", iReader::WithIn<std::string>({ "admin","student","a","s" }))
+		.read(std::cin, std::cout);
+	switch (logintype[0])
 	{
-		std::string s;
-
-		costream<std::cout>(LIGHT_RED) << 123 << std::endl;
-		//std::getline(std::cin, s);
-		std::cin >> s;
-		costream<std::cout>(LIGHT_RED) << s.length() << std::endl;
+	case 'a':
+		return asAdmin();
+		break;
+	case 's':
+		return asStudent();
+		break;
+	default:
+		return -1;
+		break;
 	}
-	return 0;
+
 }
 int main(void)
 {
-	__main__();
-	return readerTest();
+	return 	__main__();
+
 }
