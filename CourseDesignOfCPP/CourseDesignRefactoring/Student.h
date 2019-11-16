@@ -21,8 +21,6 @@ public:
 	void setClassName(Student::StudentClassLogicalID newClass);
 	Student::StudentGrade getStartYear()const;
 	json serialize()const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static Student interactiveBuild(Is& is, Os& os);
 private:
 	StudentClassLogicalID myClass;
 	StudentGrade myStartYear;

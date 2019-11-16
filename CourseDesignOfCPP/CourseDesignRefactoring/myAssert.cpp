@@ -1,6 +1,6 @@
 #include "myAssert.h"
 
-CmdResalt::CmdResalt(bool success, std::string msg):success(success),msg(msg)
+CmdResalt::CmdResalt(bool success,const std::string& msg):success(success),msg(msg)
 {
 }
 

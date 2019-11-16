@@ -13,8 +13,6 @@ public:
 	Gender(const json& js);
 	json serialize()const;
 	std::string to_string()const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static Gender interactiveBuild(Is& is, Os& os);
 private:
 	enumGender myGender;
 };
@@ -36,8 +34,6 @@ public:
 	bool login(User::PWD token)const;
 	void setPWD(User::PWD newPWD);
 	json serialize()const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static User interactiveBuild(Is& is, Os& os);
 private:
 	Gender myGender;
 	UserName myName;

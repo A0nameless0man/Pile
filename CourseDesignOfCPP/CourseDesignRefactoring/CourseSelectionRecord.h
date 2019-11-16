@@ -12,8 +12,6 @@ public:
 	void setGrade(CourseSelectionRecord::GradeOfCourse newGrade);
 	Course::CourseID getCourseID();
 	json serialize()const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static Course interactiveBuild(Is& is, Os& os);
 private:
 	User::LogicID student;
 	GradeOfCourse grade;

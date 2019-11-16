@@ -3,7 +3,7 @@
 class CmdResalt
 {
 public:
-	CmdResalt(bool success, std::string msg = "");
+	CmdResalt(bool success,const std::string& msg = "");
 	operator bool()const;
 	operator const std::string& ()const;
 private:

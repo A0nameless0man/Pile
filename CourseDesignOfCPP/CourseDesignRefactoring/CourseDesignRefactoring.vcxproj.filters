@@ -39,9 +39,6 @@
     <ClCompile Include="myAssert.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="interactiveReader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Docs.h">
@@ -55,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="ThirdPartyLib\colourStream.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="SerializationAid.h">
       <Filter>头文件</Filter>
@@ -75,6 +69,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="interactiveReader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

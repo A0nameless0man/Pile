@@ -16,8 +16,6 @@ public:
 	Course::ClassHourOfCourse getClassHour()const;
 	void resetClassHour(Course::ClassHourOfCourse newClassHour);
 	json serialize()const;
-	template<class Is = stdIstream, class Os = stdOstream>
-	static Course interactiveBuild(Is& is, Os& os);
 private:
 	CourseName myCourseName;
 	ClassHourOfCourse classHourOfThisCourse;

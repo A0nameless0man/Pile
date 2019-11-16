@@ -12,33 +12,48 @@
 class Server
 {
 public:
+	using AdminRecord = std::map<User::LogicID, User>;
+	using StudentRecord = std::map<Student::LogicID, Student>;
+	using CoursesRecord = std::map<Course::CourseID, Course>;
+	using CourseSelectionRecords = std::map<CourseSelectionRecord::CourseSelectionRecordID, CourseSelectionRecord>;
+	using ClassNameRecord = std::map<Student::StudentClassLogicalID, Student::StudentClassName>;
+	using ClassNameIndex = std::map<Student::StudentClassName, Student::StudentClassLogicalID>;
+	using PlacementIndex = std::multimap<Student::StudentClassLogicalID, Student::LogicID>;
+	using StudentNameIndex = std::multimap<Student::UserName, Student::LogicID>;
+	using StudentIdIndex = std::map<Student::ID, Student::LogicID>;
 	enum class LoginType
 	{
 		admin, student
 	};
+	Server();
 	Server(const json& js);
 	json serialize()const;
 	CmdResalt addStudent(const Student& student);
+	CmdResalt addClass(const Student::StudentClassName& className);
+	CmdResalt removeStudentById(const Student::ID& id);
+	CmdResalt removeStudentByName(const Student::UserName& name);
+
 private:
 	//Section 1: data
-	std::map<User::LogicID, User> admin;
+	AdminRecord admin;
 	User::LogicID adminCount;
 
-	std::map<Student::LogicID, Student> students;
+	StudentRecord students;
 	Student::LogicID studentCount;
 
-	std::map<Course::CourseID, Course> courses;
+	CoursesRecord courses;
 	Course::CourseID courseCount;
 
-	std::map<CourseSelectionRecord::CourseSelectionRecordID, CourseSelectionRecord>courseSelectionRecords;
+	CourseSelectionRecords courseSelectionRecords;
 	CourseSelectionRecord::CourseSelectionRecordID courseSelectionCount;
 
-	std::map<Student::StudentClassLogicalID, Student::StudentClassName> classes;
+	ClassNameRecord classes;
 	Student::StudentClassLogicalID classesCount;
 
 	//Section 2 : indexs
-	std::multimap<Student::StudentClassLogicalID, Student::LogicID> placementRecord;
-	std::multimap<Student::UserName, Student::LogicID> studentNameRecord;
-	std::map<Student::ID, Student::LogicID> studentIDRecord;
+	ClassNameIndex classNameIndex;
+	PlacementIndex placementIndex;
+	StudentNameIndex studentNameIndex;
+	StudentIdIndex studentIdIndex;
 };
 

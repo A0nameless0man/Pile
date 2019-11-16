@@ -128,7 +128,6 @@
   <ItemGroup>
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="CourseSelectionRecord.cpp" />
-    <ClCompile Include="interactiveReader.cpp" />
     <ClCompile Include="myAssert.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="main.cpp" />
