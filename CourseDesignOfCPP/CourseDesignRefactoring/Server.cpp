@@ -5,6 +5,8 @@ Server::Server() :
 	courseSelectionCount(0),
 	classesCount(0)
 {
+	addUser(User("0", "Admin"));
+	setPasswardOfUser("0", "admin");
 }
 CmdResalt Server::loginAsStudent(const Student::ID& id, const Student::PWD& pwd) const
 {
@@ -17,7 +19,16 @@ CmdResalt Server::loginAsStudent(const Student::ID& id, const Student::PWD& pwd)
 }
 CmdResalt Server::loginAsUser(const User::ID& id, const User::PWD& pwd) const
 {
+	auto iter = admin.find(id);
+	RunTimeAssert(iter != admin.end(), Docs::adminIdNotExistError);
+	RunTimeAssert(iter->second.login(pwd), Docs::pwdNotMatchWarrning);
 	return CmdResalt(true, Docs::successLoginNote);
+}
+CmdResalt Server::addUser(const User& user)
+{
+	RunTimeAssert(!admin.contains(user.getID()), Docs::adminIdConflictError);
+	admin.insert({ user.getID() , user });
+	return CmdResalt(true, std::to_string(1) + Docs::insertSuccessNoteSuffix);
 }
 CmdResalt Server::addStudent(const Student& student)
 {
@@ -52,6 +63,32 @@ CmdResalt Server::addCourseSelectionRecord(const Student::LogicID& stuId, const 
 	return CmdResalt(true, std::to_string(1) + Docs::insertSuccessNoteSuffix);
 }
 
+CmdResalt Server::setPasswardOfUser(const User::ID& userId, const User::PWD& newPwd)
+{
+	auto iter = admin.find(userId);
+	RunTimeAssert(iter != admin.end(), Docs::adminIdNotExistError);
+	iter->second.setPWD(newPwd);
+	return CmdResalt(true, std::to_string(1) + Docs::setSuccessNoteSuffix);
+}
+
+CmdResalt Server::setPassWordOfStudent(const Student::LogicID& studentId, const Student::PWD& newPwd)
+{
+	auto iter = students.find(studentId);
+	RunTimeAssert(iter != students.end(), Docs::studentLogicIDNotExistError);
+	iter->second.setPWD(newPwd);
+	return CmdResalt(true, std::to_string(1) + Docs::setSuccessNoteSuffix);
+}
+
+CmdResalt Server::removeCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId, const CourseSelectionRecord::GradeOfCourse& grade)
+{
+	auto iter = courseSelectionIndex.find(stuId);
+	RunTimeAssert(iter != courseSelectionIndex.end(), Docs::noCourseSelectionRecordForThisStudentError);
+	auto iteriter = iter->second.find(courseId);
+	RunTimeAssert(iteriter != iter->second.end(), Docs::noSuchCourseSelectionRecordForThisStudentError);
+	courseSelectionRecords.find(iteriter->second)->second.setGrade(grade);
+	return CmdResalt(true, std::to_string(1) + Docs::setSuccessNoteSuffix);
+}
+
 CmdResalt Server::removeStudentByLogicId(const Student::LogicID& logicId)
 {
 	RunTimeAssert(students.contains(logicId), Docs::studentLogicIDNotExistError);
@@ -70,6 +107,17 @@ CmdResalt Server::removeStudentByLogicId(const Student::LogicID& logicId)
 	courseSelectionIndex.erase(logicId);
 
 	students.erase(logicId);
+	return CmdResalt(true, std::to_string(1) + Docs::removeSuccessNoteSuffix);
+}
+
+CmdResalt Server::removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& courseId)
+{
+	auto iter = courseSelectionIndex.find(stuId);
+	RunTimeAssert(iter != courseSelectionIndex.end(), Docs::noCourseSelectionRecordForThisStudentError);
+	auto iteriter = iter->second.find(courseId);
+	RunTimeAssert(iteriter != iter->second.end(), Docs::noSuchCourseSelectionRecordForThisStudentError);
+	courseSelectionRecords.erase(iteriter->second);
+	iter->second.erase(iteriter);
 	return CmdResalt(true, std::to_string(1) + Docs::removeSuccessNoteSuffix);
 }
 
@@ -102,10 +150,31 @@ const Server::StudentIdSet Server::getStudentLogicIdByClass(const Student::Stude
 	return iter->second;
 }
 
-const Student Server::getStudentByLogicId(const Student::LogicID& id) const
+const Student& Server::getStudentByLogicId(const Student::LogicID& id) const
 {
 	auto iter = students.find(id);
 	RunTimeAssert(iter != students.end(), Docs::studentLogicIDNotExistError);
+	return iter->second;
+}
+
+const Course& Server::getCourseByCourseId(const Course::CourseID& id) const
+{
+	auto iter = courses.find(id);
+	RunTimeAssert(iter != courses.end(), Docs::courseLogicIdNotExistError);
+	return iter->second;
+}
+
+const Student::StudentClassName& Server::getClassNameByClassID(const Student::StudentClassLogicalID& id) const
+{
+	auto iter = classes.find(id);
+	RunTimeAssert(iter != classes.end(), Docs::studentClassLogicalIdNotExistError);
+	return iter->second;
+}
+
+const CourseSelectionRecord& Server::getCourseSelectionRecordByID(const CourseSelectionRecord::CourseSelectionRecordID& id)
+{
+	auto iter = courseSelectionRecords.find(id);
+	RunTimeAssert(iter != courseSelectionRecords.end(), Docs::CSRNotExit);
 	return iter->second;
 }
 

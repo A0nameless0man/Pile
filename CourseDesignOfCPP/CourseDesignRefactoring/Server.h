@@ -40,27 +40,53 @@ public:
 	[[nodiscard]] CmdResalt loginAsUser(const User::ID& id, const User::PWD& pwd)const;
 
 	//add
+	[[maybe_unused]] CmdResalt addUser(const User& user);
 	[[maybe_unused]] CmdResalt addStudent(const Student& student);
 	[[maybe_unused]] CmdResalt addClass(const Student::StudentClassName& className);
 	[[maybe_unused]] CmdResalt addCourseSelectionRecord(const Student::LogicID& stuId,const Course::CourseID& course);
 
 	//set
-
+	[[nodiscard]] CmdResalt setPasswardOfUser(const User::ID& userId, const User::PWD& newPwd);
+	[[nodiscard]] CmdResalt setPassWordOfStudent(const Student::LogicID& studentId, const Student::PWD & newPwd);
 	//remove
 	[[nodiscard]] CmdResalt removeStudentByLogicId(const Student::LogicID& logicId);
-	[[nodiscard]] CmdResalt removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& course);
+	[[nodiscard]] CmdResalt removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& courseId);
+	[[nodiscard]] CmdResalt removeCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId,const CourseSelectionRecord::GradeOfCourse& grade);
 	
-	//getByID
-	[[nodiscard]] const CourseSelectionRecord::CourseSelectionRecordID getCourseSelectionRecordIdByStudentIdAndCourseID(const Student::LogicID& stuId, const Course::CourseID& courseId)const;
-	[[nodiscard]] const Server::CourseSelectionRecordIdSet getCourseSelectionRecordIdByStudentId(const Student::LogicID& stuId)const;
-	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByClass(const Student::StudentClassLogicalID& classid)const;
-	[[nodiscard]] const Student getStudentByLogicId(const Student::LogicID& id)const;
 
-	//getByOther
+	//-----------//
+	//getInfoByID//
+	//-----------//
+
+	[[nodiscard]] const Student& getStudentByLogicId(const Student::LogicID& id)const;
+	[[nodiscard]] const Course& getCourseByCourseId(const Course::CourseID& id)const;
+	[[nodiscard]] const Student::StudentClassName& getClassNameByClassID(const Student::StudentClassLogicalID& id)const;
+	[[nodiscard]] const CourseSelectionRecord& getCourseSelectionRecordByID(const CourseSelectionRecord::CourseSelectionRecordID& id);
+
+	//------------//
+	//getIdByOther//
+	//------------//
+
+	//get all the stu in a class
+	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByClass(const Student::StudentClassLogicalID& classid)const;
+
+	//get CourseId by Course Name
 	[[nodiscard]] const Course::CourseID getCourseIdByCourseName(const Course::CourseName& courseName)const;
+
+	//get stuID by his or her name
 	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByName(const Student::UserName& name)const;
+
+	//get logicID by lieralID
 	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByID(const Student::ID& id)const;
+
+	//get classID by Class name
 	[[nodiscard]] const Student::StudentClassLogicalID getClassLogicalIdByClassName(const Student::StudentClassName& className)const;
+
+	//get all the CSR this student has
+	[[nodiscard]] const Server::CourseSelectionRecordIdSet getCourseSelectionRecordIdByStudentId(const Student::LogicID& stuId)const;
+
+	//get CSR_ID by student and course
+	[[nodiscard]] const CourseSelectionRecord::CourseSelectionRecordID getCourseSelectionRecordIdByStudentIdAndCourseID(const Student::LogicID& stuId, const Course::CourseID& courseId)const;
 private:
 	//Section 1: data
 	AdminRecord admin;

@@ -52,8 +52,11 @@ int test(void)
 	);
 	for (auto i : s)
 	{
+		const Student& s = myServer.getStudentByLogicId(i);
+		std::cout << s.serialize().dump(4) << std::endl;
 		std::cout<<(std::string)myServer.removeStudentByLogicId(i) << std::endl;
 	}
+	std::cout << (std::string)myServer.loginAsUser("0", "admin") << std::endl;
 	return 0;
 }
 int main(void)
