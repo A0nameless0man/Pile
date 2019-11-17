@@ -17,24 +17,42 @@ Server::Server(const json& js) :
 	UnSerialize(js, classesCount)
 {
 	auto stull = [](const std::string& str)->unsigned long long {return std::strtoull(str.c_str(), NULL, 0); };
-#define Auto(i,js,x) if(js.contains(#x))for(auto i = js[#x].begin();i!=js[#x].end();i++)
 
-	Auto(i, js, admin)admin.insert({ i.key(), User(*i) });
-	Auto(i, js, students)students.insert({ stull(i.key()),Student(*i) });
-	Auto(i, js, courses)courses.insert({ stull(i.key()),Course(*i) });
-	Auto(i, js, courseSelectionRecords)courseSelectionRecords.insert({ stull(i.key()), CourseSelectionRecord(*i) });
+#define Auto(i,js,x,y,z) if(js.contains(#x))for(auto i = js[#x].begin();i!=js[#x].end();i++)x.insert({(y),(z)})
+#define AutoFor(i,js,x) if(js.contains(#x))for(auto i = js[#x].begin();i!=js[#x].end();i++)
+
+	Auto(i, js, admin,i.key(), User(*i) );
+	Auto(i, js, students,stull(i.key()),Student(*i));
+	Auto(i, js, courses,stull(i.key()),Course(*i) );
+	Auto(i, js, courseSelectionRecords,stull(i.key()), CourseSelectionRecord(*i) );
+	Auto(i, js, classes, stull(i.key()), *i);
+	Auto(i, js, classNameIndex, i.key(), *i);
+	Auto(i, js, placementIndex, stull(i.key()), *i);
+	Auto(i, js, studentNameIndex, i.key(), *i);
+	Auto(i, js, studentIdIndex, i.key(), *i);
+	Auto(i, js, courseNameIndex, i.key(), *i);
+	AutoFor(i, js, courseSelectionIndex)
+	{
+		auto& iter = courseSelectionIndex[stull(i.key())];
+		for (auto j = i->begin(); j != i->end(); j++)
+		{
+			iter.insert({ stull(j.key()),*j });
+		}
+	}
+	//Auto(i, js, courseSelectionIndex, stull(i.key()), *i);
 
 #undef Auto
+#undef AutoFor
 }
 json Server::serialize() const
 {
 	json js;
 	Serialize(js, classNameIndex);
-	Serialize(js, placementIndex);
+	//Serialize(js, placementIndex);
 	Serialize(js, studentNameIndex);
 	Serialize(js, studentIdIndex);
 	Serialize(js, courseNameIndex);
-	Serialize(js, courseSelectionIndex);
+	//Serialize(js, courseSelectionIndex);
 	Serialize(js, studentCount);
 	Serialize(js, courseCount);
 	Serialize(js, courseSelectionCount);
@@ -58,6 +76,17 @@ json Server::serialize() const
 	for (auto& i : classes)
 	{
 		js["classes"][std::to_string(i.first)] = i.second;
+	}
+	for (auto& i : placementIndex)
+	{
+		js["placementIndex"][std::to_string(i.first)] = i.second;
+	}
+	for (auto& i : courseSelectionIndex)
+	{
+		for (auto& j : i.second)
+		{
+			js["courseSelectionIndex"][std::to_string(i.first)][std::to_string(j.first)] = j.second;
+		}
 	}
 	return js;
 }
