@@ -92,9 +92,8 @@ json Server::serialize() const
 }
 CmdResalt Server::loginAsStudent(const Student::ID& id, const Student::PWD& pwd) const
 {
-	auto logicId = studentIdIndex.find(id);
-	RunTimeAssert(logicId != studentIdIndex.end(), Docs::studentIDNotExistError);
-	auto stu = students.find(logicId->second);
+	auto logicId = getStudentLogicIdByID(id);
+	auto stu = students.find(logicId);
 	RunTimeAssert(stu != students.end(), Docs::studentLogicIDNotExistError);
 	RunTimeAssert(stu->second.login(pwd), Docs::pwdNotMatchWarrning);
 	return CmdResalt(true, Docs::successLoginNote);
@@ -169,7 +168,7 @@ CmdResalt Server::setPassWordOfStudent(const Student::LogicID& studentId, const 
 	return CmdResalt(true, std::to_string(1) + Docs::setSuccessNoteSuffix);
 }
 
-CmdResalt Server::removeCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId, const CourseSelectionRecord::GradeOfCourse& grade)
+CmdResalt Server::setCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId, const CourseSelectionRecord::GradeOfCourse& grade)
 {
 	auto iter = courseSelectionIndex.find(stuId);
 	RunTimeAssert(iter != courseSelectionIndex.end(), Docs::noCourseSelectionRecordForThisStudentError);
@@ -282,11 +281,11 @@ const Server::StudentIdSet Server::getStudentLogicIdByName(const Student::UserNa
 	return studentNameIndex.find(name)->second;
 }
 
-const Server::StudentIdSet Server::getStudentLogicIdByID(const Student::ID& id) const
+const Student::LogicID Server::getStudentLogicIdByID(const Student::ID& id) const
 {
 	auto iter = studentIdIndex.find(id);
 	RunTimeAssert(iter != studentIdIndex.end(), Docs::studentIDNotExistError);
-	return Server::StudentIdSet();
+	return iter->second;
 }
 
 const Student::StudentClassLogicalID Server::getClassLogicalIdByClassName(const Student::StudentClassName& className) const

@@ -49,10 +49,11 @@ public:
 	//set
 	[[nodiscard]] CmdResalt setPasswardOfUser(const User::ID& userId, const User::PWD& newPwd);//+
 	[[nodiscard]] CmdResalt setPassWordOfStudent(const Student::LogicID& studentId, const Student::PWD & newPwd);//?
+	[[nodiscard]] CmdResalt setCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId,const CourseSelectionRecord::GradeOfCourse& grade);//?
+
 	//remove
 	[[nodiscard]] CmdResalt removeStudentByLogicId(const Student::LogicID& logicId);//+
 	[[nodiscard]] CmdResalt removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& courseId);//?
-	[[nodiscard]] CmdResalt removeCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId,const CourseSelectionRecord::GradeOfCourse& grade);//?
 	
 
 	//-----------//
@@ -78,7 +79,7 @@ public:
 	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByName(const Student::UserName& name)const;//+
 
 	//get logicID by lieralID
-	[[nodiscard]] const Server::StudentIdSet getStudentLogicIdByID(const Student::ID& id)const;//+
+	[[nodiscard]] const Student::LogicID getStudentLogicIdByID(const Student::ID& id)const;//+
 
 	//get classID by Class name
 	[[nodiscard]] const Student::StudentClassLogicalID getClassLogicalIdByClassName(const Student::StudentClassName& className)const;//+
