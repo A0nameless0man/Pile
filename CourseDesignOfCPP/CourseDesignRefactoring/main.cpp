@@ -10,6 +10,10 @@
 //#include<windows.h>
 const int BUF_SIZE = 128 * 1024;
 char buf[BUF_SIZE];
+//Server::StudentIdSet selectStudent(const Server& server)
+//{
+//
+//}
 int asStudent(void)
 {
 	return 1;
@@ -21,26 +25,10 @@ int asAdmin(void)
 int __main__(void)
 {
 	Server myServer;
-	std::string logintype = iReader::InteractiveReader
-		<
-			std::string,
-			iReader::WithIn<std::string>
-		>
-		("登陆类型", iReader::WithIn<std::string>({ "admin","student","a","s" }))
-		.read(std::cin, std::cout);
-	switch (logintype[0])
-	{
-	case 'a':
-		return asAdmin();
-		break;
-	case 's':
-		return asStudent();
-		break;
-	default:
-		return -1;
-		break;
-	}
-
+	auto s = iReader::InteractiveReader<std::string>().read(std::cin, std::cout, "登陆名", iReader::WithIn<std::string>({ "s","student","a","admin" }), iReader::StdIstreamStringReader());
+	using namespace kerbal::utility::costream;
+	costream<std::cout>(LIGHT_RED) << s << std::endl;
+	return 0;
 }
 int test(void)
 {

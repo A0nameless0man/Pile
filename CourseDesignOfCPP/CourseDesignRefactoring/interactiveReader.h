@@ -23,7 +23,12 @@ namespace iReader
 	public:
 		T	read(Is& is)const;
 	};
-
+	template<class Is = stdIstream>
+	class StdIstreamStringReader
+	{
+	public:
+		std::string	read(Is& is)const;
+	};
 	//限制器
 	template<class T, class Serializer = ToString<T> >
 	class Restricter
@@ -86,30 +91,15 @@ namespace iReader
 	//读取器
 	template
 		<
-		class T,
-		class Restriction = NoRestrict<T, ToString<T>>,
-		class Serializer = ToString<T>,
-		class UnSerializer = StdIstreamReader<T>
+		class T
 		>
 		class InteractiveReader
 	{
 	private:
-		const Restriction restriction;
-		const std::string variableNameRequired;
-		const bool voidAble;
-		const UnSerializer unSerializer;
-		const Serializer serializer;
+
 	public:
-		InteractiveReader
-		(
-			const std::string& variableNameRequired,
-			const Restriction& restriction = NoRestrict(),
-			const UnSerializer& unSerializer = UnSerializer(),
-			const Serializer& serializer = Serializer(),
-			bool voidAble = false
-		);
-		template<class Is = stdIstream, class Os = stdOstream>
-		T read(Is& is, Os& os)const;
+		template<class Is, class Os, class Restriction,class UnSerializer>
+		inline T read(Is& is, Os& os, const std::string& variableNameRequired,const Restriction& restriction,const UnSerializer& unSerlizer) const;
 	};
 
 
@@ -137,7 +127,13 @@ namespace iReader
 		is >> t;
 		return t;
 	}
-
+	template< class Is>
+	inline std::string StdIstreamStringReader<Is>::read(Is& is)const
+	{
+		std::string t;
+		std::getline(is, t);
+		return t;
+	}
 	//限制器
 
 	template<class T, class Serializer>
@@ -219,27 +215,9 @@ namespace iReader
 	}
 
 	//读取器
-
-	template<class T, class Restriction, class Serializer, class UnSerializer>
-	inline InteractiveReader<T, Restriction, Serializer, UnSerializer>::InteractiveReader
-	(
-		const std::string& variableNameRequired,
-		const Restriction& restriction,
-		const UnSerializer& unSerializer,
-		const Serializer& serializer,
-		bool voidAble
-	) :
-		variableNameRequired(variableNameRequired),
-		restriction(restriction),
-		unSerializer(unSerializer),
-		serializer(serializer),
-		voidAble(voidAble)
-	{
-	}
-
-	template<class T, class Restriction, class Serializer, class UnSerializer>
-	template<class Is, class Os>
-	inline T InteractiveReader<T, Restriction, Serializer, UnSerializer>::read(Is& is, Os& os) const
+	template<class T>
+	template<class Is, class Os, class Restriction,class UnSerializer>
+	inline T InteractiveReader<T>::read(Is& is, Os& os, const std::string& variableNameRequired,const Restriction& restriction, const UnSerializer& unSerializer) const
 	{
 		while (true)
 		{
