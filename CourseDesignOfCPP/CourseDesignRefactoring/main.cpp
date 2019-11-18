@@ -23,8 +23,8 @@ int __main__(void)
 	Server myServer;
 	std::string logintype = iReader::InteractiveReader
 		<
-		std::string,
-		iReader::WithIn<std::string>
+			std::string,
+			iReader::WithIn<std::string>
 		>
 		("登陆类型", iReader::WithIn<std::string>({ "admin","student","a","s" }))
 		.read(std::cin, std::cout);
@@ -60,7 +60,7 @@ int test(void)
 }
 int main(void)
 {
-	test();
+	//test();
 	return 	__main__();
 
 }
