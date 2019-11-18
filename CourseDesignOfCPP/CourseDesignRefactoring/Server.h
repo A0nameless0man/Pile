@@ -55,6 +55,11 @@ public:
 	[[nodiscard]] CmdResalt removeStudentByLogicId(const Student::LogicID& logicId);//+
 	[[nodiscard]] CmdResalt removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& courseId);//?
 	
+	  //-----------------//
+	 //getInfoByNothing//
+	//---------------//
+	[[nodiscard]] std::pair<ClassNameRecord::const_iterator, ClassNameRecord::const_iterator> getClassesList(void)const;
+
 
 	//-----------//
 	//getInfoByID//

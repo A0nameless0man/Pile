@@ -210,6 +210,11 @@ CmdResalt Server::removeCourseSelectionRecord(const Student::LogicID& stuId, con
 	return CmdResalt(true, std::to_string(1) + Docs::removeSuccessNoteSuffix);
 }
 
+std::pair<Server::ClassNameRecord::const_iterator,Server:: ClassNameRecord::const_iterator> Server::getClassesList(void) const
+{
+	return std::pair(classes.begin(), classes.end());
+}
+
 
 const CourseSelectionRecord::CourseSelectionRecordID Server::getCourseSelectionRecordIdByStudentIdAndCourseID(const Student::LogicID& stuId, const Course::CourseID& courseId) const
 {

@@ -99,7 +99,7 @@ namespace iReader
 
 	public:
 		template<class Is, class Os, class Restriction,class UnSerializer>
-		inline T read(Is& is, Os& os, const std::string& variableNameRequired,const Restriction& restriction,const UnSerializer& unSerlizer) const;
+		inline T read(Is& is, Os& os, const std::string& variableNameRequired,const Restriction& restriction = NoRestrict<T>(),const UnSerializer& unSerlizer = StdIstreamReader<T>()) const;
 	};
 
 
@@ -145,7 +145,7 @@ namespace iReader
 	template<class T, class Serializer>
 	inline std::string NoRestrict<T, Serializer>::explainRestriction()const
 	{
-		return "除了类型应当为" + typeid(T).name() + "以外,没有其它限制";
+		return "除了类型应当为" + std::string(typeid(T).name()) + "以外,没有其它限制";
 	}
 
 	template<class T, class Serializer, class Compare>
