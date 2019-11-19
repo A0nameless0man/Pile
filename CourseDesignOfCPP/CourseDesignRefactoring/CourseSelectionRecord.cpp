@@ -1,4 +1,4 @@
-#include "CourseSelectionRecord.h"
+﻿#include "CourseSelectionRecord.h"
 
 CourseSelectionRecord::CourseSelectionRecord
 (
@@ -19,7 +19,7 @@ CourseSelectionRecord::CourseSelectionRecord(const json& js) :
 {
 }
 
-CourseSelectionRecord::GradeOfCourse CourseSelectionRecord::getGrade()
+CourseSelectionRecord::GradeOfCourse CourseSelectionRecord::getGrade()const
 {
 	return grade;
 }
@@ -29,7 +29,7 @@ void CourseSelectionRecord::setGrade(CourseSelectionRecord::GradeOfCourse newGra
 	grade = newGrade;
 }
 
-Course::CourseID CourseSelectionRecord::getCourseID()
+Course::CourseID CourseSelectionRecord::getCourseID()const
 {
 	return courseID;
 }

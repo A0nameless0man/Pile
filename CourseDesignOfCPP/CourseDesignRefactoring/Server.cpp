@@ -210,9 +210,14 @@ CmdResalt Server::removeCourseSelectionRecord(const Student::LogicID& stuId, con
 	return CmdResalt(true, std::to_string(1) + Docs::removeSuccessNoteSuffix);
 }
 
-std::pair<Server::ClassNameRecord::const_iterator,Server:: ClassNameRecord::const_iterator> Server::getClassesList(void) const
+Server::IterPair<Server::ClassNameRecord::const_iterator> Server::getClassesList(void) const
 {
 	return std::pair(classes.begin(), classes.end());
+}
+
+Server::IterPair<Server::CoursesRecord::const_iterator> Server::getCoursesRecord(void) const
+{
+	return Server::IterPair<Server::CoursesRecord::const_iterator>(courses.begin(),courses.end());
 }
 
 
@@ -265,7 +270,7 @@ const Student::StudentClassName& Server::getClassNameByClassID(const Student::St
 	return iter->second;
 }
 
-const CourseSelectionRecord& Server::getCourseSelectionRecordByID(const CourseSelectionRecord::CourseSelectionRecordID& id)
+const CourseSelectionRecord& Server::getCourseSelectionRecordByID(const CourseSelectionRecord::CourseSelectionRecordID& id)const
 {
 	auto iter = courseSelectionRecords.find(id);
 	RunTimeAssert(iter != courseSelectionRecords.end(), Docs::CSRNotExit);

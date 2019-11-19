@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"Course.h"
 #include"User.h"
 class CourseSelectionRecord
@@ -8,9 +8,9 @@ public:
 	using GradeOfCourse = double;
 	CourseSelectionRecord(User::LogicID student,CourseSelectionRecord::GradeOfCourse grade, Course::CourseID course);
 	CourseSelectionRecord(const json& js);
-	CourseSelectionRecord::GradeOfCourse getGrade();
+	CourseSelectionRecord::GradeOfCourse getGrade()const;
 	void setGrade(CourseSelectionRecord::GradeOfCourse newGrade);
-	Course::CourseID getCourseID();
+	Course::CourseID getCourseID()const;
 	json serialize()const;
 private:
 	User::LogicID student;

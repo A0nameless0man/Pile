@@ -12,6 +12,8 @@
 class Server
 {
 public:
+	template <typename T>
+	using IterPair = std::pair<T, T>;
 	using StudentIdSet = std::set<Student::LogicID>;
 	using CourseSelectionRecordIdSet = std::set< CourseSelectionRecord::CourseSelectionRecordID>;
 
@@ -58,7 +60,8 @@ public:
 	  //-----------------//
 	 //getInfoByNothing//
 	//---------------//
-	[[nodiscard]] std::pair<ClassNameRecord::const_iterator, ClassNameRecord::const_iterator> getClassesList(void)const;
+	[[nodiscard]] IterPair<ClassNameRecord::const_iterator> getClassesList(void)const;
+	[[nodiscard]] Server::IterPair<Server::CoursesRecord::const_iterator> getCoursesRecord(void)const;
 
 
 	//-----------//
@@ -68,7 +71,7 @@ public:
 	[[nodiscard]] const Student& getStudentByLogicId(const Student::LogicID& id)const;//?
 	[[nodiscard]] const Course& getCourseByCourseId(const Course::CourseID& id)const;//?
 	[[nodiscard]] const Student::StudentClassName& getClassNameByClassID(const Student::StudentClassLogicalID& id)const;//?
-	[[nodiscard]] const CourseSelectionRecord& getCourseSelectionRecordByID(const CourseSelectionRecord::CourseSelectionRecordID& id);//?
+	[[nodiscard]] const CourseSelectionRecord& getCourseSelectionRecordByID(const CourseSelectionRecord::CourseSelectionRecordID& id)const;//?
 
 	//------------//
 	//getIdByOther//

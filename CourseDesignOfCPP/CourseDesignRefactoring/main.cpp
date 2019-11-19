@@ -8,6 +8,9 @@
 #include"interactiveReader.h"
 
 using namespace kerbal::utility::costream;
+class Quit
+{
+};
 Student::StudentClassLogicalID selectClass(const Server& server)
 {
 	while(true)try
@@ -29,6 +32,7 @@ Student::StudentClassLogicalID selectClass(const Server& server)
 			}
 		}
 		default:
+			throw Quit();
 			break;
 		}
 	}
@@ -55,6 +59,7 @@ Server::StudentIdSet selectStudent(const Server& server)
 			case 'C':
 				return server.getStudentLogicIdByClass(selectClass(server));
 			default:
+				throw Quit();
 				break;
 			}
 		}
@@ -64,6 +69,31 @@ Server::StudentIdSet selectStudent(const Server& server)
 		}
 	}
 
+}
+template<typename OS>
+void brifOnStudent(const Server& server, const Student::LogicID& id, OS &os)
+{
+	auto& s = server.getStudentByLogicId(id);
+	auto CSR = server.getCourseSelectionRecordIdByStudentId(id);
+	auto className = server.getClassNameByClassID(s.getClass());
+	os << "姓名:\t" << s.getName() << std::endl;
+	os << "学号:\t" << s.getID() << std::endl;
+	os << "班级:\t" << className << std::endl;
+	os << "性别:\t" << s.getGender().to_string() << std::endl;;
+	os << "入学年份:\t" << s.getStartYear() << std::endl;
+	os << "成绩:\n" << std::endl;
+	CourseSelectionRecord::GradeOfCourse sumGrade = 0;
+	Course::ClassHourOfCourse sumClassHour = 0;
+	for (auto i : server.getCourseSelectionRecordIdByStudentId(id))
+	{
+		const auto& csr = server.getCourseSelectionRecordByID(i);//csr for CourseSelectionRecord
+		const auto& course = server.getCourseByCourseId(csr.getCourseID());
+		sumGrade += csr.getGrade()*course.getClassHour();
+		sumClassHour += course.getClassHour();
+		os << "\t" <<course.getName() << " : \t" << csr.getGrade() << std::endl;
+	}
+	if (sumClassHour > 0.5)
+		os << "\t平均成绩:" << sumGrade / sumClassHour << std::endl;
 }
 int asStudent(void)
 {
@@ -88,11 +118,13 @@ int test(void)
 	myServer.addStudent(Student(User("123", "hh"), 0, 2019));
 	myServer.addCourse(Course("lm",1.0));
 	myServer.addCourseSelectionRecord(*(myServer.getStudentLogicIdByName("hh").begin()), myServer.getCourseIdByCourseName("lm"));
-	selectStudent(myServer);
+	for(auto s:selectStudent(myServer))
+	brifOnStudent(myServer,s,std::cout);
 	auto s = myServer.getStudentLogicIdByClass(
 	myServer.getClassLogicalIdByClassName("2b")
 	);
-	using namespace kerbal::utility::costream;
+
+
 	costream<std::cout>(LIGHT_RED) << Server(myServer.serialize()).serialize().dump(4) << std::endl;
 	std::cout << myServer.serialize().dump(4) << std::endl;
 	return 0;
