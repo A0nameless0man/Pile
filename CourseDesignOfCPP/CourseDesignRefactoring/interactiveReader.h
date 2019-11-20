@@ -145,7 +145,7 @@ namespace iReader
 	template<class T, class Serializer>
 	inline std::string NoRestrict<T, Serializer>::explainRestriction()const
 	{
-		return "除了类型应当为" + std::string(typeid(T).name()) + "以外,没有其它限制";
+		return "除了类型,没有其它限制";
 	}
 
 	template<class T, class Serializer, class Compare>
