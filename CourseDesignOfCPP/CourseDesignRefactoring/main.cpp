@@ -12,10 +12,70 @@ class Quit
 {
 };
 
+
+//brif
+
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+void oneLineBrifOnStudent(const Server& server, const Student::LogicID& id)
+{
+	auto& s = server.getStudentByLogicId(id);
+	costream<os>(GREY) << "姓名:\t" << s.getName() << ",\t" << "学号:\t" << s.getID() << std::endl;
+}
+
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+void brifOnStudent(const Server& server, const Student::LogicID& id)
+{
+	auto& s = server.getStudentByLogicId(id);
+	auto CSR = server.getCourseSelectionRecordIdByStudentId(id);
+	auto className = server.getClassNameByClassID(s.getClass());
+	costream<os>(GREY) << "姓名:\t" << s.getName() << std::endl;
+	costream<os>(GREY) << "学号:\t" << s.getID() << std::endl;
+	costream<os>(GREY) << "班级:\t" << className << std::endl;
+	costream<os>(GREY) << "性别:\t" << s.getGender().to_string() << std::endl;;
+	costream<os>(GREY) << "入学年份:\t" << s.getStartYear() << std::endl;
+	costream<os>(GREY) << "成绩:\n" << std::endl;
+	CourseSelectionRecord::GradeOfCourse sumGrade = 0;
+	Course::ClassHourOfCourse sumClassHour = 0;
+	for (auto i : server.getCourseSelectionRecordIdByStudentId(id))
+	{
+		const auto& csr = server.getCourseSelectionRecordByID(i);//csr for CourseSelectionRecord
+		const auto& course = server.getCourseByCourseId(csr.getCourseID());
+		sumGrade += csr.getGrade() * course.getClassHour();
+		sumClassHour += course.getClassHour();
+		if(csr.getGrade()>=60.0)
+			costream<os>(GREY) << "\t" << course.getName() << " : \t" << csr.getGrade() << std::endl;
+		else
+			costream<os>(RED) << "\t" << course.getName() << " : \t" << csr.getGrade() << std::endl;
+
+	}
+	if (sumClassHour > 0.5)
+		costream<os>(GREY) << "\t平均成绩:" << sumGrade / sumClassHour << std::endl;
+
+}
+
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+void brifOfClass(const Server& server, const Student::StudentClassLogicalID& id)
+{
+	auto& className = server.getClassNameByClassID(id);
+	auto students = server.getStudentLogicIdByClass(id);
+	costream<os>(LIGHT_BLUE) << "班级:\t" << className << std::endl;
+	for (auto s : students)
+	{
+		oneLineBrifOnStudent(server, s, os);
+	}
+}
+
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+void oneLineBrifOfCourse(const Server& server, const Course::CourseID& id)
+{
+	const auto& course = server.getCourseByCourseId(id);
+	costream<os>(YELLOW) << "课程名:\t" << course.myCourseName() << ",\t" << "课时:\t" << course.getClassHour()<<std::endl;
+}
+
 //select
 
-template<typename OS ,typename IS>
-Student::StudentClassLogicalID selectClass(const Server& server,OS&os = std::cout,IS&is = std::cin)
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+Student::StudentClassLogicalID selectClass(const Server& server)
 {
 	while (true)try
 	{
@@ -24,7 +84,7 @@ Student::StudentClassLogicalID selectClass(const Server& server,OS&os = std::cou
 		{
 		case 'N':
 		{
-			auto s = iReader::InteractiveReader<Student::StudentClassName>().read(is,os, "班级的名字", iReader::NoRestrict<Student::StudentClassName>(), iReader::StdIstreamStringReader());
+			auto s = iReader::InteractiveReader<Student::StudentClassName>().read(is, os, "班级的名字", iReader::NoRestrict<Student::StudentClassName>(), iReader::StdIstreamStringReader());
 			return server.getClassLogicalIdByClassName(s);
 		}
 		case 'L':
@@ -34,7 +94,9 @@ Student::StudentClassLogicalID selectClass(const Server& server,OS&os = std::cou
 			{
 				costream<os>(LIGHT_BLUE) << i->first << " " << i->second << std::endl;
 			}
-		}
+		}			
+		case 'Q':
+			[[fallthrough]]
 		default:
 			throw Quit();
 			break;
@@ -45,23 +107,27 @@ Student::StudentClassLogicalID selectClass(const Server& server,OS&os = std::cou
 		costream<os>(LIGHT_RED) << res.operator const std::string & () << std::endl;
 	}
 }
+
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
 Server::StudentIdSet selectStudent(const Server& server)
 {
 	while (true)
 	{
-		auto s = iReader::InteractiveReader<std::string>().read(std::cin, std::cout, "选择学生的条件", iReader::WithIn<std::string>({ "ID","Name","Class","Quit" }), iReader::StdIstreamStringReader());
+		auto s = iReader::InteractiveReader<std::string>().read(is, os, "选择学生的条件", iReader::WithIn<std::string>({ "ID","Name","Class","Quit" }), iReader::StdIstreamStringReader());
 		try
 		{
 			switch (s[0])
 			{
 			case 'I':
-				return Server::StudentIdSet({ server.getStudentLogicIdByID(iReader::InteractiveReader<Student::ID>().read(std::cin,std::cout,"学生的ID",iReader::NoRestrict<Student::ID>(),iReader::StdIstreamStringReader())) });
+				return Server::StudentIdSet({ server.getStudentLogicIdByID(iReader::InteractiveReader<Student::ID>().read(is,os,"学生的ID",iReader::NoRestrict<Student::ID>(),iReader::StdIstreamStringReader())) });
 				break;
 			case 'N':
-				return server.getStudentLogicIdByName(iReader::InteractiveReader<Student::UserName>().read(std::cin, std::cout, "学生的姓名", iReader::NoRestrict<Student::UserName>(), iReader::StdIstreamStringReader()));
+				return server.getStudentLogicIdByName(iReader::InteractiveReader<Student::UserName>().read(is, os, "学生的姓名", iReader::NoRestrict<Student::UserName>(), iReader::StdIstreamStringReader()));
 				break;
 			case 'C':
 				return server.getStudentLogicIdByClass(selectClass(server));
+			case 'Q':
+				[[fallthrough]]
 			default:
 				throw Quit();
 				break;
@@ -69,56 +135,69 @@ Server::StudentIdSet selectStudent(const Server& server)
 		}
 		catch (CmdResalt & res)
 		{
-			costream<std::cout>(LIGHT_RED) << res.operator const std::string & () << std::endl;
+			costream<os>(LIGHT_RED) << res.operator const std::string & () << std::endl;
 		}
 	}
-
 }
+
+template<std::ostream& os = std::cout, std::istream& is = std::cin>
 Course::CourseID selectCourse(const Server& server)
 {
-
-}
-//brif
-template<typename OS>
-void oneLineBrifOnStudent(const Server& server, const Student::LogicID& id, OS& os)
-{
-	auto& s = server.getStudentByLogicId(id);
-	os << "姓名:\t" << s.getName() << ",\t" << "学号:\t" << s.getID() << std::endl;
-}
-template<typename OS>
-void brifOnStudent(const Server& server, const Student::LogicID& id, OS& os)
-{
-	auto& s = server.getStudentByLogicId(id);
-	auto CSR = server.getCourseSelectionRecordIdByStudentId(id);
-	auto className = server.getClassNameByClassID(s.getClass());
-	os << "姓名:\t" << s.getName() << std::endl;
-	os << "学号:\t" << s.getID() << std::endl;
-	os << "班级:\t" << className << std::endl;
-	os << "性别:\t" << s.getGender().to_string() << std::endl;;
-	os << "入学年份:\t" << s.getStartYear() << std::endl;
-	os << "成绩:\n" << std::endl;
-	CourseSelectionRecord::GradeOfCourse sumGrade = 0;
-	Course::ClassHourOfCourse sumClassHour = 0;
-	for (auto i : server.getCourseSelectionRecordIdByStudentId(id))
+	while (true)
 	{
-		const auto& csr = server.getCourseSelectionRecordByID(i);//csr for CourseSelectionRecord
-		const auto& course = server.getCourseByCourseId(csr.getCourseID());
-		sumGrade += csr.getGrade() * course.getClassHour();
-		sumClassHour += course.getClassHour();
-		os << "\t" << course.getName() << " : \t" << csr.getGrade() << std::endl;
+		auto s = iReader::InteractiveReader<std::string>(is, os, "选择课程的条件", iReader::WithIn<std::string>({ "Name","List","Quit" }), iReader::StdIstreamStringReader());
+		try
+		{
+			switch (s[0])
+			{
+			case 'N':
+				auto name = iReader::InteractiveReader<std::string>(is, os, "课程的名字");
+				return server.getCourseIdByCourseName(name);
+			case 'L':
+				const auto & iter = server.getCoursesRecord();
+				for (auto i = iter.first; i != iter.second; i++)
+				{
+					oneLineBrifOfCourse(server, i->first);
+				}
+			case 'Q':
+				[[fallthrough]]
+			default:
+				throw Quit();
+				break;
+			}
+
+		}
+		catch (CmdResalt & res)
+		{
+			costream<os>(LIGHT_RED) << res.operator const std::string & () << std::endl;
+		}
+
 	}
-	if (sumClassHour > 0.5)
-		os << "\t平均成绩:" << sumGrade / sumClassHour << std::endl;
+}
 
-}	template<typename OS>
-void brifOfClass(const Server& server, const Student::StudentClassLogicalID& id, OS& os)
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+CourseSelectionRecord::CourseSelectionRecordID selectCSR(const Server& server)
 {
-	auto& className = server.getClassNameByClassID(id);
-	auto students = server.getStudentLogicIdByClass(id);
-	os << "班级:\t" << className << std::endl;
-	for (auto s : students)
+	while (true)
 	{
-		oneLineBrifOnStudent(server, s, os);
+		auto s = iReader::InteractiveReader<std::string>(is, os, "选择选课记录的条件", iReader::WithIn<std::string>({ "Student","List","Quit" }), iReader::StdIstreamStringReader());
+		try
+		{
+			switch (s[0])
+			{
+
+			case 'Q':
+				[[fallthrough]]
+			default:
+				throw Quit();
+				break;
+			}
+
+		}
+		catch (CmdResalt & res)
+		{
+			costream<os>(LIGHT_RED) << res.operator const std::string & () << std::endl;
+		}
 	}
 }
 
@@ -147,7 +226,7 @@ int test(void)
 	myServer.addCourse(Course("lm", 1.0));
 	myServer.addCourseSelectionRecord(*(myServer.getStudentLogicIdByName("hh").begin()), myServer.getCourseIdByCourseName("lm"));
 	for (auto s : selectStudent(myServer))
-		brifOnStudent(myServer, s, std::cout);
+		brifOnStudent(myServer, s);
 	auto s = myServer.getStudentLogicIdByClass(
 		myServer.getClassLogicalIdByClassName("2b")
 	);
