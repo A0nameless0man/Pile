@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include<string>
 #include"SerializationAid.h"
 
@@ -10,6 +10,7 @@ class Gender
 {
 public:
 	Gender(enumGender gender = enumGender::unknow);
+	Gender(const std::string& str);
 	Gender(const json& js);
 	json serialize()const;
 	std::string to_string()const;

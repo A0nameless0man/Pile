@@ -96,7 +96,7 @@ Student::StudentClassLogicalID selectClass(const Server& server)
 			}
 		}			
 		case 'Q':
-			[[fallthrough]]
+			//[[fallthrough]]
 		default:
 			throw Quit();
 			break;
@@ -126,8 +126,9 @@ Server::StudentIdSet selectStudent(const Server& server)
 				break;
 			case 'C':
 				return server.getStudentLogicIdByClass(selectClass(server));
+				break;
 			case 'Q':
-				[[fallthrough]]
+				//[[fallthrough]]
 			default:
 				throw Quit();
 				break;
@@ -160,7 +161,7 @@ Course::CourseID selectCourse(const Server& server)
 					oneLineBrifOfCourse(server, i->first);
 				}
 			case 'Q':
-				[[fallthrough]]
+				//[[fallthrough]]
 			default:
 				throw Quit();
 				break;
@@ -194,7 +195,7 @@ Server::CourseSelectionRecordIdSet selectCSR(const Server& server)
 					server.getCourseSelectionRecordIdByStudentIdAndCourseID(selectStudent(server),selectCourse(server)) 
 					});
 			case 'Q':
-				[[fallthrough]]
+				//[[fallthrough]]
 			default:
 				throw Quit();
 				break;
@@ -212,7 +213,11 @@ Server::CourseSelectionRecordIdSet selectCSR(const Server& server)
 template<std::ostream & os = std::cout, std::istream & is = std::cin>
 User inputUser(void)
 {
-
+	auto name = iReader::InteractiveReader<std::string>(os, is, "姓名").read();
+	auto id = iReader::InteractiveReader<std::string>(os, is, "ID").read();
+	auto gender = iReader::InteractiveReader<std::string>(os, is, "性别", iReader::WithIn<std::string>({ "Male","Female","Unknown" }));
+	//auto ID= iReader::
+	return User(id,name,Gender(gender));
 }
 
 int asStudent(void)

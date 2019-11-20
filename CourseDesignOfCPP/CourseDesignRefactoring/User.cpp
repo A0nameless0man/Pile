@@ -1,8 +1,24 @@
-#include"User.h"
+﻿#include"User.h"
 #include"Docs.h"
 #include"ThirdPartyLib/md5.h"
 Gender::Gender(enumGender gender) :myGender(gender)
 {
+}
+
+Gender::Gender(const std::string& str)
+{
+	if (str == "male" || str == "Male")
+	{
+		myGender = enumGender::male;
+	}
+	else if (str == "female" || str == "Female")
+	{
+		myGender = enumGender::female;
+	}
+	else
+	{
+		myGender = enumGender::unknow;
+	}
 }
 
 Gender::Gender(const json& js) : myGender(js["gender"])
