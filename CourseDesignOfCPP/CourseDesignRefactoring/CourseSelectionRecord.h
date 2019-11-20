@@ -11,6 +11,7 @@ public:
 	CourseSelectionRecord::GradeOfCourse getGrade()const;
 	void setGrade(CourseSelectionRecord::GradeOfCourse newGrade);
 	Course::CourseID getCourseID()const;
+	User::LogicID getStudent()const;
 	json serialize()const;
 private:
 	User::LogicID student;

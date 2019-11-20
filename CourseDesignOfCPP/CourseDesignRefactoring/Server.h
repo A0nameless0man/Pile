@@ -56,7 +56,9 @@ public:
 	//remove
 	[[nodiscard]] CmdResalt removeStudentByLogicId(const Student::LogicID& logicId);//+
 	[[nodiscard]] CmdResalt removeCourseSelectionRecord(const Student::LogicID& stuId, const Course::CourseID& courseId);//?
-	
+	[[nodiscard]] CmdResalt removeCSR(const CourseSelectionRecord::CourseSelectionRecordID& CSRid);
+
+
 	  //-----------------//
 	 //getInfoByNothing//
 	//---------------//

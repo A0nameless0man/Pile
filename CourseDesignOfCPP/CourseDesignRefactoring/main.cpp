@@ -176,16 +176,23 @@ Course::CourseID selectCourse(const Server& server)
 }
 
 template<std::ostream & os = std::cout, std::istream & is = std::cin>
-CourseSelectionRecord::CourseSelectionRecordID selectCSR(const Server& server)
+Server::CourseSelectionRecordIdSet selectCSR(const Server& server)
 {
 	while (true)
 	{
-		auto s = iReader::InteractiveReader<std::string>(is, os, "选择选课记录的条件", iReader::WithIn<std::string>({ "Student","List","Quit" }), iReader::StdIstreamStringReader());
+		auto s = iReader::InteractiveReader<std::string>(is, os, "选择选课记录的条件", iReader::WithIn<std::string>({ "Both","Student","Quit" }), iReader::StdIstreamStringReader());
 		try
 		{
 			switch (s[0])
 			{
-
+			case 'S':
+				return server.getCourseSelectionRecordIdByStudentId(selectStudent(server));
+				break;
+			case 'B':
+				return Server::CourseSelectionRecordIdSet(
+					{ 
+					server.getCourseSelectionRecordIdByStudentIdAndCourseID(selectStudent(server),selectCourse(server)) 
+					});
 			case 'Q':
 				[[fallthrough]]
 			default:
@@ -201,6 +208,12 @@ CourseSelectionRecord::CourseSelectionRecordID selectCSR(const Server& server)
 	}
 }
 
+//add
+template<std::ostream & os = std::cout, std::istream & is = std::cin>
+User inputUser(void)
+{
+
+}
 
 int asStudent(void)
 {

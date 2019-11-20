@@ -205,9 +205,17 @@ CmdResalt Server::removeCourseSelectionRecord(const Student::LogicID& stuId, con
 	RunTimeAssert(iter != courseSelectionIndex.end(), Docs::noCourseSelectionRecordForThisStudentError);
 	auto iteriter = iter->second.find(courseId);
 	RunTimeAssert(iteriter != iter->second.end(), Docs::noSuchCourseSelectionRecordForThisStudentError);
-	courseSelectionRecords.erase(iteriter->second);
+	auto CSRid = iteriter->second;
+	courseSelectionRecords.erase(CSRid);
 	iter->second.erase(iteriter);
 	return CmdResalt(true, std::to_string(1) + Docs::removeSuccessNoteSuffix);
+}
+
+CmdResalt Server::removeCSR(const CourseSelectionRecord::CourseSelectionRecordID& CSRid)
+{
+	auto iter = courseSelectionRecords.find(CSRid);
+	RunTimeAssert(iter != courseSelectionRecords.end(), Docs::CSRNotExit);
+	return removeCourseSelectionRecord(iter->second.getStudent(), iter->second.getCourseID());
 }
 
 Server::IterPair<Server::ClassNameRecord::const_iterator> Server::getClassesList(void) const

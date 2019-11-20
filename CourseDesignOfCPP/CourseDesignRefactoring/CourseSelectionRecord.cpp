@@ -34,6 +34,11 @@ Course::CourseID CourseSelectionRecord::getCourseID()const
 	return courseID;
 }
 
+User::LogicID CourseSelectionRecord::getStudent() const
+{
+	return student;
+}
+
 json CourseSelectionRecord::serialize() const
 {
 	json js;
