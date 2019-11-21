@@ -99,7 +99,7 @@ namespace iReader
 
 	public:
 		template<class Is, class Os, class Restriction,class UnSerializer>
-		inline T read(Is& is, Os& os, const std::string& variableNameRequired,const Restriction& restriction = NoRestrict<T>(),const UnSerializer& unSerlizer = StdIstreamReader<T>()) const;
+		inline T read(Is& is, Os& os, std::string variableNameRequired,Restriction restriction = NoRestrict<T>(),UnSerializer unSerlizer = StdIstreamReader<T>()) const;
 	};
 
 
@@ -217,13 +217,13 @@ namespace iReader
 	//读取器
 	template<class T>
 	template<class Is, class Os, class Restriction,class UnSerializer>
-	inline T InteractiveReader<T>::read(Is& is, Os& os, const std::string& variableNameRequired,const Restriction& restriction, const UnSerializer& unSerializer) const
+	inline T InteractiveReader<T>::read(Is& is, Os& os, std::string variableNameRequired, Restriction restriction, UnSerializer unSerlizer) const
 	{
 		while (true)
 		{
 			os << "请输入" << variableNameRequired << ":\n";
 			os << restriction.explainRestriction() << std::endl;
-			T t = (unSerializer.read(is));
+			T t = (unSerlizer.read(is));
 			if (restriction(t))
 			{
 				return t;
