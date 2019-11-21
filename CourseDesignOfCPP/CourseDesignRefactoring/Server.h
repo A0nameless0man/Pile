@@ -52,6 +52,7 @@ public:
 	[[nodiscard]] CmdResalt setPasswardOfUser(const User::ID& userId, const User::PWD& newPwd);//+
 	[[nodiscard]] CmdResalt setPassWordOfStudent(const Student::LogicID& studentId, const Student::PWD & newPwd);//?
 	[[nodiscard]] CmdResalt setCourseGrade(const Student::LogicID& stuId, const Course::CourseID& courseId,const CourseSelectionRecord::GradeOfCourse& grade);//?
+	[[nodiscard]] CmdResalt setCourseGrade(const CourseSelectionRecord::CourseSelectionRecordID csrid,const CourseSelectionRecord::GradeOfCourse& grade);//?
 
 	//remove
 	[[nodiscard]] CmdResalt removeStudentByLogicId(const Student::LogicID& logicId);//+

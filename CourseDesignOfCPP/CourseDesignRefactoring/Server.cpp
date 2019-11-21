@@ -178,6 +178,14 @@ CmdResalt Server::setCourseGrade(const Student::LogicID& stuId, const Course::Co
 	return CmdResalt(true, std::to_string(1) + Docs::setSuccessNoteSuffix);
 }
 
+CmdResalt Server::setCourseGrade(const CourseSelectionRecord::CourseSelectionRecordID csrid, const CourseSelectionRecord::GradeOfCourse& grade)
+{
+	auto iter = courseSelectionRecords.find(csrid);
+	RunTimeAssert(iter != courseSelectionRecords.end(), Docs::CSRNotExit);
+	iter->second.setGrade(grade);
+	return CmdResalt(true, std::to_string(1) + Docs::setSuccessNoteSuffix);
+}
+
 CmdResalt Server::removeStudentByLogicId(const Student::LogicID& logicId)
 {
 	RunTimeAssert(students.contains(logicId), Docs::studentLogicIDNotExistError);

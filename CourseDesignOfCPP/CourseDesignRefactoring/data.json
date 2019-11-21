@@ -1,0 +1,95 @@
+{
+  "admin": {
+    "0": {
+      "hashedPWD": "f9211025483cc8fdcb73c30b1d765696",
+      "myGender": {
+        "gender": 2
+      },
+      "myID": "0",
+      "myName": "Admin"
+    }
+  },
+  "classNameIndex": {
+    "First": 0
+  },
+  "classes": {
+    "0": "First"
+  },
+  "classesCount": 1,
+  "courseCount": 1,
+  "courseNameIndex": {
+    "math": 0
+  },
+  "courseSelectionCount": 2,
+  "courseSelectionIndex": {
+    "0": {
+      "0": 0
+    },
+    "1": {
+      "0": 1
+    }
+  },
+  "courseSelectionRecords": {
+    "0": {
+      "courseID": 0,
+      "grade": 0.0,
+      "student": 0
+    },
+    "1": {
+      "courseID": 0,
+      "grade": 100.0,
+      "student": 1
+    }
+  },
+  "courses": {
+    "0": {
+      "classHourOfThisCourse": 6.0,
+      "myCourseName": "math"
+    }
+  },
+  "placementIndex": {
+    "0": [
+      0,
+      1
+    ]
+  },
+  "studentCount": 2,
+  "studentIdIndex": {
+    "123": 0,
+    "201883290072": 1
+  },
+  "studentNameIndex": {
+    "": [
+      0
+    ],
+    "hg": [
+      1
+    ]
+  },
+  "students": {
+    "0": {
+      "User": {
+        "hashedPWD": "1976ead35f323ac314e0995ccd53fdcf",
+        "myGender": {
+          "gender": 0
+        },
+        "myID": "123",
+        "myName": ""
+      },
+      "myClass": 0,
+      "myStartYear": 2016
+    },
+    "1": {
+      "User": {
+        "hashedPWD": "1976ead35f323ac314e0995ccd53fdcf",
+        "myGender": {
+          "gender": 0
+        },
+        "myID": "201883290072",
+        "myName": "hg"
+      },
+      "myClass": 0,
+      "myStartYear": 2018
+    }
+  }
+}

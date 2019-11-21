@@ -131,7 +131,7 @@ namespace iReader
 	inline std::string StdIstreamStringReader<Is>::read(Is& is)const
 	{
 		std::string t;
-		std::getline(is, t);
+		is >> t;
 		return t;
 	}
 	//限制器
