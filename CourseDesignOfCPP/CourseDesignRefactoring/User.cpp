@@ -60,6 +60,7 @@ User::User(ID id, UserName name, Gender gender) :
 	myName(name),
 	myGender(gender)
 {
+	hashedPWD = hash("user");
 }
 
 User::User(const json& js) :
