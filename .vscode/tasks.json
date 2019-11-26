@@ -33,12 +33,10 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-g",
                 "-Wall",
-                "-std=c++17",
-                //"-O2"
+                "-std=c++17"
             ],
             "problemMatcher": [
-                "$gcc",
-                
+                "$gcc"
             ],
             "group": {
                 "kind": "build",
@@ -117,6 +115,17 @@
                 "kind": "test",
                 "isDefault": true
             }
+        },
+        {
+            "type": "shell",
+            "label": "QuickClean",
+            "windows": {
+                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe)|(\\.ilk)|(\\.pdb)$\\\" -and $_.mode -notmatch \\\"d\\\"){del $_.FullName}}",
+            },
+            "linux": {
+                "command": "find ./ -name \"*.exe\"|xargs rm"
+            },
+            "problemMatcher": []
         }
     ]
 }
