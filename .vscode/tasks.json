@@ -5,8 +5,8 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "cl.exe build active file",
-            "command": "clang-cl",
+            "label": "clangBuildActiveFile",
+            "command": "clang",
             "args": [
                 "/Zi",
                 "/EHsc",
