@@ -8,10 +8,14 @@
             "label": "clangBuildActiveFile",
             "command": "clang",
             "args": [
-                "/Zi",
-                "/EHsc",
-                "/O2",
-                "/Fe:",
+                "-std=c++2a",
+                "-Werror",
+                "-Wall",
+                "-Wno-c++98-compat",
+                "-Wno-c++98-compat-pedantic",
+                "-Wno-newline-eof",
+                "-O2",
+                "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "${file}"
             ],

@@ -16,12 +16,14 @@
             "preLaunchTask": "GccBuild",
             "avoidWindowsConsoleRedirection": true,
             "MIMode": "gdb",
-            // "sourceFileMap": {
-            //     "\\c": "C:"
-            // },
             //"miDebuggerPath": "C:\\MinGW\\mingw64\\bin\\gdb.exe",
-            "windows": 
-            {
+            "windows": {
+                "sourceFileMap": {
+                    // // "/c": "C:"
+                    // "K:":"\\k"
+                    "/k":"K:/",
+                    "/c":"C:/"
+                },
                 "miDebuggerPath": "C:/msys64/usr/bin/gdb.exe"
             },
             "setupCommands": [
