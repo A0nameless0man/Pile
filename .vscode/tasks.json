@@ -120,7 +120,7 @@
             "type": "shell",
             "label": "QuickClean",
             "windows": {
-                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe)|(\\.ilk)|(\\.pdb)$\\\" -and $_.mode -notmatch \\\"d\\\"){del $_.FullName}}",
+                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)\\\" -and $_.mode -notmatch \\\"d\\\"){del $_.FullName}}",
             },
             "linux": {
                 "command": "find ./ -name \"*.exe\"|xargs rm"
