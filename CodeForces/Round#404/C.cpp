@@ -5,7 +5,8 @@
 //n-1
 
 #include<iostream>
-typedef __int128 LL;
+#include<cmath>
+typedef unsigned long long LL;
 int main(void)
 {
 	long long nn,mm;
@@ -22,7 +23,7 @@ int main(void)
 			{
 				ans = m;
 				stor = n-m;
-				LL l = 1,r = n;
+				LL l = 1,r = 2*sqrt(n);
 				while(l<r)
 				{
 					LL mid = (l+r)/2;
@@ -38,7 +39,7 @@ int main(void)
 				}
 				ans += l;
 			}	
-			long long a = ans; 
+			long long a = (long long)(ans); 
 			std::cout<<a<<std::endl;
 		}
 	}
