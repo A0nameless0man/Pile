@@ -66,6 +66,10 @@
         "xlocbuf": "cpp",
         "xlocmes": "cpp",
         "concepts": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "clocale": "cpp",
+        "forward_list": "cpp",
+        "numeric": "cpp",
+        "valarray": "cpp"
     }
 }
