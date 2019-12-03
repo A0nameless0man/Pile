@@ -37,7 +37,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-g",
                 "-Wall",
-                "-std=c++17"
+                "-std=c++2a"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -57,7 +57,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-g",
                 "-Wall",
-                "-std=c++17",
+                "-std=c++2a",
                 "-D DEBUG"
             ],
             "problemMatcher": [
