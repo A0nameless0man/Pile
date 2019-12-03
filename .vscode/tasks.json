@@ -49,6 +49,27 @@
         },
         {
             "type": "shell",
+            "label": "GccDebugBuild",
+            "command": "g++",
+            "args": [
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.exe",
+                "-g",
+                "-Wall",
+                "-std=c++17",
+                "-D DEBUG"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
             "label": "Run",
             "command": [
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
