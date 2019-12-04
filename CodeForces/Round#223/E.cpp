@@ -71,7 +71,8 @@ int main(void)
 		} //Debug
 #endif	//DEBUG
 		int m;
-		std::cin >> m;
+		//std::cin >> m;
+		scanf("%d",&m);
 		for (int i = 0; i < m; i++)
 		{
 			int l, r;
