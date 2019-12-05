@@ -9,3 +9,5 @@
   {name:"!Q2",wave:"1...........0...x"}
 ]} 
 ```
+[OfficialManual](https://wavedrom.com/tutorial.html)
+[MarkDownPrevievEnhancedManual](https://www.bookstack.cn/read/mpe/zh-cn-diagrams.md)
