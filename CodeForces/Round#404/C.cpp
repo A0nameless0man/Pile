@@ -4,33 +4,33 @@
 //i ==m  stor =n
 //n-1
 
-#include<iostream>
-#include<cmath>
+#include <iostream>
+#include <cmath>
 typedef unsigned long long LL;
 int main(void)
 {
-	long long nn,mm;
-	while(std::cin>>nn>>mm)
+	long long nn, mm;
+	while (std::cin >> nn >> mm)
 	{
-		LL n= nn,m=mm;
+		LL n = nn, m = mm;
 		{
-			LL ans,stor;
-			if(m>=n)
+			LL ans, stor;
+			if (m >= n)
 			{
 				ans = n;
 			}
 			else
 			{
 				ans = m;
-				stor = n-m;
-				LL l = 1,r = 2*sqrt(n);
-				while(l<r)
+				stor = n - m;
+				LL l = 1, r = 2 * sqrt(n);
+				while (l < r)
 				{
-					LL mid = (l+r)/2;
+					LL mid = (l + r) / 2;
 					//std::cout<<"mid:"<<mid<<std::endl;
-					if(stor*2>(mid+1)*mid)
+					if (stor * 2 > (mid + 1) * mid)
 					{
-						l = mid+1;
+						l = mid + 1;
 					}
 					else
 					{
@@ -38,9 +38,9 @@ int main(void)
 					}
 				}
 				ans += l;
-			}	
-			long long a = (long long)(ans); 
-			std::cout<<a<<std::endl;
+			}
+			long long a = (long long)(ans);
+			std::cout << a << std::endl;
 		}
 	}
 	return 0;
