@@ -3,15 +3,14 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
-#include"colourStream.h"
-using namespace kerbal::utility::costream;
-#define PRINT(x) std::cout << #x << " is : " << (x) << std::endl;
 
-#define CHECK(x)                                                                        \
-    if ((x))                                                                            \
-        costream<std::cout>(LIGHT_GREEN) << "Check : " << #x << " Passed" << std::endl; \
-    else                                                                                \
-        costream<std::cout>(LIGHT_RED) << "Check : " << #x << " Failed" << std::endl;
+//#define PRINT(x) std::cout << #x << " is : " << (x) << std::endl;
+
+#define CHECK(x)                                                                                                        \
+    if ((x))                                                                                                            \
+        std::cout << "\033[38;5;2m" << std::flush << "Passed Check : " << #x << std::flush << "\t\033[0m" << std::endl; \
+    else                                                                                                                \
+        std::cout << "\033[38;5;1m" << std::flush << "Failed Check : " << #x << std::flush << "\t\033[0m" << std::endl;
 //#define TIMING(x)                                                                                  \
 //    {                                                                                              \
 //        clock_t cstart = clock();                                                                  \
@@ -21,10 +20,10 @@ using namespace kerbal::utility::costream;
 //    }
 int main(void)
 {
-    CHECK((std::is_base_of<Reader::stdIstream, std::stringstream>::value))
-    CHECK((std::is_convertible<const char[3], std::stringstream>::value))
+    
     Reader::OperatorReader<std::stringstream, std::string> r;
     std::stringstream ss("ss aa");
-    CHECK((r.read(ss) == "ss"));
-    CHECK((r.read(ss) == "aa"));
+    CHECK((r.read(ss) == "ss"))
+    CHECK((r.read(ss) == "aa"))
+    system("pause");
 }
