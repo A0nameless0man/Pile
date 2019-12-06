@@ -3,14 +3,17 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
-
-//#define PRINT(x) std::cout << #x << " is : " << (x) << std::endl;
+#include <cstdlib>
+#define PRINT(x) std::cout << #x << " is : " << (x) << std::endl;
 
 #define CHECK(x)                                                                                                        \
     if ((x))                                                                                                            \
         std::cout << "\033[38;5;2m" << std::flush << "Passed Check : " << #x << std::flush << "\t\033[0m" << std::endl; \
     else                                                                                                                \
         std::cout << "\033[38;5;1m" << std::flush << "Failed Check : " << #x << std::flush << "\t\033[0m" << std::endl;
+
+    //The colour code above works when compiled with clang, but have srange behavior using gcc!
+
 //#define TIMING(x)                                                                                  \
 //    {                                                                                              \
 //        clock_t cstart = clock();                                                                  \
@@ -20,10 +23,9 @@
 //    }
 int main(void)
 {
-    
+    PRINT(typeid("aa").name())
     Reader::OperatorReader<std::stringstream, std::string> r;
     std::stringstream ss("ss aa");
     CHECK((r.read(ss) == "ss"))
     CHECK((r.read(ss) == "aa"))
-    system("pause");
 }
