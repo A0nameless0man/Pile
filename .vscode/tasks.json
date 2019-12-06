@@ -37,7 +37,8 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-g",
                 "-Wall",
-                "-std=c++2a"
+                "-std=c++2a",
+                "-fconstexpr-ops-limit=0x7fffffffffffffff"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -91,6 +92,10 @@
                 "-Wno-c++98-compat",
                 "-Wno-c++98-compat-pedantic",
                 "-Wno-newline-eof",
+                "-Xclang",
+                "-fconstexpr-steps",
+                "-Xclang",
+                "2147483647",
                 "-O2",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
@@ -145,7 +150,7 @@
             "type": "shell",
             "label": "QuickClean",
             "windows": {
-                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)\\\" -and $_.mode -notmatch \\\"d\\\"){del $_.FullName}}",
+                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}",
             },
             "linux": {
                 "command": "find ${workspaceRoot} -name \"*.exe\"|xargs rm"

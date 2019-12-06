@@ -1,9 +1,9 @@
 #include <iostream>
 #include <algorithm>
-int input[3];
 int main(void)
 {
     int n;
+    int input[3];
     while (std::cin >> n)
     {
         for (int i = 0; i < n; ++i)
@@ -18,8 +18,8 @@ int main(void)
             {
                 std::cout << input[i] << " ";
             }
-#endif//DEBUG
-            if(input[0]+input[1]<input[2])
+#endif //DEBUG
+            if (input[0] + input[1] < input[2])
             {
                 std::cout << input[1] + input[0] << std::endl;
             }
