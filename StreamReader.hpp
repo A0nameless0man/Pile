@@ -47,11 +47,23 @@ public:
     T operator()(IS &is) const
     {
         T t;
-        return fun(t, is);
+        fun(t, is);
+        return t;
     }
     using ReturnType = T;
 private:
     F fun;
+};
+
+template <typename T,template<typename>typename F>
+class MFReader
+{
+    public:
+        template <typename IS>
+        T operator()(IS &is) const
+        {
+            return F<IS>(is);
+        }
 };
 template <typename F>
 MemFnReader(F)->MemFnReader<F, typename F::result_type>;

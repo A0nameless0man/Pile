@@ -12,7 +12,7 @@
     else                                                                                                                \
         std::cout << "\033[38;5;1m" << std::flush << "Failed Check : " << #x << std::flush << "\t\033[0m" << std::endl;
 
-    //The colour code above works when compiled with clang, but have srange behavior using gcc!
+//The colour code above works when compiled with clang, but have srange behavior using gcc!
 
 //#define TIMING(x)                                                                                  \
 //    {                                                                                              \
@@ -21,42 +21,52 @@
 //        clock_t cend = clock();                                                                    \
 //        std::cout << "It takes " << ((cend - cstart) / 1) << " clock to exec " << #x << std::endl; \
 //    }
-    struct S
+struct S
+{
+    S(int k) : j(k) {}
+    S(void) : j(0) {}
+    int j;
+    template <typename IS>
+    S r(IS &is)
     {
-        S(int k):j(k){}
-        S(void):j(0){}
-        int j;
-        template<typename IS>
-        S r(IS&is)
-        {
-            int i;
-            is >> i;
-            return S(i);
-        }
-        S re(Reader::stdIstream & is)
-        {
-            int i;
-            is >> i;
-            return S(i);
-        }
-    };
+        int i;
+        is >> i;
+        j = i;
+        return S(i);
+    }
+    S re(Reader::stdIstream &is)
+    {
+        int i;
+        is >> i;
+        j = i;
+        return S(i);
+    }
+};
+template <typename IS>
+int f(IS &is)
+{
+    int i = 0;
+    is >> i;
+    return i;
+}
 int main(void)
 {
 
-    
     PRINT(typeid("aa").name())
     Reader::OperatorReader<std::string> s;
-    std::stringstream ss("ss aa 123 456 789 102");
+    std::stringstream ss("ss aa 123 456 789  102");
     CHECK((s(ss) == "ss"))
     CHECK((s(ss) == "aa"))
     Reader::OperatorReader<int> i;
     //CHECK((i.read(ss)==456))
-    Reader::InteractiveStreamReader<int,Reader::OperatorReader<int>> reader;
+    Reader::InteractiveStreamReader<int, Reader::OperatorReader<int>> reader;
     Reader::InteractiveStreamReader reader2(i);
-    CHECK((reader.read(ss,ss)==123))
-    CHECK((reader2.read(ss,ss)==456))
-    Reader::MemFnReader mr1(std::function<S(S&,std::stringstream&)>(&S::r<std::stringstream>));
+    CHECK((reader.read(ss, ss) == 123))
+    CHECK((reader2.read(ss, ss) == 456))
+    Reader::MemFnReader mr1(std::function<S(S &, std::stringstream &)>(&S::r<std::stringstream>));
     Reader::InteractiveStreamReader reader3(mr1);
-    CHECK((mr1(ss).j==789))
-    CHECK((reader3.read(ss,ss).j==102))
+    CHECK((mr1(ss).j == 789))
+    //Reader::MFReader<int, f> fr;
+    //CHECK((f(ss)==100))
+    CHECK((reader3.read(ss, ss).j == 102))
 }
