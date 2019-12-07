@@ -75,6 +75,11 @@ int main(void)
     CHECK((reader.read(ss, ss) == 123))
     CHECK((reader2.read(ss, ss) == 456))
     CHECK((mr(ss).j==789))
+    Reader::FunReader fr(f<decltype(ss)>);
+    CHECK((fr(ss)==100))
+    auto fu = [](decltype(ss) &is) ->S { S ts; ts.r(is); return ts; };
+    Reader::FunReader fr2(fu);
+    CHECK(fr2(ss).j==102)
     //CHECK((f(ss)==100))
     //CHECK((reader3.read(ss, ss).j == 102))
 }

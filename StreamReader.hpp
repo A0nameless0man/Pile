@@ -16,6 +16,11 @@ concept OperatorReadable = requires(T t, IS is)
 
     is >> t;
 };
+template <typename T>
+concept MenFnReadable = requires(T t)
+{
+    t.read();
+};
 #endif //CONCEPT_OK
 
 template <typename T>
@@ -51,6 +56,53 @@ public:
 private:
 };
 
+
+template <typename T>
+struct function_traits;
+template <typename R, typename... Args>
+struct function_traits_helper
+{
+    using return_type = R;
+};
+template <typename R, typename... Args>
+struct function_traits<R (*)(Args...)> : public function_traits_helper<R, Args...>
+{
+};
+template <typename R, typename... Args>
+struct function_traits<R (&)(Args...)> : public function_traits_helper<R, Args...>
+{
+};
+template <typename R, typename... Args>
+struct function_traits<R(Args...)> : public function_traits_helper<R, Args...>
+{
+};
+template <typename ClassType, typename R, typename... Args>
+struct function_traits<R (ClassType::*)(Args...) const> : public function_traits_helper<R, Args...>
+{
+    using class_type = ClassType;
+};
+template <typename T>
+struct function_traits : public function_traits<decltype(&T::operator())>
+{
+};
+
+
+template <class F>
+class FunReader
+{
+    public:
+    using ReturnType = typename function_traits<F>::return_type;
+    FunReader(F f):fun(f)
+    {
+    }
+    template<typename IS>
+    ReturnType operator()(IS&is)
+    {
+        return fun(is);
+    }
+    private:
+        F fun;
+};
 
 template <
     typename T,
