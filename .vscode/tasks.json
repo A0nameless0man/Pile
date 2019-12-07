@@ -150,10 +150,10 @@
             "type": "shell",
             "label": "QuickClean",
             "windows": {
-                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}",
+                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}",
             },
             "linux": {
-                "command": "find ${workspaceRoot} -name \"*.exe\"|xargs rm"
+                "command": "find ${workspaceRoot} -name \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)\\\" |xargs rm"
             },
             "problemMatcher": []
         }
