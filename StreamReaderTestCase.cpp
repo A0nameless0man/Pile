@@ -21,17 +21,42 @@
 //        clock_t cend = clock();                                                                    \
 //        std::cout << "It takes " << ((cend - cstart) / 1) << " clock to exec " << #x << std::endl; \
 //    }
+    struct S
+    {
+        S(int k):j(k){}
+        S(void):j(0){}
+        int j;
+        template<typename IS>
+        S r(IS&is)
+        {
+            int i;
+            is >> i;
+            return S(i);
+        }
+        S re(Reader::stdIstream & is)
+        {
+            int i;
+            is >> i;
+            return S(i);
+        }
+    };
 int main(void)
 {
+
+    
     PRINT(typeid("aa").name())
     Reader::OperatorReader<std::string> s;
-    std::stringstream ss("ss aa 123 456");
+    std::stringstream ss("ss aa 123 456 789 102");
     CHECK((s(ss) == "ss"))
     CHECK((s(ss) == "aa"))
     Reader::OperatorReader<int> i;
     //CHECK((i.read(ss)==456))
-    Reader::InteractiveStreamReader<int,Reader::OperatorReader> reader;
+    Reader::InteractiveStreamReader<int,Reader::OperatorReader<int>> reader;
     Reader::InteractiveStreamReader reader2(i);
     CHECK((reader.read(ss,ss)==123))
     CHECK((reader2.read(ss,ss)==456))
+    Reader::MemFnReader mr1(std::function<S(S&,std::stringstream&)>(&S::r<std::stringstream>));
+    Reader::InteractiveStreamReader reader3(mr1);
+    CHECK((mr1(ss).j==789))
+    CHECK((reader3.read(ss,ss).j==102))
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <type_traits>
+#include <functional>
 //#define CONCEPT_OK
 namespace Reader
 {
@@ -32,20 +33,41 @@ public:
         is >> t;
         return t;
     }
+    using ReturnType = T;
 };
+
+
+template <typename F,class T>
+class MemFnReader
+{
+public:
+    MemFnReader(F f) :fun(f)
+    {}
+    template <typename IS>
+    T operator()(IS &is) const
+    {
+        T t;
+        return fun(t, is);
+    }
+    using ReturnType = T;
+private:
+    F fun;
+};
+template <typename F>
+MemFnReader(F)->MemFnReader<F, typename F::result_type>;
 
 template <
     typename T,
-    template <typename> class Reader//,
+    class Reader //,
     //template <typename> class Rrinter
     >
 class InteractiveStreamReader
 {
 public:
-    InteractiveStreamReader(Reader<T> givenReader) : reader(givenReader)
+    InteractiveStreamReader(Reader givenReader) : reader(givenReader)
     {
     }
-    InteractiveStreamReader() : reader(Reader<T>()){}
+    InteractiveStreamReader() : reader(Reader()) {}
     template <
         class OS,
         class IS /*,
@@ -59,8 +81,9 @@ public:
         os << " ";
         return reader(is);
     }
-    Reader<T> reader;
+    Reader reader;
     //Printer<T> printer;
 };
-
+template <class X>
+InteractiveStreamReader(X)->InteractiveStreamReader<typename X::ReturnType, X>;
 } // namespace Reader
