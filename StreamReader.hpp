@@ -36,37 +36,21 @@ public:
     using ReturnType = T;
 };
 
-
-template <typename F,class T>
+template <class T>
 class MemFnReader
 {
 public:
-    MemFnReader(F f) :fun(f)
-    {}
     template <typename IS>
     T operator()(IS &is) const
     {
         T t;
-        fun(t, is);
+        t.read(is);
         return t;
     }
     using ReturnType = T;
 private:
-    F fun;
 };
 
-template <typename T,template<typename>typename F>
-class MFReader
-{
-    public:
-        template <typename IS>
-        T operator()(IS &is) const
-        {
-            return F<IS>(is);
-        }
-};
-template <typename F>
-MemFnReader(F)->MemFnReader<F, typename F::result_type>;
 
 template <
     typename T,

@@ -42,6 +42,16 @@ struct S
         return S(i);
     }
 };
+class X : public S
+{
+public:
+    template <class IS>
+    X read(IS &is)
+    {
+        S::r(is);
+        return X(*this);
+    }
+};
 template <typename IS>
 int f(IS &is)
 {
@@ -54,19 +64,17 @@ int main(void)
 
     PRINT(typeid("aa").name())
     Reader::OperatorReader<std::string> s;
-    std::stringstream ss("ss aa 123 456 789  102");
+    std::stringstream ss("ss aa 123 456 789 100 102");
     CHECK((s(ss) == "ss"))
     CHECK((s(ss) == "aa"))
     Reader::OperatorReader<int> i;
     //CHECK((i.read(ss)==456))
     Reader::InteractiveStreamReader<int, Reader::OperatorReader<int>> reader;
     Reader::InteractiveStreamReader reader2(i);
+    Reader::MemFnReader<X> mr;
     CHECK((reader.read(ss, ss) == 123))
     CHECK((reader2.read(ss, ss) == 456))
-    Reader::MemFnReader mr1(std::function<S(S &, std::stringstream &)>(&S::r<std::stringstream>));
-    Reader::InteractiveStreamReader reader3(mr1);
-    CHECK((mr1(ss).j == 789))
-    //Reader::MFReader<int, f> fr;
+    CHECK((mr(ss).j==789))
     //CHECK((f(ss)==100))
-    CHECK((reader3.read(ss, ss).j == 102))
+    //CHECK((reader3.read(ss, ss).j == 102))
 }
