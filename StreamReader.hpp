@@ -23,7 +23,7 @@ class OperatorReader
 {
 public:
     template <typename IS>
-    T read(IS &is) const
+    T operator()(IS &is) const
 #ifdef CONCEPT_OK
         requires OperatorReadable<IS, T>
 #endif //conceptOK
@@ -36,7 +36,9 @@ public:
 
 template <
     typename T,
-    template <typename> class Reader>
+    template <typename> class Reader//,
+    //template <typename> class Rrinter
+    >
 class InteractiveStreamReader
 {
 public:
@@ -55,9 +57,10 @@ public:
     T read(OS &os, IS &is)
     {
         os << " ";
-        return reader.read(is);
+        return reader(is);
     }
     Reader<T> reader;
+    //Printer<T> printer;
 };
 
 } // namespace Reader

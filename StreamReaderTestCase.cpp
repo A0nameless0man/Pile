@@ -26,12 +26,11 @@ int main(void)
     PRINT(typeid("aa").name())
     Reader::OperatorReader<std::string> s;
     std::stringstream ss("ss aa 123 456");
-    CHECK((s.read(ss) == "ss"))
-    CHECK((s.read(ss) == "aa"))
+    CHECK((s(ss) == "ss"))
+    CHECK((s(ss) == "aa"))
     Reader::OperatorReader<int> i;
     //CHECK((i.read(ss)==456))
     Reader::InteractiveStreamReader<int,Reader::OperatorReader> reader;
-
     Reader::InteractiveStreamReader reader2(i);
     CHECK((reader.read(ss,ss)==123))
     CHECK((reader2.read(ss,ss)==456))
