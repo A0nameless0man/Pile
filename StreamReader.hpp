@@ -1,3 +1,8 @@
+/*
+Time: 2019-12-08 13:17:40
+Describe: InteractiveReaderForStream
+Statue: Active
+*/
 #pragma once
 #include <iostream>
 #include <type_traits>
@@ -109,6 +114,11 @@ template <
     class Reader //,
     //template <typename> class Rrinter
     >
+    /*
+    Time: 2019-12-08 13:18:36
+    Describe: PrinterForHint
+    Statue: TODO
+    */
 class InteractiveStreamReader
 {
 public:
