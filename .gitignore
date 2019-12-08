@@ -4,6 +4,7 @@
 .vs/
 Debug/
 [xX]64/
+*.out
 *.exe
 *.user
 *.ilk

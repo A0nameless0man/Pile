@@ -5,20 +5,44 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "clangBuildActiveFile",
-            "command": "clang",
-            "args": [
-                "-std=c++2a",
-                "-Werror",
-                "-Wall",
-                "-Wno-c++98-compat",
-                "-Wno-c++98-compat-pedantic",
-                "-Wno-newline-eof",
-                "-O2",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "${file}"
-            ],
+            "label": "ClangBuild",
+            "linux": {
+                "command": "clang++",
+                "args": [
+                    "-std=c++2a",
+                    "-Werror",
+                    "-Wall",
+                    "-Wno-c++98-compat",
+                    "-Wno-c++98-compat-pedantic",
+                    "-Wno-newline-eof",
+                    "-O2",
+                    "-o",
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                    "${file}"
+                ],
+            },
+            "windows": {
+                "command": "clang-cl",
+                "args": [
+                    "-Zi",
+                    "-EHac",
+                    "-Xclang",
+                    "-std=c++2a",
+                    "-Werror",
+                    "-Wall",
+                    "-Wno-c++98-compat",
+                    "-Wno-c++98-compat-pedantic",
+                    "-Wno-newline-eof",
+                    "-Xclang",
+                    "-fconstexpr-steps",
+                    "-Xclang",
+                    "2147483647",
+                    "-O2",
+                    "-o",
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                    "${file}"
+                ],
+            },
             "problemMatcher": [
                 "$gcc"
             ],
@@ -37,16 +61,12 @@
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-g",
                 "-Wall",
-                "-std=c++2a",
-                "-fconstexpr-ops-limit=0x7fffffffffffffff"
+                "-std=c++2a"
             ],
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "type": "shell",
@@ -64,10 +84,7 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "type": "shell",
@@ -80,63 +97,30 @@
         },
         {
             "type": "shell",
-            "label": "Build",
-            "command": "clang-cl",
-            "args": [
-                "-Zi",
-                "-EHac",
-                "-Xclang",
-                "-std=c++2a",
-                "-Werror",
-                "-Wall",
-                "-Wno-c++98-compat",
-                "-Wno-c++98-compat-pedantic",
-                "-Wno-newline-eof",
-                "-Xclang",
-                "-fconstexpr-steps",
-                "-Xclang",
-                "2147483647",
-                "-O2",
-                "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "${file}"
-            ],
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
             "label": "Clean",
             "command": "rm",
-            "args": [
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                ",",
-                "${fileDirname}\\${fileBasenameNoExtension}.ilk",
-                ",",
-                "${fileDirname}\\${fileBasenameNoExtension}.pdb",
-                "|Out-Null"
-            ],
-            "presentation": {
-                "echo": false,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
+            "windows": {
+                "args": [
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                    ",",
+                    "${fileDirname}\\${fileBasenameNoExtension}.ilk",
+                    ",",
+                    "${fileDirname}\\${fileBasenameNoExtension}.pdb",
+                    "|Out-Null"
+                ],
             },
-            "problemMatcher": []
+            "linux":{
+                "args": [
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                ],
+            }
         },
         {
             "type": "shell",
             "label": "CleanRun",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Build",
+                "ClangBuild",
                 "Run",
                 "Clean"
             ],
@@ -148,12 +132,12 @@
         },
         {
             "type": "shell",
-            "label": "QuickClean",
+            "label": "CompleteClean",
             "windows": {
                 "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}",
             },
             "linux": {
-                "command": "find ${workspaceRoot} -regextype posix-extended -regex '.*\\.(exe$|ilk$|pch$|pdb$)' |tee ./deletedFiles|xargs rm\ncat ./deletedFiles\nrm ./deletedFiles"//xargs rm"
+                "command": "find ${workspaceRoot} -regextype posix-extended -regex '.*\\.(exe$|ilk$|pch$|pdb$|out$)' |tee ./deletedFiles|xargs rm\ncat ./deletedFiles\nrm ./deletedFiles" //xargs rm"
             },
             "problemMatcher": []
         }
