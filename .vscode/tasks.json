@@ -153,7 +153,7 @@
                 "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}",
             },
             "linux": {
-                "command": "find ${workspaceRoot} -name \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)\\\" |xargs rm"
+                "command": "find ${workspaceRoot} -regextype posix-extended -regex '.*\\.(exe$|ilk$|pch$|pdb$)' |tee ./deletedFiles|xargs rm\ncat ./deletedFiles\nrm ./deletedFiles"//xargs rm"
             },
             "problemMatcher": []
         }
