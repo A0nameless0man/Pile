@@ -130,10 +130,9 @@ class InteractiveStreamReader
 {
 public:
     using RetryLimitType = unsigned;
-    using 
-    InteractiveStreamReader(Reader givenReader, Restriction givenRestriction = NoRestriction()) : reader(givenReader), restriction(givenRestriction) {}
+    using InteractiveStreamReader(Reader givenReader, Restriction givenRestriction = NoRestriction()) : reader(givenReader), restriction(givenRestriction) {}
     InteractiveStreamReader() : reader(Reader()), restriction(Restriction()) {}
-    InteractiveStreamReader<T, Reader, Restriction>& setRetryLimit(RetryLimitType newLimit)
+    InteractiveStreamReader<T, Reader, Restriction> &setRetryLimit(RetryLimitType newLimit)
     {
         retryLimit = newLimit;
         return *this;
@@ -150,6 +149,6 @@ private:
     Restriction restriction;
     RetryLimitType retryLimit = 0;
 };
-template <class X, class ...Args>
-InteractiveStreamReader(X, Args...)->InteractiveStreamReader<typename X::ReturnType, X,Args...>;
+template <class X, class... Args>
+InteractiveStreamReader(X, Args...)->InteractiveStreamReader<typename X::ReturnType, X, Args...>;
 } // namespace Reader
