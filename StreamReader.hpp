@@ -122,9 +122,7 @@ template <
 class InteractiveStreamReader
 {
 public:
-    InteractiveStreamReader(Reader givenReader) : reader(givenReader)
-    {
-    }
+    InteractiveStreamReader(Reader givenReader) : reader(givenReader){}
     InteractiveStreamReader() : reader(Reader()) {}
     template <
         class OS,
