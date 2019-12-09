@@ -58,9 +58,9 @@ public:
         return t;
     }
     using ReturnType = T;
+
 private:
 };
-
 
 template <typename T>
 struct function_traits;
@@ -90,58 +90,66 @@ template <typename T>
 struct function_traits : public function_traits<decltype(&T::operator())>
 {
 };
-
-
 template <class F>
 class FunReader
 {
-    public:
+public:
     using ReturnType = typename function_traits<F>::return_type;
-    FunReader(F f):fun(f)
+    FunReader(F f) : fun(f)
     {
     }
-    template<typename IS>
-    ReturnType operator()(IS&is)
+    template <typename IS>
+    ReturnType operator()(IS &is)
     {
         return fun(is);
     }
-    private:
-        F fun;
+
+private:
+    F fun;
 };
 
-
+class NoRestriction
+{
+public:
+    template <class T>
+    bool operator()(T &t)
+    {
+        return true;
+    }
+    operator std::string(void)
+    {
+        return "没有限制";
+    }
+};
 
 template <
     typename T,
-    class Reader //,
-    //template <typename> class Rrinter
-    >
-    /*
-    Time: 2019-12-08 13:18:36
-    Describe: PrinterForHint
-    Statue: TODO
-    */
+    class Reader,
+    class Restriction = NoRestriction>
 class InteractiveStreamReader
 {
 public:
-    InteractiveStreamReader(Reader givenReader) : reader(givenReader){}
-    InteractiveStreamReader() : reader(Reader()) {}
-    template <
-        class OS,
-        class IS /*,
-        template <
-            typename OS = stdOstream,
-            typename PrinterType = T>
-        class Printer*/
-        >
+    using RetryLimitType = unsigned;
+    using 
+    InteractiveStreamReader(Reader givenReader, Restriction givenRestriction = NoRestriction()) : reader(givenReader), restriction(givenRestriction) {}
+    InteractiveStreamReader() : reader(Reader()), restriction(Restriction()) {}
+    InteractiveStreamReader<T, Reader, Restriction>& setRetryLimit(RetryLimitType newLimit)
+    {
+        retryLimit = newLimit;
+        return *this;
+    }
+    template <class OS, class IS>
     T read(OS &os, IS &is)
     {
         os << " ";
         return reader(is);
     }
+
+private:
     Reader reader;
-    //Printer<T> printer;
+    Restriction restriction;
+    RetryLimitType retryLimit = 0;
 };
-template <class X>
-InteractiveStreamReader(X)->InteractiveStreamReader<typename X::ReturnType, X>;
+template <class X, class ...Args>
+InteractiveStreamReader(X, Args...)->InteractiveStreamReader<typename X::ReturnType, X,Args...>;
 } // namespace Reader
