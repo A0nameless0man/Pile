@@ -109,6 +109,8 @@ class FunReader
         F fun;
 };
 
+
+
 template <
     typename T,
     class Reader //,
