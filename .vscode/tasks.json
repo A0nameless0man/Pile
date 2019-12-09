@@ -37,6 +37,8 @@
                     "-fconstexpr-steps",
                     "-Xclang",
                     "2147483647",
+                    "-Xclang",
+                    "-finput-charset=utf8",
                     "-O2",
                     "-o",
                     "${fileDirname}\\${fileBasenameNoExtension}.exe",

@@ -1,4 +1,4 @@
-#include "StreamReader.hpp"
+﻿#include "StreamReader.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -72,12 +72,21 @@ int main(void)
     Reader::InteractiveStreamReader reader2(i);
     Reader::MemFnReader<X> mr;
     CHECK((reader2.read(ss, ss) == 456))
-    CHECK((mr(ss).j==789))
+    CHECK((mr(ss).j == 789))
     Reader::FunReader fr(f<decltype(ss)>);
-    CHECK((fr(ss)==100))
-    auto fu = [](decltype(ss) &is) ->S { S ts; ts.r(is); return ts; };
+    CHECK((fr(ss) == 100))
+    auto fu = [](decltype(ss) &is) -> S { S ts; ts.r(is); return ts; };
     Reader::FunReader fr2(fu);
-    CHECK(fr2(ss).j==102)
+    CHECK(fr2(ss).j == 102)
+    Reader::InteractiveStreamReader reader3(i, Reader::NeverAccept());
+    try
+    {
+        reader3.setRetryLimit(2).setTitle("abc").read(std::cout, std::cin);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what()<< std::endl;
+    }
     //CHECK((f(ss)==100))
     //CHECK((reader3.read(ss, ss).j == 102))
 }

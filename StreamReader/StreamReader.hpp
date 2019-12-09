@@ -1,4 +1,4 @@
-/*
+﻿/*
 Time: 2019-12-08 13:17:40
 Describe: InteractiveReaderForStream
 Statue: Active
@@ -121,7 +121,19 @@ public:
         return "没有限制";
     }
 };
-
+class NeverAccept
+{
+public:
+    template <class T>
+    bool operator()(T &t)
+    {
+        return false;
+    }
+    operator std::string(void)
+    {
+        return "只有限制";
+    }
+};
 template <
     typename T,
     class Reader,
@@ -130,21 +142,44 @@ class InteractiveStreamReader
 {
 public:
     using RetryLimitType = unsigned;
-    using InteractiveStreamReader(Reader givenReader, Restriction givenRestriction = NoRestriction()) : reader(givenReader), restriction(givenRestriction) {}
+    InteractiveStreamReader(Reader givenReader, Restriction givenRestriction = NoRestriction()) : reader(givenReader), restriction(givenRestriction) {}
     InteractiveStreamReader() : reader(Reader()), restriction(Restriction()) {}
     InteractiveStreamReader<T, Reader, Restriction> &setRetryLimit(RetryLimitType newLimit)
     {
         retryLimit = newLimit;
         return *this;
     }
+    InteractiveStreamReader<T, Reader, Restriction> &setTitle(std::string newTitle)
+    {
+        title = newTitle;
+        return *this;
+    }
     template <class OS, class IS>
     T read(OS &os, IS &is)
     {
-        os << " ";
-        return reader(is);
+        for (RetryLimitType retryCount = 1; retryLimit==0||retryCount <= retryLimit; ++retryCount)
+        {
+            if (!title.empty()) //如果有标题
+            {
+                os << "请输入" << title << ":";
+            }
+            T t = reader(is);
+            if (restriction(t))
+            {
+                return t;
+            }
+            if (!descriptionOfRestrict.empty()) //如果对限制有描述
+            {
+                os << "输入不满足" << descriptionOfRestrict << "的要求，请重试。" << std::endl;
+                os << retryCount<< "/" << retryLimit << std::endl;
+            }
+        }
+        throw std::logic_error("输入尝试达到限制");
     }
 
 private:
+    std::string title;
+    std::string descriptionOfRestrict;
     Reader reader;
     Restriction restriction;
     RetryLimitType retryLimit = 0;
