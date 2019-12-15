@@ -72,24 +72,18 @@ namespace P_Queue
 		size_t next = target;
 		while (true)
 		{
+
 			if (Heap[target] < Heap[left(target)])
-			{
-				next = left(target);
-			}
-			if (Heap[next] < Heap[right(target)])
-			{
-				next = right(target);
-			}
-			if (next != target)
+			{next = left(target);}
+			else if (Heap[next] < Heap[right(target)])
+			{next = right(target);}//找到父节点和子节点中比较大的那个
+			if (next != target)//如果不是父节点就交换
 			{
 				std::swap(Heap[next], Heap[target]);
 				target = next;
 			}
-			else
-			{
-				return;
-			}
-		}
+			else{return;}//是则说明这个节点满足性质，可以收工了
+		}//继续维护性质
 	}
 	template<class T>size_t P_Queue<T>::changeSizeTo(size_t target)
 	{
