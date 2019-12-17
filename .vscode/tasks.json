@@ -141,6 +141,33 @@
                 "command": "find ${workspaceRoot} -regextype posix-extended -regex '.*\\.(exe$|ilk$|pch$|pdb$|out$)' |tee ./deletedFiles|xargs rm\ncat ./deletedFiles\nrm ./deletedFiles" //xargs rm"
             },
             "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "TScompile",
+            "command":"tsc",
+            "args": [
+                "-p",
+                "${fileDirname}\\..\\"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "TSrun",
+            "command":"node",
+            "args": [
+                "${fileDirname}\\..\\dist\\${fileBasenameNoExtension}.js"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "TStest",
+            "dependsOrder": "sequence",
+            "dependsOn":[
+                "TScompile",
+                "TSrun"
+            ]
         }
     ]
 }
