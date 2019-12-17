@@ -8,6 +8,10 @@ class Greeting
         if (type == 'string')
         {
             console.log(`Hello ${name}`);
+            for(let c of <string>name)
+            {
+                console.log(c);
+            }
         }
         else if (type == 'number')
         {
