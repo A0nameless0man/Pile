@@ -2,7 +2,7 @@ const hello: string = 'HelloWorld';
 console.log(hello);
 class Greeting
 {
-    greet(name: string | number): void
+    greet(name: string | number|string[]): void
     {
         var type: string = typeof (name)
         if (type == 'string')
@@ -20,9 +20,14 @@ class Greeting
                 console.log(`Hello ${i}`);
             }
         }
+        else if(type == 'array')
+        {
+            
+        }
     }
 }
 var gr: Greeting = new Greeting();
 gr.greet('me');
 gr.greet(5);
-console.log(typeof (typeof (console)))
+console.log(typeof(['a']));
+console.log(typeof (typeof (console)));
