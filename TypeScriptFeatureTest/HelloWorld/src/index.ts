@@ -20,9 +20,12 @@ class Greeting
                 console.log(`Hello ${i}`);
             }
         }
-        else if(type == 'array')
+        else
         {
-            
+            for(let s of <string[]>name)
+            {
+                console.log(`Hello ${s}`);
+            }
         }
     }
 }
