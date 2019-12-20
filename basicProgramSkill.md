@@ -25,12 +25,59 @@
 
 #### 通用
 
-#### gcc
+指定语言标准
 
+```{.line-numbers}
+-std=c++11
+-std=c++17
+-std=c++2a
+```
 
-#### clang
+开启代码速度优化
+
+```
+-o2
+```
+
+把 `warning` 视为 `error`
+
+```
+-Wall
+```
+
+开启更多 `warning`
+
+```
+-Werror
+```
+
+关闭某种 `warning`
+
+```
+-Wno-xxx
+```
 
 #### clang-cl
+
+clang-cl 是个 `clang` 的修改版以兼容 `cl.exe`
+
+生成 `.pdb` 调试信息文件以兼容 `cl.exe`
+
+```
+-Zi
+```
+
+允许使用 `exception`
+
+```
+-EHac
+```
+
+将下一个参数用 `clang` 的参数格式解析
+
+```
+-xclang
+```
 
 ## 文档工具
 
