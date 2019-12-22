@@ -11,10 +11,10 @@
     - [环境变量](#环境变量)
   - [Windows下的开发工具安装](#windows下的开发工具安装)
     - [怎么设置环境变量](#怎么设置环境变量)
-    - [gcc系](#gcc系)
+    - [安装 `gcc`](#安装-gcc)
       - [Mingw64](#mingw64)
       - [msys2](#msys2)
-    - [clang系](#clang系)
+    - [安装 `clang`](#安装-clang)
   - [配置vsc以运行及调试](#配置vsc以运行及调试)
     - [coderunner法](#coderunner法)
     - [launch.json+task.json法](#launchjsontaskjson法)
@@ -135,19 +135,42 @@ Unix 系统下，多数软件安装在 `/usr/bin` 下，而这个目录默认是
 >
 >1. 可以选择编辑系统变量或用户变量，区别是系统变量是全局的，用户变量只有自>己看得见。
 >
->1. 找到 `Path` ，大小写无所谓的。
+>1. 找到并选中 `希望修改的环境变量` ，大小写无所谓的。
 >
 >1. 点击 `编辑`，然后 `新建`
 >
 >1. 加入你需要的路径
 
-#### gcc系
+当我们谈到要添加 `PATH` 或者 `路径` 时，还有一个要素是被添加的路径。
+
+这个一般要找到刚安装的可执行文件的所在地。比如说直接全盘搜索。
+
+#### 安装 `gcc`
+
+`GCC` 并不提供单独的安装包，因为它的依赖特别多，因此通常是直接提供整个 `GUN` 软件环境。
 
 ##### Mingw64
 
+这个是 经典的 `Mingw` 的后继者，也是经常被建议使用的软件。
+
+但是有个问题，更新比较慢，`gcc` 只到 8.1。
+
+总之，先[下载](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe)。
+然后安装。
+
+<!--等安个虚拟机测试一下再继续-->
+
 ##### msys2
 
-#### clang系
+#### 安装 `clang`
+
+这个就要方便不少了。
+
+还是先[下载](http://releases.llvm.org/9.0.0/LLVM-9.0.0-win64.exe).
+安装，界面是英文的。
+中间会有一步问你是不是要添加 `PATH` ，选中就不用手动加了。
+
+但是有个问题，搭配 `clang` 的调试器 `lldb` 还没有 `Windows` 版，恐怕只能输出调试。
 
 ### 配置vsc以运行及调试
 
