@@ -155,10 +155,16 @@ Unix 系统下，多数软件安装在 `/usr/bin` 下，而这个目录默认是
 
 但是有个问题，更新比较慢，`gcc` 只到 8.1。
 
-总之，先[下载](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe)。
+总之，先[下载](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/seh/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z)。
+或者从文件服务器下载。
 然后安装。
 
+- 安装时，第一页选项中有一个要选架构，选择 `x86_64`
+- 安装路径避免中文或者空格之类的。
+- 由于缺少支持，可能会提示一些下载有关的错误，再试 **~~一~~** 次就好。
+
 <!--等安个虚拟机测试一下再继续-->
+<!-- 网络反复出错，体验实在辣鸡 -->
 
 ##### msys2
 
