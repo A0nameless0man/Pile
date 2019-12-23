@@ -85,7 +85,7 @@ vector<size_t>& caculateNext(const string& key, vector<size_t>& next)
 	{
 		while (j!=0&&key[j]!=key[i])
 		{
-			j = next[j];
+			j = next[j-1];
 		}
 		if (key[j]==key[i])
 		{
@@ -122,7 +122,7 @@ vector<size_t> KMP_string_matcher(const string& target, const string& key, const
 	{
 		while (j != 0 && target[i] != key[j])
 		{
-			j = next[j];
+			j = next[j-1];
 		}
 		if (target[i]==key[j])
 		{
