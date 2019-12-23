@@ -95,10 +95,10 @@ int main(void)
     {
         pi = caculateNext(key);
         result = KMP_string_matcher(target, key, pi);
-        // autoPrint(pi);
-        // std::cout << std::endl;
-        // autoPrint(key);
-        // std::cout << std::endl;
+        autoPrint(pi);
+        std::cout << std::endl;
+        autoPrint(key);
+        std::cout << std::endl;
         //for (auto u : result)
         // {
         //     cout << u << endl;
@@ -112,5 +112,8 @@ abbababababababbbsbabcbabcbabcsbbdbdbcabsdbbcasdbcbasdbcbasdbcbasdbcsbad
 */
 /*
 ababcab
-abababcababcabcbababcbabababcabc
+abababcababcabcbababcbabababcabcababcab
+aaa
+aaaaaaaaaaabaaaaaaaaa
+
 */
