@@ -23,4 +23,4 @@ rl.question("", (input: string) =>
   )
   console.log(sum);
 })
-rl.close();
+//rl.close();
