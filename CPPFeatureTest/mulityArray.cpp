@@ -1,34 +1,32 @@
-#include<iostream>
-#include<iomanip>
+#include <iostream>
+#include <iomanip>
 
-int foo(int a[][4]);
-int foo(int a[][4])
+template <size_t N,typename T>
+int bar(T (&a)[N])
 {
-    for (int i = 0; i < 4; i++)
+    for (size_t i = 0; i < N; i++)
     {
-        std::cout << a[i] << std::endl;
+        bar(a[i]);
     }
+    std::cout << N << std::endl
+              << std::endl;
+    
     return 0;
 }
-
-template<size_t N>
-int bar(int a[][N])
+template<typename T>
+int bar(T &a)
 {
-    for (int i = 0; i < 4; i++)
-    {
-        std::cout << a[i] << std::endl;
-    }
-    std::cout << N << std::endl;
+
+        std::cout << a << std::endl;
+
     return 0;
 }
 
 int main(void)
 {
-    int a[4][4];
-    for (int i = 0; i < 4;i++)
-    {
-        std::cout << a[i] << std::endl;
-    }
-    foo(a);
+    long long a[4][4][5];
+    int b[4] = {0};
+
     bar(a);
+    bar(b);
 }
