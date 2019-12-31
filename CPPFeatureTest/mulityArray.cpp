@@ -1,32 +1,48 @@
 #include <iostream>
 #include <iomanip>
-
-template <size_t N,typename T>
-int bar(T (&a)[N])
+#include <string>
+template <typename T>
+struct ArrayType
 {
+    using Result = T;
+};
+
+template <typename T, size_t N>
+struct ArrayType<T[N]>
+{
+    using Result = typename ArrayType<T>::Result;
+};
+
+template <size_t N, typename T>
+typename ArrayType<T>::Result sum(T (&a)[N])
+{
+    using sumType = typename ArrayType<T>::Result;
+    sumType s{};
     for (size_t i = 0; i < N; i++)
     {
-        bar(a[i]);
+        s += sum(a[i]);
     }
-    std::cout << N << std::endl
-              << std::endl;
-    
-    return 0;
+    return s;
 }
-template<typename T>
-int bar(T &a)
+template <typename T>
+T sum(T &a)
 {
-
-        std::cout << a << std::endl;
-
-    return 0;
+    return a;
 }
 
 int main(void)
 {
-    long long a[4][4][5];
-    int b[4] = {0};
-
-    bar(a);
-    bar(b);
+    long long a[4][4][5] =
+        {
+            {{1, 2, 3, 4, 5},
+             {2, 4, 6, 8, 10}}};
+    int b[4] = {1, 2, 3, 4};
+    std::string s[][2] =
+        {
+            {"a", "A"},
+            {"b", "B"}};
+    //bar(a);
+    std::cout << sum(a) << std::endl;
+    std::cout << sum(b) << std::endl;
+    std::cout << sum(s) << std::endl;
 }
