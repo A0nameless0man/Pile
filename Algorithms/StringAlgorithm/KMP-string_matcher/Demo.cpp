@@ -3,17 +3,15 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <unistd.h>
+#include <thread>
+//#include <unistd.h>
 using namespace std;
 const int wide = 2;
 const char placeHolder = ' ';
 const int sleepBase = 1;
-string key, target;
-vector<size_t> pi;
-vector<size_t> result;
 
 template <class T>
-void autoPrint(T &t)
+static void autoPrint(T &t)
 {
     for (auto i : t)
     {
@@ -21,7 +19,7 @@ void autoPrint(T &t)
     }
 }
 
-vector<size_t> KMP_string_matcher(const string &target, const string &key, const vector<size_t> &next)
+static vector<size_t> KMP_string_matcher(const string &target, const string &key, const vector<size_t> &next)
 {
     vector<size_t> ans;
     size_t j = 0;
@@ -37,7 +35,8 @@ vector<size_t> KMP_string_matcher(const string &target, const string &key, const
         std::cout << outputPrefix;
         auto ss = key.substr(j);
         autoPrint(ss);
-        sleep(sleepBase);
+        //Sleep(sleepBase);
+        std::this_thread::sleep_for(std::chrono::seconds(sleepBase));
         std::cout << '\r' << std::flush;
         if (target[i] == key[j])
         {
@@ -46,7 +45,7 @@ vector<size_t> KMP_string_matcher(const string &target, const string &key, const
         if (j == key.length())
         {
             ans.push_back(i - j + 1);
-            std::cout << string(wide*(i+j+1), ' ');
+            std::cout << string(wide * (i + j + 1), ' ');
             std::cout << std::endl;
             std::cout << "found at " << i - j + 1 << ":" << std::endl;
             autoPrint(target);
@@ -59,10 +58,10 @@ vector<size_t> KMP_string_matcher(const string &target, const string &key, const
             j = next[j - 1];
         }
     }
-    std::cout << string(wide * (key.length() + target.length() + 1), ' ')<<'\r';
+    std::cout << string(wide * (key.length() + target.length() + 1), ' ') << '\r';
     return ans;
 }
-vector<size_t> &caculateNext(const string &key, vector<size_t> &next)
+static vector<size_t> &caculateNext(const string &key, vector<size_t> &next)
 {
     //vector<int> next;
     next.clear();
@@ -82,7 +81,7 @@ vector<size_t> &caculateNext(const string &key, vector<size_t> &next)
     }
     return next;
 }
-vector<size_t> caculateNext(const string &key)
+static vector<size_t> caculateNext(const string &key)
 {
     vector<size_t> next;
     caculateNext(key, next);
@@ -90,6 +89,9 @@ vector<size_t> caculateNext(const string &key)
 }
 int main(void)
 {
+    string key, target;
+    vector<size_t> pi;
+    vector<size_t> result;
     //std::string stringHolder(placeHolder, wide - 1);
     while (std::cin >> key >> target)
     {
