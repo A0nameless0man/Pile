@@ -8,7 +8,7 @@
 using namespace std;
 const int wide = 2;
 const char placeHolder = ' ';
-const int sleepBase = 1;
+const int sleepBase = 500;
 
 template <class T>
 static void autoPrint(T &t)
@@ -36,7 +36,7 @@ static vector<size_t> KMP_string_matcher(const string &target, const string &key
         auto ss = key.substr(j);
         autoPrint(ss);
         //Sleep(sleepBase);
-        std::this_thread::sleep_for(std::chrono::seconds(sleepBase));
+        std::this_thread::sleep_for(std::chrono::milliseconds(sleepBase));
         std::cout << '\r' << std::flush;
         if (target[i] == key[j])
         {
@@ -111,8 +111,6 @@ int main(void)
 /*
 abcabcad
 abbababababababbbsbabcbabcbabcsbbdbdbcabsdbbcasdbcbasdbcbasdbcbasdbcsbad
-*/
-/*
 ababcab
 abababcababcabcbababcbabababcabcababcab
 aaa
