@@ -32,14 +32,15 @@
 //             {
 //                 if (p.second > i)
 //                 {
-//                     if (ls.find(p.first - 1) == ls.end() || i != 0 && array[p.first - 1][i - 1] != array[p.first][i - 1])
+//                     if (ls.find(p.first - 1) == ls.end() || i != 0 && array[p.first - 1][i - 1]
+//                     != array[p.first][i - 1])
 //                     {
 //                         from = p.second;
 //                         last = p.second;
 //                         circle = 0;
-//                     } //如果 找不到上一个串 或者 上一个串和本串的上一个字符不同 : 说明已经断了,上一个串 与 当前串的字典序已经决定
-//                     else
-//                     { //如果 上一个串存在 : 则转动圈数应当使得 current >= last
+//                     } //如果 找不到上一个串 或者 上一个串和本串的上一个字符不同 :
+//                     说明已经断了,上一个串 与 当前串的字典序已经决定 else { //如果 上一个串存在 :
+//                     则转动圈数应当使得 current >= last
 //                         int current = array[p.first][i] + c * circle;
 //                         if (current > last)
 //                         {

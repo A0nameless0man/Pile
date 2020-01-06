@@ -1,11 +1,11 @@
 ---
 BasedOnStyle: LLVM
-AccessModifierOffset: '4'
+AccessModifierOffset: '-4'
 AlignAfterOpenBracket: Align
 AlignConsecutiveMacros: 'true'
 #monospace has space
-AlignConsecutiveAssignments: 'false'
-AlignConsecutiveDeclarations: 'false'
+AlignConsecutiveAssignments: 'true'
+AlignConsecutiveDeclarations: 'true'
 AlignEscapedNewlines: Left
 AlignOperands: 'true'
 AlignTrailingComments: 'true'

@@ -1,50 +1,46 @@
 ﻿#include "CourseSelectionRecord.h"
 
-CourseSelectionRecord::CourseSelectionRecord
-(
-	User::LogicID student,
-	CourseSelectionRecord::GradeOfCourse grade, 
-	Course::CourseID course
-):
-	student(student),
-	grade(grade),
-	courseID(course)
+CourseSelectionRecord::CourseSelectionRecord(User::LogicID                        student,
+                                             CourseSelectionRecord::GradeOfCourse grade,
+                                             Course::CourseID                     course):
+    student(student),
+    grade(grade),
+    courseID(course)
 {
 }
 
-CourseSelectionRecord::CourseSelectionRecord(const json& js) :
-	UnSerialize(js,student),
-	UnSerialize(js,grade),
-	UnSerialize(js,courseID)
+CourseSelectionRecord::CourseSelectionRecord(const json &js):
+    UnSerialize(js, student),
+    UnSerialize(js, grade),
+    UnSerialize(js, courseID)
 {
 }
 
-CourseSelectionRecord::GradeOfCourse CourseSelectionRecord::getGrade()const
+CourseSelectionRecord::GradeOfCourse CourseSelectionRecord::getGrade() const
 {
-	return grade;
+    return grade;
 }
 
 void CourseSelectionRecord::setGrade(CourseSelectionRecord::GradeOfCourse newGrade)
 {
-	grade = newGrade;
+    grade = newGrade;
 }
 
-Course::CourseID CourseSelectionRecord::getCourseID()const
+Course::CourseID CourseSelectionRecord::getCourseID() const
 {
-	return courseID;
+    return courseID;
 }
 
 User::LogicID CourseSelectionRecord::getStudent() const
 {
-	return student;
+    return student;
 }
 
 json CourseSelectionRecord::serialize() const
 {
-	json js;
-	Serialize(js, student);
-	Serialize(js, grade);
-	Serialize(js, courseID);
-	return js;
+    json js;
+    Serialize(js, student);
+    Serialize(js, grade);
+    Serialize(js, courseID);
+    return js;
 }
-

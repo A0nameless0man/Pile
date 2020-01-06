@@ -1,7 +1,7 @@
-#include<stdio.h>
+#include <stdio.h>
 /*
 B :竹鼠的时间
-时间限制:  1000MS   空间限制:  32MB   提交数:  61   通过数:  30  
+时间限制:  1000MS   空间限制:  32MB   提交数:  61   通过数:  30
 题目内容
 
 题目描述
@@ -36,16 +36,16 @@ B :竹鼠的时间
 */
 int main(void)
 {
-	scanf("%*d");
-	int h,m,dh,dm;
-	while(scanf("%d:%d%d:%d",&h,&m,&dh,&dm )!=EOF)
-	{
-		m+=dm;
-		dh+=m/60;
-		m%=60;
-		h+=dh;
-		h%=24;
-		printf("%02d:%02d\n",h,m);
-	}
-	return 0;
+    scanf("%*d");
+    int h, m, dh, dm;
+    while(scanf("%d:%d%d:%d", &h, &m, &dh, &dm) != EOF)
+    {
+        m += dm;
+        dh += m / 60;
+        m %= 60;
+        h += dh;
+        h %= 24;
+        printf("%02d:%02d\n", h, m);
+    }
+    return 0;
 }

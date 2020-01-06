@@ -1,12 +1,13 @@
-#include<stdio.h>
+#include <stdio.h>
 /*
 C :三角魔法阵
-时间限制:  1000MS   空间限制:  32MB   提交数:  31   通过数:  17  
+时间限制:  1000MS   空间限制:  32MB   提交数:  31   通过数:  17
 题目内容
 
 题目描述
 
-你是一个魔法师，身处一个坐标平面内，在坐标点上有n个不同的魔法石，每个坐标点上最多有一个魔法石。选择3个魔法石构成一个三角形魔法阵，就可以获取一种魔法元素。 使用不同的魔法石组合成的魔法阵，获取的魔法元素是不同的。你最多可以获取多少种不同的魔法元素？（忽略魔法石组合的顺序）
+你是一个魔法师，身处一个坐标平面内，在坐标点上有n个不同的魔法石，每个坐标点上最多有一个魔法石。选择3个魔法石构成一个三角形魔法阵，就可以获取一种魔法元素。
+使用不同的魔法石组合成的魔法阵，获取的魔法元素是不同的。你最多可以获取多少种不同的魔法元素？（忽略魔法石组合的顺序）
 输入描述
 
 题目包含多组测试数据。第一行包括一个正整数T，代表测试数据的组数。
@@ -48,44 +49,45 @@ C :三角魔法阵
 
 3
 */
-int x[107],y[107],n,kind;
-bool ist(int i,int j,int k)
+int  x[107], y[107], n, kind;
+bool ist(int i, int j, int k)
 {
-	if((x[i]-x[j])*(y[i]-y[k])-(x[i]-x[k])*(y[i]-y[j])!=0)
-	{
-		return true;
-	}
-	else
-	{
-//		printf("f%d %d\n%d %d\n%d %d\n%d\n",x[i],y[i],x[j],y[j],x[k],y[k],(x[i]-x[j])*(y[i]-y[j])-(x[i]-x[k])*(y[i]-y[k]));
-		return false;
-	}
+    if((x[i] - x[j]) * (y[i] - y[k]) - (x[i] - x[k]) * (y[i] - y[j]) != 0)
+    {
+        return true;
+    }
+    else
+    {
+        //		printf("f%d %d\n%d %d\n%d
+        //%d\n%d\n",x[i],y[i],x[j],y[j],x[k],y[k],(x[i]-x[j])*(y[i]-y[j])-(x[i]-x[k])*(y[i]-y[k]));
+        return false;
+    }
 }
 
 int main(void)
 {
-	scanf("%*d");
-	while(scanf("%d",&n)!=EOF)
-	{
-		for(int i=0;i<n;i++)
-		{
-			scanf("%d%d",&x[i],&y[i]);
-		}
-		kind = 0;
-		for(int i=0;i<n;i++)
-		{
-			for(int j=0;j<i;j++)
-			{
-				for(int k=0;k<j;k++)
-				{
-					if(ist(i,j,k))
-					{
-						kind++;
-					}
-				}
-			}
-		}
-		printf("%d\n",kind);
-	}	
-	return 0;
+    scanf("%*d");
+    while(scanf("%d", &n) != EOF)
+    {
+        for(int i = 0; i < n; i++)
+        {
+            scanf("%d%d", &x[i], &y[i]);
+        }
+        kind = 0;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < i; j++)
+            {
+                for(int k = 0; k < j; k++)
+                {
+                    if(ist(i, j, k))
+                    {
+                        kind++;
+                    }
+                }
+            }
+        }
+        printf("%d\n", kind);
+    }
+    return 0;
 }

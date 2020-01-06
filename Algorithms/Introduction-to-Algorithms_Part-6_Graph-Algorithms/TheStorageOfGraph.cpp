@@ -1,24 +1,22 @@
-#include <iostream>
-#include <cstdio>
-#include <stack>
-#include <queue>
-#include <vector>
 #include <array>
+#include <cstdio>
+#include <iostream>
 #include <map>
+#include <queue>
+#include <stack>
 #include <string>
+#include <vector>
 class Graph
 {
 private:
     std::vector<std::vector<unsigned long long>> edges;
-    std::vector<bool> vis;
+    std::vector<bool>                            vis;
 
 public:
-    Graph(unsigned long long n) : edges(n), vis(n, false)
-    {
-    }
+    Graph(unsigned long long n): edges(n), vis(n, false) {}
     Graph &unTagAll(void)
     {
-        for (auto t : vis)
+        for(auto t: vis)
         {
             t = false;
         }
@@ -47,10 +45,10 @@ public:
 int main(void)
 {
     unsigned long long n, m;
-    while (std::cin >> n >> m)
+    while(std::cin >> n >> m)
     {
         Graph g(n);
-        for (unsigned long long i = 0; i < m; ++i)
+        for(unsigned long long i = 0; i < m; ++i)
         {
             unsigned long long u, v;
             std::cin >> u >> v;
@@ -61,23 +59,23 @@ int main(void)
             std::cin >> d;
             std::stack<std::pair<unsigned long long, unsigned long long>> stk;
             g.tag(d);
-            stk.push({d, 0});
+            stk.push({ d, 0 });
             std::cout << d << std::endl;
-            while (!stk.empty())
+            while(!stk.empty())
             {
-                unsigned long long cur = stk.top().first;
-                unsigned long long pos = stk.top().second;
+                unsigned long long cur   = stk.top().first;
+                unsigned long long pos   = stk.top().second;
                 unsigned long long depth = stk.size();
                 stk.pop();
-                std::string prefix = std::string(2*depth-2, ' ') + "|-";
-                for (unsigned long long i = pos;i<g.getEdges(cur).size();++i)
+                std::string prefix = std::string(2 * depth - 2, ' ') + "|-";
+                for(unsigned long long i = pos; i < g.getEdges(cur).size(); ++i)
                 {
                     auto u = g.getEdges(cur)[i];
-                    if (!g.taged(u))
+                    if(!g.taged(u))
                     {
                         std::cout << prefix << u << std::endl;
-                        stk.push({cur,i+1});
-                        stk.push({u,0});
+                        stk.push({ cur, i + 1 });
+                        stk.push({ u, 0 });
                         g.tag(u);
                         break;
                     }
@@ -90,20 +88,20 @@ int main(void)
             std::cin >> d;
             std::queue<std::pair<unsigned long long, unsigned long long>> stk;
             g.tag(d);
-            stk.push({d, 1});
+            stk.push({ d, 1 });
             std::cout << d << std::endl;
-            while (!stk.empty())
+            while(!stk.empty())
             {
-                unsigned long long cur = stk.front().first;
+                unsigned long long cur   = stk.front().first;
                 unsigned long long depth = stk.front().second;
                 stk.pop();
-                std::string prefix = std::string(2*depth-2, ' ') + "|-";
-                for (auto u : g.getEdges(cur))
+                std::string prefix = std::string(2 * depth - 2, ' ') + "|-";
+                for(auto u: g.getEdges(cur))
                 {
-                    if (!g.taged(u))
+                    if(!g.taged(u))
                     {
                         std::cout << prefix << u << std::endl;
-                        stk.push({u, depth + 1});
+                        stk.push({ u, depth + 1 });
                         g.tag(u);
                     }
                 }

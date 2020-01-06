@@ -1,41 +1,38 @@
 #pragma once
-#include"BigInt.h"
+#include "BigInt.h"
 namespace RatNum
 {
-	class RationalNumber
-	{
-	public:
-		RationalNumber();
-		~RationalNumber();
-		RationalNumber operator+(const RationalNumber& b)const;
-		RationalNumber operator-(const RationalNumber& b)const;
-		RationalNumber operator*(const RationalNumber& b)const;
-		RationalNumber operator/(const RationalNumber& b)const;
-	private:
-		bit::BigInt molecule, denominator;
-	};
+class RationalNumber
+{
+public:
+    RationalNumber();
+    ~RationalNumber();
+    RationalNumber operator+(const RationalNumber &b) const;
+    RationalNumber operator-(const RationalNumber &b) const;
+    RationalNumber operator*(const RationalNumber &b) const;
+    RationalNumber operator/(const RationalNumber &b) const;
 
-	RationalNumber::RationalNumber():molecule(bit::DEC,0),denominator(bit::DEC,0)
-	{
-	}
+private:
+    bit::BigInt molecule, denominator;
+};
 
-	RationalNumber::~RationalNumber()
-	{
-	}
-	inline RationalNumber RationalNumber::operator+(const RationalNumber& b) const
-	{
-		return RationalNumber();
-	}
-	inline RationalNumber RationalNumber::operator-(const RationalNumber& b) const
-	{
-		return RationalNumber();
-	}
-	inline RationalNumber RationalNumber::operator*(const RationalNumber& b) const
-	{
-		return RationalNumber();
-	}
-	inline RationalNumber RationalNumber::operator/(const RationalNumber& b) const
-	{
-		return RationalNumber();
-	}
+RationalNumber::RationalNumber(): molecule(bit::DEC, 0), denominator(bit::DEC, 0) {}
+
+RationalNumber::~RationalNumber() {}
+inline RationalNumber RationalNumber::operator+(const RationalNumber &b) const
+{
+    return RationalNumber();
 }
+inline RationalNumber RationalNumber::operator-(const RationalNumber &b) const
+{
+    return RationalNumber();
+}
+inline RationalNumber RationalNumber::operator*(const RationalNumber &b) const
+{
+    return RationalNumber();
+}
+inline RationalNumber RationalNumber::operator/(const RationalNumber &b) const
+{
+    return RationalNumber();
+}
+}  // namespace RatNum

@@ -3,9 +3,7 @@ template <class T>
 class A
 {
 public:
-    A(T tt) : t(tt)
-    {
-    }
+    A(T tt): t(tt) {}
     T t;
     using Type = T;
 };
@@ -13,13 +11,9 @@ template <class T, template <typename> class X, template <typename> class Y>
 class B
 {
 public:
-    B(T tt, X<T> xx, Y<T> yy) : t(tt), x(xx), y(yy)
-    {
-    }
-    B(X<T> xx, Y<T> yy) : t(xx.t), x(xx), y(yy)
-    {
-    }
-    T t;
+    B(T tt, X<T> xx, Y<T> yy): t(tt), x(xx), y(yy) {}
+    B(X<T> xx, Y<T> yy): t(xx.t), x(xx), y(yy) {}
+    T    t;
     X<T> x;
     Y<T> y;
 };
@@ -29,11 +23,11 @@ class C
 {
 public:
     template <class X>
-    C(X xx) : t(xx.t)
+    C(X xx): t(xx.t)
     {
     }
-    T t;
-    void foo(void){}
+    T    t;
+    void foo(void) {}
 };
 
 template <class X>
@@ -54,5 +48,5 @@ int main(void)
     std::cout << typeid(bbbb).name() << std::endl;
     std::cout << typeid(c).name() << std::endl;
     std::cout << typeid(A<int>::Type).name() << std::endl;
-    std::cout << typeid(& C<int>::foo).name() << std::endl;
+    std::cout << typeid(&C<int>::foo).name() << std::endl;
 }

@@ -1,20 +1,20 @@
-#include<iostream>
+#include <iostream>
 int main(void)
 {
-	int n,q;
-	while(std::cin>>n>>q)
-	{
-		for(int i = 0;i<q;i++)
-		{
-			int x;
-			std::cin>>x;
-			while(x%2==0)
-			{
-				x= n+x/2;
-			}
-			std::cout<<(x+1)/2<<std::endl;
-		}
-	}
+    int n, q;
+    while(std::cin >> n >> q)
+    {
+        for(int i = 0; i < q; i++)
+        {
+            int x;
+            std::cin >> x;
+            while(x % 2 == 0)
+            {
+                x = n + x / 2;
+            }
+            std::cout << (x + 1) / 2 << std::endl;
+        }
+    }
 }
 /*
 1+2+3+4+5+6
@@ -25,7 +25,7 @@ the ith move,move (2*n-i) to 2*(n-i)th pos
 x = 2*(n-i)
 n-i = x/2
 i = n-x/2
-(2*n-i)=n+x/2 
+(2*n-i)=n+x/2
 */
 /*
 1 2 3 4

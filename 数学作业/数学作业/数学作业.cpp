@@ -6,14 +6,13 @@
 
 int main()
 {
-	int a = 2;
-	int x = 4;
-	int y = pow(a,x);
-	while(y <= 10*x+3)
-	{
-		x++;
-		y = pow(a, x);
-	}
-	return x;
+    int a = 2;
+    int x = 4;
+    int y = pow(a, x);
+    while(y <= 10 * x + 3)
+    {
+        x++;
+        y = pow(a, x);
+    }
+    return x;
 }
-

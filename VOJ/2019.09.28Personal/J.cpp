@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
-#include <cstdio>
-#include <stack>
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
+#include <stack>
 #include <vector>
 struct S_tree;
 const int INF = 0x7fffffff;
@@ -14,9 +14,10 @@ const int MOD = 998244353;
 // 	S_tree *lSon;
 // 	S_tree *rSon;
 // 	size_t l, r, mid;
-// 	int lazy;															 //0 or 2 or 3//if range is bigger than my range than lazy and just mul the best with i
-// 	int best;															 //best is the smallest rec in (l,r)
-// 	inline void ini(size_t size, size_t from = 0, S_tree *parent = NULL) //:l(from),r(from+size),p(parent),lazy(0),best(0)
+// 	int lazy;															 //0 or
+// 2 or 3//if range is bigger than my range than lazy and just mul the best with i 	int best;
+// //best is the smallest rec in (l,r) 	inline void ini(size_t size, size_t from = 0, S_tree *parent
+// = NULL) //:l(from),r(from+size),p(parent),lazy(0),best(0)
 // 	{
 // 		struct V
 // 		{
@@ -188,19 +189,19 @@ const int MOD = 998244353;
 
 inline long long qpow(long long base, long long p)
 {
-	long long ans = 1;
-	while (p)
-	{
-		if (p & 1)
-		{
-			ans *= base;
-			ans %= MOD;
-		}
-		base *= base;
-		base %= MOD;
-		p >>= 1;
-	}
-	return ans;
+    long long ans = 1;
+    while(p)
+    {
+        if(p & 1)
+        {
+            ans *= base;
+            ans %= MOD;
+        }
+        base *= base;
+        base %= MOD;
+        p >>= 1;
+    }
+    return ans;
 }
 // int main(void)
 // {
@@ -248,32 +249,32 @@ inline long long qpow(long long base, long long p)
 */
 int main(void)
 {
-	int t;
-	std::cin >> t;
-	while (t--)
-	{
-		int n, m;
-		std::cin >> n >> m;
-		std::vector<int> vec[2];
-		vec[0].resize(n + 1);
-		vec[1].resize(n + 1);
-		for (int i = 0; i < m; i++)
-		{
-			int l, r, j;
-			scanf("%d%d%d", &l, &r, &j);
-			vec[j - 2][l - 1]++;
-			vec[j - 2][r]--;
-		}
-		int a = INF, b = INF;
-		int sa = 0, sb = 0;
-		for (int i = 0; i < n; i++)
-		{
-			sa += vec[0][i];
-			sb += vec[1][i];
-			a = std::min(a, sa);
-			b = std::min(b, sb);
-		}
-		long long ans = (qpow(2, a) * qpow(3, b))%MOD;
-		printf("%lld\n", ans);
-	}
+    int t;
+    std::cin >> t;
+    while(t--)
+    {
+        int n, m;
+        std::cin >> n >> m;
+        std::vector<int> vec[2];
+        vec[0].resize(n + 1);
+        vec[1].resize(n + 1);
+        for(int i = 0; i < m; i++)
+        {
+            int l, r, j;
+            scanf("%d%d%d", &l, &r, &j);
+            vec[j - 2][l - 1]++;
+            vec[j - 2][r]--;
+        }
+        int a = INF, b = INF;
+        int sa = 0, sb = 0;
+        for(int i = 0; i < n; i++)
+        {
+            sa += vec[0][i];
+            sb += vec[1][i];
+            a = std::min(a, sa);
+            b = std::min(b, sb);
+        }
+        long long ans = (qpow(2, a) * qpow(3, b)) % MOD;
+        printf("%lld\n", ans);
+    }
 }

@@ -1,33 +1,34 @@
-#include <iostream> //stream
-#include <iomanip>
-#include <string>
 #include <algorithm>
-#include <vector>
+#include <iomanip>
+#include <iostream>  //stream
+#include <string>
 #include <thread>
+#include <vector>
 //#include <unistd.h>
 using namespace std;
-const int wide = 2;
+const int  wide        = 2;
 const char placeHolder = ' ';
-const int sleepBase = 500;
+const int  sleepBase   = 500;
 
 template <class T>
 static void autoPrint(T &t)
 {
-    for (auto i : t)
+    for(auto i: t)
     {
         std::cout << std::setw(wide) << std::setfill(placeHolder) << i;
     }
 }
 
-static vector<size_t> KMP_string_matcher(const string &target, const string &key, const vector<size_t> &next)
+static vector<size_t>
+KMP_string_matcher(const string &target, const string &key, const vector<size_t> &next)
 {
     vector<size_t> ans;
-    size_t j = 0;
+    size_t         j = 0;
     autoPrint(target);
     std::cout << std::endl;
-    for (size_t i = 0; i < target.length(); i++)
+    for(size_t i = 0; i < target.length(); i++)
     {
-        while (j != 0 && target[i] != key[j])
+        while(j != 0 && target[i] != key[j])
         {
             j = next[j - 1];
         }
@@ -35,14 +36,14 @@ static vector<size_t> KMP_string_matcher(const string &target, const string &key
         std::cout << outputPrefix;
         auto ss = key.substr(j);
         autoPrint(ss);
-        //Sleep(sleepBase);
+        // Sleep(sleepBase);
         std::this_thread::sleep_for(std::chrono::milliseconds(sleepBase));
         std::cout << '\r' << std::flush;
-        if (target[i] == key[j])
+        if(target[i] == key[j])
         {
             j++;
         }
-        if (j == key.length())
+        if(j == key.length())
         {
             ans.push_back(i - j + 1);
             std::cout << string(wide * (i + j + 1), ' ');
@@ -63,17 +64,17 @@ static vector<size_t> KMP_string_matcher(const string &target, const string &key
 }
 static vector<size_t> &caculateNext(const string &key, vector<size_t> &next)
 {
-    //vector<int> next;
+    // vector<int> next;
     next.clear();
     next.resize(key.length(), 0);
     size_t j = 0;
-    for (size_t i = 1; i < key.length(); i++)
+    for(size_t i = 1; i < key.length(); i++)
     {
-        while (j != 0 && key[j] != key[i])
+        while(j != 0 && key[j] != key[i])
         {
             j = next[j - 1];
         }
-        if (key[j] == key[i])
+        if(key[j] == key[i])
         {
             ++j;
         }
@@ -89,19 +90,19 @@ static vector<size_t> caculateNext(const string &key)
 }
 int main(void)
 {
-    string key, target;
+    string         key, target;
     vector<size_t> pi;
     vector<size_t> result;
-    //std::string stringHolder(placeHolder, wide - 1);
-    while (std::cin >> key >> target)
+    // std::string stringHolder(placeHolder, wide - 1);
+    while(std::cin >> key >> target)
     {
-        pi = caculateNext(key);
+        pi     = caculateNext(key);
         result = KMP_string_matcher(target, key, pi);
         autoPrint(pi);
         std::cout << std::endl;
         autoPrint(key);
         std::cout << std::endl;
-        //for (auto u : result)
+        // for (auto u : result)
         // {
         //     cout << u << endl;
         // }

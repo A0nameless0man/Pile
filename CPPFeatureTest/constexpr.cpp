@@ -10,7 +10,7 @@
     }
 constexpr int fib(int n)
 {
-    if (n == 1 || n == 2)
+    if(n == 1 || n == 2)
     {
         return 1;
     }
@@ -22,18 +22,19 @@ constexpr int fib(int n)
 
 int main(void)
 {
-    int g;
+    int       g;
     const int test = 41;
     {
-        clock_t cstart = clock();
-        constexpr int x = fib(test);
-        clock_t cend = clock();
-        std::cout << "It takes " << ((cend - cstart) / 1) << " clock to exec constexpr" << std::endl;
+        clock_t       cstart = clock();
+        constexpr int x      = fib(test);
+        clock_t       cend   = clock();
+        std::cout << "It takes " << ((cend - cstart) / 1) << " clock to exec constexpr"
+                  << std::endl;
         std::cout << x << std::endl;
     }
     TIMING(g = fib(test))
 
-    //std::cout << "notconstexpr:" << std::endl;
-    //TIMING((n = fib(30)));
+    // std::cout << "notconstexpr:" << std::endl;
+    // TIMING((n = fib(30)));
     return g;
 }

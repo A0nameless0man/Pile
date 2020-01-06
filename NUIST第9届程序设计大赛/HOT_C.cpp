@@ -1,7 +1,7 @@
-#include<stdio.h>
+#include <stdio.h>
 /*
 C :瓷砖铺放
-时间限制:  1000MS   空间限制:  16MB   提交数:  54   通过数:  48  
+时间限制:  1000MS   空间限制:  16MB   提交数:  54   通过数:  48
 题目内容
 
 题目描述:
@@ -38,4 +38,10 @@ C :瓷砖铺放
 
 5
 */
-int main(void){int a[]={0,1,2,3,5,8,13,21,34,55,89};while(scanf("%d",a)!=EOF)printf("%d\n",a[a[0]]);return 0;}
+int main(void)
+{
+    int a[] = { 0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 };
+    while(scanf("%d", a) != EOF)
+        printf("%d\n", a[a[0]]);
+    return 0;
+}

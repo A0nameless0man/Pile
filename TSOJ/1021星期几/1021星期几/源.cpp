@@ -19,13 +19,13 @@
 
 2
 */
-#include<stdio.h>
+#include <stdio.h>
 int main(void)
 {
-	int n;
-	while (scanf("%d",&n)!=EOF)
-	{
-		printf("%d\n", ((n-1) % 7)+1);
-	}
-	return 0;
+    int n;
+    while(scanf("%d", &n) != EOF)
+    {
+        printf("%d\n", ((n - 1) % 7) + 1);
+    }
+    return 0;
 }

@@ -42,9 +42,9 @@ size_t guardedSequenceFind(std::vector<T> &vec, const T &key)
 template <typename T>
 std::pair<size_t, size_t> binarySearch(std::vector<T> &vec, const T &key)
 {
-    size_t l = 0;
-    size_t r = vec.size();
-    int count = 0;
+    size_t l     = 0;
+    size_t r     = vec.size();
+    int    count = 0;
     while(l < r)
     {
         size_t mid = (l + r) / 2;
@@ -66,7 +66,7 @@ const size_t TIMES = 1000;
 
 int main(void)
 {
-     size_t n;
+    size_t n;
     while(std::cin >> n)
     {
         std::vector<size_t> a;
@@ -75,24 +75,26 @@ int main(void)
         {
             a.push_back(i);
         }
-        
+
         size_t tar;
         std::cin >> tar;
 
         {
             myclock c;
 
-            for(size_t i = 0; i < TIMES; ++i) {
+            for(size_t i = 0; i < TIMES; ++i)
+            {
                 // sequenceFind(a, tar);
                 auto it = std::find(a.begin(), a.end(), tar);
             }
-                
+
             cout << c.count() << endl;
         }
         {
             myclock c;
- 
-            for(size_t i = 0; i < TIMES; ++i) {
+
+            for(size_t i = 0; i < TIMES; ++i)
+            {
                 // binarySearch(a, tar);
                 auto it = std::lower_bound(a.begin(), a.end(), tar);
             }

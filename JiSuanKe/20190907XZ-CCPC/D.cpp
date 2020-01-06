@@ -1,51 +1,51 @@
-#include <iostream>
-#include <string>
-#include <stdio.h>
-#include <iostream> //stream
-#include <sstream>  //stringstream
-#include <fstream>  //file
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
-#include <string>
 #include <algorithm>
-//STL
+#include <ctype.h>
+#include <fstream>  //file
+#include <iostream>
+#include <iostream>  //stream
+#include <math.h>
+#include <sstream>  //stringstream
+#include <stdio.h>
+#include <string.h>
+#include <string>
+// STL
 #include <map>
-#include <set>
-#include <vector>
 #include <queue>
+#include <set>
 #include <stack>
-//STL
+#include <vector>
+// STL
 #ifdef DEBUG
-#include <Windows.h> //sleep()
-#include <stdlib.h>  //system("pause")
-#endif               // DEBUG
+#    include <Windows.h>  //sleep()
+#    include <stdlib.h>   //system("pause")
+#endif                    // DEBUG
 
-//template <typename T> void swap(T &a, T &b)
+// template <typename T> void swap(T &a, T &b)
 //{
 //	T t = a;
 //	a = b;
 //	b = t;
 //}
 using namespace std;
-using LL = long long;
-using ULL = unsigned long long;
+using LL        = long long;
+using ULL       = unsigned long long;
 const int MAX_N = 10007;
-vector<size_t> KMP_string_matcher(const string &target, const string &key, const vector<size_t> &next)
+vector<size_t>
+KMP_string_matcher(const string &target, const string &key, const vector<size_t> &next)
 {
     vector<size_t> ans;
-    size_t j = 0;
-    for (size_t i = 0; i < target.length(); i++)
+    size_t         j = 0;
+    for(size_t i = 0; i < target.length(); i++)
     {
-        while (j != 0 && target[i] != key[j])
+        while(j != 0 && target[i] != key[j])
         {
-            j = next[j-1];
+            j = next[j - 1];
         }
-        if (target[i] == key[j])
+        if(target[i] == key[j])
         {
             j++;
         }
-        if (j == key.length())
+        if(j == key.length())
         {
             ans.push_back(i - j + 1);
             j = next[j - 1];
@@ -55,18 +55,18 @@ vector<size_t> KMP_string_matcher(const string &target, const string &key, const
 }
 vector<size_t> &caculateNext(const string &key, vector<size_t> &next)
 {
-    //vector<int> next;
+    // vector<int> next;
     next.clear();
     next.resize(key.length());
-    next[0] = 0;
+    next[0]  = 0;
     size_t j = 0;
-    for (size_t i = 1; i < key.length(); i++)
+    for(size_t i = 1; i < key.length(); i++)
     {
-        while (j != 0 && key[j] != key[i])
+        while(j != 0 && key[j] != key[i])
         {
             j = next[j];
         }
-        if (key[j] == key[i])
+        if(key[j] == key[i])
         {
             ++j;
         }
@@ -87,20 +87,20 @@ bool isSubStr(const string &key, const string &tar)
 int main(void)
 {
     char buf[100007];
-    scanf("%s",buf);
+    scanf("%s", buf);
     std::string T(buf);
-    int q;
-    std::cin>>q;
-    while (q--)
+    int         q;
+    std::cin >> q;
+    while(q--)
     {
-        scanf("%s",buf);
+        scanf("%s", buf);
         std::string S(buf);
 
-        //std::cout<<T<<std::endl<<S<<std::endl;
+        // std::cout<<T<<std::endl<<S<<std::endl;
 
-        if (T.length() > S.length())
+        if(T.length() > S.length())
         {
-            if (isSubStr(S,T))
+            if(isSubStr(S, T))
             {
                 std::cout << "my child!" << std::endl;
             }
@@ -111,9 +111,9 @@ int main(void)
         }
         else
         {
-            if (S.length() != T.length())
+            if(S.length() != T.length())
             {
-                if (isSubStr(T,S))
+                if(isSubStr(T, S))
                 {
                     std::cout << "my teacher!" << std::endl;
                 }
@@ -124,13 +124,13 @@ int main(void)
             }
             else
             {
-                if(S==T)
+                if(S == T)
                 {
-                    std::cout<<"jntm!"<<std::endl;
+                    std::cout << "jntm!" << std::endl;
                 }
                 else
                 {
-                    std::cout<<"friend!"<<std::endl;
+                    std::cout << "friend!" << std::endl;
                 }
             }
         }

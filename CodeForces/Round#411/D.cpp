@@ -1,15 +1,15 @@
-#include<cstdio>
-#include<iostream>
+#include <cstdio>
+#include <iostream>
 char input[1000007];
-int main(void)
+int  main(void)
 {
-    while(scanf("%s",input)!=EOF)
+    while(scanf("%s", input) != EOF)
     {
-        long long ans=0, sum = 0;
-        int i = 0;
-        while(input[i]!='\0')
+        long long ans = 0, sum = 0;
+        int       i = 0;
+        while(input[i] != '\0')
         {
-            if(input[i]=='a')
+            if(input[i] == 'a')
             {
                 sum += 1 + sum;
             }
@@ -21,7 +21,7 @@ int main(void)
             sum %= 1000000007;
             ++i;
         }
-        //printf("%d\n", ans);
+        // printf("%d\n", ans);
         std::cout << ans << std::endl;
     }
     return 0;

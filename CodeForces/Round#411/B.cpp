@@ -1,12 +1,12 @@
-#include<iostream>
+#include <iostream>
 int main(void)
 {
     int n;
-    while(std::cin>>n)
+    while(std::cin >> n)
     {
         while(n--)
         {
-            if(n%4<2)
+            if(n % 4 < 2)
             {
                 std::cout << 'a';
             }

@@ -5,21 +5,19 @@
 int main(void)
 {
     // setvbuf(stdout, buf, _IOFBF, BUF_SIZE);
-    for (int i = 0; i < 256; i++)
+    for(int i = 0; i < 256; i++)
     {
         // std::cout << "i:\t" << i << "\t";
-        std::cout << "\033[48;5;" << i << "m"
-             << i << "\t\033[0m" << std::flush;
-        if (i && !((i + 3) % 6))
+        std::cout << "\033[48;5;" << i << "m" << i << "\t\033[0m" << std::flush;
+        if(i && !((i + 3) % 6))
         {
             std::cout << std::endl;
         }
         else
         {
-            std::cout<<std::flush;
+            std::cout << std::flush;
         }
-        
     }
-    //while(1);
+    // while(1);
     return 0;
 }

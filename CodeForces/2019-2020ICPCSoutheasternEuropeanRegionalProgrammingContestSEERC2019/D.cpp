@@ -1,19 +1,19 @@
-#include<iostream>
-#include<algorithm>
-#include<string>
+#include <algorithm>
+#include <iostream>
+#include <string>
 int main(void)
 {
     std::string s;
-    std::cin>>s;
-    std::sort(s.begin(),s.end());
-    if(*s.begin()==*s.rbegin())
+    std::cin >> s;
+    std::sort(s.begin(), s.end());
+    if(*s.begin() == *s.rbegin())
     {
-        std::cout<<"NO"<<std::endl;
+        std::cout << "NO" << std::endl;
     }
     else
     {
-        std::cout<<"YES"<<std::endl;
-        std::cout<<s<<std::endl;
+        std::cout << "YES" << std::endl;
+        std::cout << s << std::endl;
     }
     return 0;
 }

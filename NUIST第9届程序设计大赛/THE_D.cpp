@@ -1,14 +1,15 @@
-#include<stdio.h>
+#include <stdio.h>
 /*
 D :满减优惠券
-时间限制:  1000MS   空间限制:  32MB   提交数:  123   通过数:  15  
+时间限制:  1000MS   空间限制:  32MB   提交数:  123   通过数:  15
 题目内容
 
 题目描述
 
 每天我们都会思考一个令人纠结的难题：晚上吃什么。你打开手机想点个外卖，发现自己有一张满减优惠券快要过期了。
 
-你选择了一家餐厅，这家餐厅一共有N道菜品，价格分别是A1, A2, ... , AN元。只要消费满X元，就可以用掉这张优惠券。
+你选择了一家餐厅，这家餐厅一共有N道菜品，价格分别是A1, A2, ... ,
+AN元。只要消费满X元，就可以用掉这张优惠券。
 
 你希望选择若干道不同的菜品，使得总价在不低于X元的同时尽量低。
 
@@ -42,48 +43,46 @@ D :满减优惠券
 
 -1
 */
-int p[105]={0},x,n,sum;
+int p[105] = { 0 }, x, n, sum;
 int main(void)
 {
-	scanf("%*d");
-	while(scanf("%d%d",&n,&x)!=EOF)
-	{
-		sum = 0;
-		for(int i=0;i<n;i++)
-		{
-			scanf("%d",&p[i]);
-			sum+=p[i];
-		}
-		if(sum<x)
-		{
-			printf("-1");
-			continue;
-		}
-		else
-		{
-			int k[105]={0};
-			while(k[n]==0)
-			{
-				int r=0;
-				for(int i=0;i<n;i++)
-				{
-					r+=p[i]*k[i];
-				}
-				if(r>=x&&r<sum)
-				{
-					sum=r;
-				}
-				k[0]++;
-				for(int i=0;i<n;i++)
-				{
-					k[i+1]+=k[i]/2;
-					k[i]%=2;
-				}
-			}
-			printf("%d\n",sum);
-		}
-	
-		
-	}
-	return 0;
+    scanf("%*d");
+    while(scanf("%d%d", &n, &x) != EOF)
+    {
+        sum = 0;
+        for(int i = 0; i < n; i++)
+        {
+            scanf("%d", &p[i]);
+            sum += p[i];
+        }
+        if(sum < x)
+        {
+            printf("-1");
+            continue;
+        }
+        else
+        {
+            int k[105] = { 0 };
+            while(k[n] == 0)
+            {
+                int r = 0;
+                for(int i = 0; i < n; i++)
+                {
+                    r += p[i] * k[i];
+                }
+                if(r >= x && r < sum)
+                {
+                    sum = r;
+                }
+                k[0]++;
+                for(int i = 0; i < n; i++)
+                {
+                    k[i + 1] += k[i] / 2;
+                    k[i] %= 2;
+                }
+            }
+            printf("%d\n", sum);
+        }
+    }
+    return 0;
 }

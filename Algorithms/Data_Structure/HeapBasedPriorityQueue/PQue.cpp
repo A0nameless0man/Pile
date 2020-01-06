@@ -1,7 +1,7 @@
 #ifndef PriQue
-#include"PriorityQueue.h"
+#    include "PriorityQueue.h"
 namespace P_Queue
 {
 }
-#endif //!PriQue
+#endif  //! PriQue
 #define PriQue

@@ -12,13 +12,13 @@
 //
 ////std::map<line,cos> mp;
 ////using iter = std::map<line,cos>::iterator;
-//const int MAX = 100005;
-//const long long INF = (long long)5e10;
+// const int MAX = 100005;
+// const long long INF = (long long)5e10;
 ////line lines[MAX];
-//long long cost[MAX];
-//long long p[MAX];
-//long long s[MAX];
-//int main(void)
+// long long cost[MAX];
+// long long p[MAX];
+// long long s[MAX];
+// int main(void)
 //{
 //	std::ios::sync_with_stdio(false);
 //	int T;
@@ -83,65 +83,65 @@
 //			}
 //			while (s[left] > q)left--;
 //			long long cq = std::min(p[left] * q, cost[left + 1]);
-//			//	 long long cq = (q > lines[left].e) ? lines[left].cost[1] : lines[left].cost[0] * q;
-//			std::cout << cq << std::endl;
+//			//	 long long cq = (q > lines[left].e) ? lines[left].cost[1] :
+//lines[left].cost[0] * q; 			std::cout << cq << std::endl;
 //		}
 //	}
 //	//system("pause");
 //	return 0;
 //}
-#include<iostream>
-#include<stdio.h>
-#include<algorithm>
-const int MAX = 100005;
+#include <algorithm>
+#include <iostream>
+#include <stdio.h>
+const int       MAX = 100005;
 const long long INF = 0x3f3f3f3f3f3f3f3f;
-long long cost[MAX];
-long long p[MAX];
-long long s[MAX];
-int main(void)
+long long       cost[MAX];
+long long       p[MAX];
+long long       s[MAX];
+int             main(void)
 {
-	//std::ios::sync_with_stdio(false);
-	int T;
-	std::cin >> T;
-	while (T--)
-	{
-		int n, m;
-		std::cin >> n >> m;
-		for (int i = 1; i <= n; i++)
-		{
-			std::cin >> s[i] >> p[i];
-			scanf("%lld%lld", &s[i], &p[i]);
-			cost[i] = s[i] * p[i];
-		}
-		cost[n+1] = INF;
-		for(int i= n;i;--i)
-		{
-			cost[i] = std::min(cost[i], cost[i + 1]);
-		}
-		long long q;
-		for (int i = 0; i < m; i++)
-		{
-			std::cin >> q;
-			//scanf("%lld", &q);
-			int left = 1;
-			int right = n+1;
-			int mid;
-			while (left<right-1)
-			{
-				mid = (left + right) / 2;
-				if (s[mid]<=q)
-				{
-					left = mid;
-				}
-				else
-				{
-					right = mid;
-				}
-			}
-			long long cq = std::min(p[left] * q, cost[left + 1]);
-			std::cout << cq << std::endl;
-			//printf("%lld\n", cq);
-		}
-	}
-	return 0;
+    // std::ios::sync_with_stdio(false);
+    int T;
+    std::cin >> T;
+    while(T--)
+    {
+        int n, m;
+        std::cin >> n >> m;
+        for(int i = 1; i <= n; i++)
+        {
+            std::cin >> s[i] >> p[i];
+            scanf("%lld%lld", &s[i], &p[i]);
+            cost[i] = s[i] * p[i];
+        }
+        cost[n + 1] = INF;
+        for(int i = n; i; --i)
+        {
+            cost[i] = std::min(cost[i], cost[i + 1]);
+        }
+        long long q;
+        for(int i = 0; i < m; i++)
+        {
+            std::cin >> q;
+            // scanf("%lld", &q);
+            int left  = 1;
+            int right = n + 1;
+            int mid;
+            while(left < right - 1)
+            {
+                mid = (left + right) / 2;
+                if(s[mid] <= q)
+                {
+                    left = mid;
+                }
+                else
+                {
+                    right = mid;
+                }
+            }
+            long long cq = std::min(p[left] * q, cost[left + 1]);
+            std::cout << cq << std::endl;
+            // printf("%lld\n", cq);
+        }
+    }
+    return 0;
 }

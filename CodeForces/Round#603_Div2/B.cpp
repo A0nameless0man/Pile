@@ -1,38 +1,38 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <string>
 
 int main(void)
 {
     int t;
-    while (std::cin >> t)
+    while(std::cin >> t)
     {
-        while (t--)
+        while(t--)
         {
             int n;
             std::cin >> n;
             int count[4][10];
-            for (int x = 0; x < 10; ++x)
-                for (int y = 0; y < 4; ++y)
+            for(int x = 0; x < 10; ++x)
+                for(int y = 0; y < 4; ++y)
                     count[y][x] = 0;
             std::string input[10];
-            for (int i = 0; i < n; ++i)
+            for(int i = 0; i < n; ++i)
             {
                 std::cin >> input[i];
-                for (int j = 0; j < 4; ++j)
+                for(int j = 0; j < 4; ++j)
                 {
                     ++count[j][input[i][j] - '0'];
                 }
             }
-            //std::sort(input, input + n);
+            // std::sort(input, input + n);
             int ans = 0;
-            for (int i = 0; i < n; ++i)
-                for (int j = 0; j < i; ++j)
+            for(int i = 0; i < n; ++i)
+                for(int j = 0; j < i; ++j)
                 {
-                    if (input[j] == input[i])
+                    if(input[j] == input[i])
                     {
                         int x = 0, y = 0;
-                        while (count[x][y])
+                        while(count[x][y])
                         {
                             y++;
                             x += y / 10;
@@ -45,7 +45,7 @@ int main(void)
                     }
                 }
             std::cout << ans << std::endl;
-            for (int i = 0; i < n; ++i)
+            for(int i = 0; i < n; ++i)
             {
                 std::cout << input[i] << std::endl;
             }
