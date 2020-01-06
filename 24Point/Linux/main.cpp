@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <math.h>
-float easy(float a, float b, int way)
+static double easy(double a, double b, int way)
 {
     //使用int指示运算符以使用for循环
     switch(way)
@@ -12,7 +12,7 @@ float easy(float a, float b, int way)
         case 2:
             return (a * b);
         case 3:
-            if(b != 0)
+            if(fabs(b) > 0)
             {
                 return (a / b);
             }
@@ -22,10 +22,9 @@ float easy(float a, float b, int way)
             }
         default:
             return 0;
-            break;
     }
 }
-bool count(int *input, int *caculate)
+static bool count(int *input, int *caculate)
 {
     //超多for循环嵌套在此
     //此处决定运算符
@@ -58,7 +57,6 @@ bool count(int *input, int *caculate)
                                caculate[2]) -
                              24) <= 0.00005)
                         {
-
                             return true;
                         }
                     }
@@ -68,8 +66,7 @@ bool count(int *input, int *caculate)
     }
     return false;
 }
-
-bool trarange(int *input, int *output, int *caculate)
+static bool trarange(int *input, int *output, int *caculate)
 {
     //此处决定运算顺序
     for(size_t m = 0; m < 4; m++)
