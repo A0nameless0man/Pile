@@ -6,7 +6,7 @@
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>  //¼ÓÕâ¸öÍ·ÎÄ¼şºóÃæsleep»áÓÃµ½
+#include <windows.h>  //åŠ è¿™ä¸ªå¤´æ–‡ä»¶åé¢sleepä¼šç”¨åˆ°
 //#pragma comment(lib,"ws2_32.lib")
 #pragma comment(lib, "ws2_32.lib")
 
@@ -32,20 +32,20 @@ int   main()
 {
     int ret;
 
-    WSADATA dat;  //¿â°æ±¾ĞÅÏ¢½á¹¹
-                  // WSADATA½á¹¹±»ÓÃÀ´´¢´æµ÷ÓÃAfxSocketInitÈ«¾Öº¯Êı·µ»ØµÄWindows Sockets³õÊ¼»¯ĞÅÏ¢¡£
+    WSADATA dat;  //åº“ç‰ˆæœ¬ä¿¡æ¯ç»“æ„
+                  // WSADATAç»“æ„è¢«ç”¨æ¥å‚¨å­˜è°ƒç”¨AfxSocketInitå…¨å±€å‡½æ•°è¿”å›çš„Windows Socketsåˆå§‹åŒ–ä¿¡æ¯ã€‚
     DWORD version;
 
     version = MAKEWORD(2, 2);
-    // MAKEWORD(2,2)±íÊ¾Ê¹ÓÃWINSOCK2°æ±¾.wsaDataÓÃÀ´´æ´¢ÏµÍ³´«»ØµÄ¹ØÓÚWINSOCKµÄ×ÊÁÏ.
+    // MAKEWORD(2,2)è¡¨ç¤ºä½¿ç”¨WINSOCK2ç‰ˆæœ¬.wsaDataç”¨æ¥å­˜å‚¨ç³»ç»Ÿä¼ å›çš„å…³äºWINSOCKçš„èµ„æ–™.
 
     ret = WSAStartup(version, &dat);
-    //´Ëº¯ÊıÔÚÓ¦ÓÃ³ÌĞòÖĞ³õÊ¼»¯winsockDLL,¸ñÊ½£ºint PASCAL FAR WSAStartup( WORD wVersionRequested,
+    //æ­¤å‡½æ•°åœ¨åº”ç”¨ç¨‹åºä¸­åˆå§‹åŒ–winsockDLL,æ ¼å¼ï¼šint PASCAL FAR WSAStartup( WORD wVersionRequested,
     //LPWSADATA lpWSAData );
 
     if(ret != 0)
     {
-        printf("¼ÓÔØÌ×½Ó×ÖÊ§°Ü!\n");
+        printf("åŠ è½½å¥—æ¥å­—å¤±è´¥!\n");
         WSACleanup();
         return NETWORK_ERROR;
     }
@@ -60,7 +60,7 @@ int   main()
 
         if(starting_port < PORT_MIN)
         {
-            printf("ÆğÊ¼¶Ë¿Ú³ö´í\n");
+            printf("èµ·å§‹ç«¯å£å‡ºé”™\n");
             WSACleanup();
             return NETWORK_ERROR;
         }
@@ -70,7 +70,7 @@ int   main()
 
         if(ending_port > PORT_MAX)
         {
-            printf("ÖÕµã¶Ë¿Ú³ö´í\n");
+            printf("ç»ˆç‚¹ç«¯å£å‡ºé”™\n");
             WSACleanup();
             return NETWORK_ERROR;
         }
@@ -79,17 +79,17 @@ int   main()
         for(int i = starting_port; i <= ending_port; i++)
         {
             ports.push(int(i));
-        }  //½«ÈÎÎñ¼ÓÈë¶ÓÁĞ
+        }  //å°†ä»»åŠ¡åŠ å…¥é˜Ÿåˆ—
         ThreadLock = false;
         for(int i = 0; i < ThreadCount; i++)
         {
             hThread = CreateThread(0, 0, (LPTHREAD_START_ROUTINE) portscan, 0, 0, &hID);
-            // Thread1 = CreateThread(  0, Ä¬ÈÏÏß³Ì¶ÑÕ»´óĞ¡ 0(2M) ThreadProc,Ïß³ÌÈë¿Úº¯Êı 0,´´½¨±êÊ¶
-            // 0´ú±íÁ¢¼´Ö´ĞĞ,&Thread1ID»ñµÃÏß³ÌID);
+            // Thread1 = CreateThread(  0, é»˜è®¤çº¿ç¨‹å †æ ˆå¤§å° 0(2M) ThreadProc,çº¿ç¨‹å…¥å£å‡½æ•° 0,åˆ›å»ºæ ‡è¯†
+            // 0ä»£è¡¨ç«‹å³æ‰§è¡Œ,&Thread1IDè·å¾—çº¿ç¨‹ID);
 
             if(hThread == 0)
             {
-                printf("´´½¨Ïß³ÌÊ§°Ü\n");
+                printf("åˆ›å»ºçº¿ç¨‹å¤±è´¥\n");
                 WSACleanup();
                 return NETWORK_ERROR;
             }
@@ -99,14 +99,14 @@ int   main()
                 hIDs.insert(hID);
             }
         }
-        // Sleep(-1);//½ø³Ì¹ÒÆğ
+        // Sleep(-1);//è¿›ç¨‹æŒ‚èµ·
         while(ThreadOpened)
-            ;  //µÈµ½ËùÓĞ½ø³Ì½áÊøºó
+            ;  //ç­‰åˆ°æ‰€æœ‰è¿›ç¨‹ç»“æŸå
         printf("Number of ports opened = %d\n", nopen);
     }
     WSACleanup();
-    // WSAStartupÓ¦¸ÃÓëWSACleanup³É¶ÔÊ¹ÓÃ£¬WSAStartupµÄ¹¦ÄÜÊÇ³õÊ¼»¯Winsock DLL£¬
-    // WSACleanupÊÇÀ´½â³ıÓëSocket¿âµÄ°ó¶¨²¢ÇÒÊÍ·ÅSocket¿âËùÕ¼ÓÃµÄÏµÍ³×ÊÔ´¡£
+    // WSAStartupåº”è¯¥ä¸WSACleanupæˆå¯¹ä½¿ç”¨ï¼ŒWSAStartupçš„åŠŸèƒ½æ˜¯åˆå§‹åŒ–Winsock DLLï¼Œ
+    // WSACleanupæ˜¯æ¥è§£é™¤ä¸Socketåº“çš„ç»‘å®šå¹¶ä¸”é‡Šæ”¾Socketåº“æ‰€å ç”¨çš„ç³»ç»Ÿèµ„æºã€‚
 
     return NETWORK_OK;
 }
@@ -116,15 +116,15 @@ DWORD portscan()
     // printf("\nScanning [%s]...\n", hostname);
     int i, nret;
 
-    SOCKET    thesocket;  //¶¨Òå·şÎñÆ÷Ì×½Ó×Ö
+    SOCKET    thesocket;  //å®šä¹‰æœåŠ¡å™¨å¥—æ¥å­—
     LPHOSTENT hostent;
 
     thesocket =
       socket(AF_INET,
              SOCK_STREAM,
-             IPPROTO_TCP);  //µÚÒ»¸ö±äÁ¿ÎªĞ­Òé´Ø£¬µÚ¶ş¸ö±äÁ¿ÎªÌ×½Ó×ÖÀàĞÍ£¬µÚÈı¸ö±äÁ¿ÎªÊ¹ÓÃµÄÍ¨ĞÅĞ­Òé
+             IPPROTO_TCP);  //ç¬¬ä¸€ä¸ªå˜é‡ä¸ºåè®®ç°‡ï¼Œç¬¬äºŒä¸ªå˜é‡ä¸ºå¥—æ¥å­—ç±»å‹ï¼Œç¬¬ä¸‰ä¸ªå˜é‡ä¸ºä½¿ç”¨çš„é€šä¿¡åè®®
     hostent = gethostbyname((
-      hostname));  // gethostbyname()·µ»Ø¶ÔÓ¦ÓÚ¸ø¶¨Ö÷»úÃûµÄ°üº¬Ö÷»úÃû×ÖºÍµØÖ·ĞÅÏ¢µÄhostent½á¹¹Ö¸Õë¡£
+      hostname));  // gethostbyname()è¿”å›å¯¹åº”äºç»™å®šä¸»æœºåçš„åŒ…å«ä¸»æœºåå­—å’Œåœ°å€ä¿¡æ¯çš„hostentç»“æ„æŒ‡é’ˆã€‚
 
     // for (i = (int)ports.front(),ports.pop(); !ports.empty(); i=(int)ports.front(),ports.pop())
     while(!ports.empty())
@@ -132,10 +132,10 @@ DWORD portscan()
         if(!ThreadLock)
         {
             ThreadLock = true;
-            i          = ports.front();  //ÌáÈ¡¶ÓÁĞÖĞµÚÒ»¸öÔªËØ
-            ports.pop();                 //´Ó¶ÓÁĞÖĞÉ¾È¥µÚÒ»¸öÔªËØ
+            i          = ports.front();  //æå–é˜Ÿåˆ—ä¸­ç¬¬ä¸€ä¸ªå…ƒç´ 
+            ports.pop();                 //ä»é˜Ÿåˆ—ä¸­åˆ å»ç¬¬ä¸€ä¸ªå…ƒç´ 
             ThreadLock = false;
-        }  //½ø³ÌËø·ÀÖ¹¶ÁÈ¡³åÍ»
+        }  //è¿›ç¨‹é”é˜²æ­¢è¯»å–å†²çª
         else
         {
             continue;
@@ -146,23 +146,23 @@ DWORD portscan()
             break;
         }
         // printf("port:%dscaning\n", i);
-        SOCKADDR_IN hostinfo;  //·şÎñÆ÷µØÖ·ĞÅÏ¢½á¹¹
+        SOCKADDR_IN hostinfo;  //æœåŠ¡å™¨åœ°å€ä¿¡æ¯ç»“æ„
 
         hostinfo.sin_family = AF_INET;
-        hostinfo.sin_addr = *((LPIN_ADDR) *hostent->h_addr_list);  // sin.addr´¢´æIPµØÖ·
-        hostinfo.sin_port = htons(i);                              // sin_port´¢´æ¶Ë¿ÚºÅ
+        hostinfo.sin_addr = *((LPIN_ADDR) *hostent->h_addr_list);  // sin.addrå‚¨å­˜IPåœ°å€
+        hostinfo.sin_port = htons(i);                              // sin_portå‚¨å­˜ç«¯å£å·
 
-        // htons ÊÇ½«ÕûĞÍ±äÁ¿´ÓÖ÷»ú×Ö½ÚË³Ğò×ª±ä³ÉÍøÂç×Ö½ÚË³Ğò£¬
-        // ¾ÍÊÇÕûÊıÔÚµØÖ·¿Õ¼ä´æ´¢·½Ê½±äÎª£º¸ßÎ»×Ö½Ú´æ·ÅÔÚÄÚ´æµÄµÍµØÖ·´¦¡£
+        // htons æ˜¯å°†æ•´å‹å˜é‡ä»ä¸»æœºå­—èŠ‚é¡ºåºè½¬å˜æˆç½‘ç»œå­—èŠ‚é¡ºåºï¼Œ
+        // å°±æ˜¯æ•´æ•°åœ¨åœ°å€ç©ºé—´å­˜å‚¨æ–¹å¼å˜ä¸ºï¼šé«˜ä½å­—èŠ‚å­˜æ”¾åœ¨å†…å­˜çš„ä½åœ°å€å¤„ã€‚
 
         nret = connect(thesocket,
                        (LPSOCKADDR) &hostinfo,
-                       sizeof(hostinfo));  // connect£¨£©º¯Êı£º·¢ËÍÒ»¸öÁ¬½ÓÇëÇó£¬·µ»ØÖµÎª 0³É¹¦¡£
-        // TCPÊÇÃæÏòÁ¬½ÓµÄ¡¢¿É¿¿µÄ´«ÊäĞ­Òé¡£
-        //²ÎÊıÒ»£ºÌ×½Ó×ÖÃèÊö·û
-        //²ÎÊı¶ş£ºÖ¸ÏòÊı¾İ»ú¹¹sockaddrµÄÖ¸Õë£¬ÆäÖĞ°üÀ¨Ä¿µÄ¶Ë¿ÚºÍIPµØÖ·
-        //²ÎÊıÈı£º²ÎÊı¶şsockaddrµÄ³¤¶È£¬¿ÉÒÔÍ¨¹ısizeof£¨struct sockaddr£©»ñµÃ
-        //·µ»ØÖµÎª0´ú±í³É¹¦
+                       sizeof(hostinfo));  // connectï¼ˆï¼‰å‡½æ•°ï¼šå‘é€ä¸€ä¸ªè¿æ¥è¯·æ±‚ï¼Œè¿”å›å€¼ä¸º 0æˆåŠŸã€‚
+        // TCPæ˜¯é¢å‘è¿æ¥çš„ã€å¯é çš„ä¼ è¾“åè®®ã€‚
+        //å‚æ•°ä¸€ï¼šå¥—æ¥å­—æè¿°ç¬¦
+        //å‚æ•°äºŒï¼šæŒ‡å‘æ•°æ®æœºæ„sockaddrçš„æŒ‡é’ˆï¼Œå…¶ä¸­åŒ…æ‹¬ç›®çš„ç«¯å£å’ŒIPåœ°å€
+        //å‚æ•°ä¸‰ï¼šå‚æ•°äºŒsockaddrçš„é•¿åº¦ï¼Œå¯ä»¥é€šè¿‡sizeofï¼ˆstruct sockaddrï¼‰è·å¾—
+        //è¿”å›å€¼ä¸º0ä»£è¡¨æˆåŠŸ
         if(nret == 0)
         {
             printf("\n\t%d\n", i);
