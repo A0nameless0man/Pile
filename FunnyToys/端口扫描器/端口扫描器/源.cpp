@@ -2,13 +2,15 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <Winsock2.h>
 #include <commctrl.h>
+#include <cstdlib>
+#include <iostream>
 #include <queue>
 #include <set>
-#include <stdio.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 //#include <windows.h>  //加这个头文件后面sleep会用到
 //#pragma comment(lib,"ws2_32.lib")
-#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "WS2_32.lib")
 
 #define NETWORK_ERROR -1
 #define NETWORK_OK    0
@@ -20,7 +22,7 @@ HANDLE           hThread;
 std::set<DWORD>  hIDs;
 DWORD            hID;
 std::queue<int>  ports;
-char             hostname[30];
+std::string      hostname;
 
 int   starting_port = 0;
 int   ending_port   = 0;
@@ -41,41 +43,42 @@ int   main()
 
     ret = WSAStartup(version, &dat);
     //此函数在应用程序中初始化winsockDLL,格式：int PASCAL FAR WSAStartup( WORD wVersionRequested,
-    //LPWSADATA lpWSAData );
+    // LPWSADATA lpWSAData );
 
     if(ret != 0)
     {
-        printf("加载套接字失败!\n");
+        std::cout << "加载套接字失败!\n";
         WSACleanup();
         return NETWORK_ERROR;
     }
     if(ret == 0)
     {
 
-        printf("Enter hostname:");
-        scanf("%s", hostname);
-
-        printf("Enter starting port:");
-        scanf("%d", &starting_port);
-
+        std::cout<<"Enter hostname:";
+        //scanf("%s", hostname);
+        std::cin >> hostname;
+        std::cout << ("Enter starting port:");
+        //scanf("%d", &starting_port);
+        std::cin >> starting_port;
         if(starting_port < PORT_MIN)
         {
-            printf("起始端口出错\n");
+            std::cout << ("起始端口出错\n");
             WSACleanup();
             return NETWORK_ERROR;
         }
 
-        printf("Enter ending port:");
-        scanf("%d", &ending_port);
-
+        std::cout << ("Enter ending port:");
+        // scanf("%d", &ending_port);
+        std::cin >> ending_port;
         if(ending_port > PORT_MAX)
         {
-            printf("终点端口出错\n");
+            std::cout << ("终点端口出错\n");
             WSACleanup();
             return NETWORK_ERROR;
         }
 
-        printf("\nScanning [%s]...\n", hostname);
+        // printf("\nScanning [%s]...\n", hostname);
+        std::cout << "Scanning [" << hostname << "]\n";
         for(int i = starting_port; i <= ending_port; i++)
         {
             ports.push(int(i));
@@ -89,7 +92,7 @@ int   main()
 
             if(hThread == 0)
             {
-                printf("创建线程失败\n");
+                std::cout << ("创建线程失败\n");
                 WSACleanup();
                 return NETWORK_ERROR;
             }
@@ -102,7 +105,7 @@ int   main()
         // Sleep(-1);//进程挂起
         while(ThreadOpened)
             ;  //等到所有进程结束后
-        printf("Number of ports opened = %d\n", nopen);
+        std::cout<<("Number of ports opened = ")<< (nopen)<<std::endl;
     }
     WSACleanup();
     // WSAStartup应该与WSACleanup成对使用，WSAStartup的功能是初始化Winsock DLL，
@@ -124,7 +127,7 @@ DWORD portscan()
              SOCK_STREAM,
              IPPROTO_TCP);  //第一个变量为协议簇，第二个变量为套接字类型，第三个变量为使用的通信协议
     hostent = gethostbyname((
-      hostname));  // gethostbyname()返回对应于给定主机名的包含主机名字和地址信息的hostent结构指针。
+      hostname.c_str()));  // gethostbyname()返回对应于给定主机名的包含主机名字和地址信息的hostent结构指针。
 
     // for (i = (int)ports.front(),ports.pop(); !ports.empty(); i=(int)ports.front(),ports.pop())
     while(!ports.empty())
@@ -149,8 +152,8 @@ DWORD portscan()
         SOCKADDR_IN hostinfo;  //服务器地址信息结构
 
         hostinfo.sin_family = AF_INET;
-        hostinfo.sin_addr = *((LPIN_ADDR) *hostent->h_addr_list);  // sin.addr储存IP地址
-        hostinfo.sin_port = htons(i);                              // sin_port储存端口号
+        hostinfo.sin_addr   = *((LPIN_ADDR) *hostent->h_addr_list);  // sin.addr储存IP地址
+        hostinfo.sin_port   = htons(i);                              // sin_port储存端口号
 
         // htons 是将整型变量从主机字节顺序转变成网络字节顺序，
         // 就是整数在地址空间存储方式变为：高位字节存放在内存的低地址处。
@@ -165,12 +168,12 @@ DWORD portscan()
         //返回值为0代表成功
         if(nret == 0)
         {
-            printf("\n\t%d\n", i);
+            //printf("\n\t%d\n", i);
             ++nopen;
         }
     }
 
-    printf("\nScan complete.\n\n");
+    // printf("\nScan complete.\n\n");
     // printf("Number of ports opened = %d\n", nopen);
     ThreadOpened--;
     closesocket(thesocket);
