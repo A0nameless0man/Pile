@@ -6,7 +6,7 @@
 #include <set>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>  //加这个头文件后面sleep会用到
+//#include <windows.h>  //加这个头文件后面sleep会用到
 //#pragma comment(lib,"ws2_32.lib")
 #pragma comment(lib, "ws2_32.lib")
 
