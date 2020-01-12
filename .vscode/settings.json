@@ -106,6 +106,7 @@
         "*.tcc": "cpp",
         "netfwd": "cpp",
         "rope": "cpp",
-        "slist": "cpp"
+        "slist": "cpp",
+        "ranges": "cpp"
     }
 }
