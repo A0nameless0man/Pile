@@ -4,13 +4,13 @@
 #include <queue>
 #include <string>
 
-using ULL = unsigned long long;
+using ULL = long long;
 
 const ULL MAX_N = 1000007;
 const ULL MAX_M = 26;
-const ULL INF   = static_cast<ULL>(-1);
+const ULL INF   = static_cast<ULL>(10e15);
 
-ULL ctoi(const char &c)
+inline ULL ctoi(const char &c)
 {
     return c - 'a';
 }
@@ -30,7 +30,7 @@ struct Trie
         cnt  = 0;
         root = newNode();
     }
-    ULL newNode()
+    inline ULL newNode()
     {
         Node &cur = nodes[cnt];
         for(ULL i = 0; i < MAX_M; i++)
@@ -143,7 +143,8 @@ int  main(void)
         {
             int cost;
             scanf("%s", buf);
-            std::cin >> cost;
+            // std::cin >> cost;
+            scanf("%d", &cost);
             acm.insert(buf, cost);
         }
         scanf("%s", buf);
