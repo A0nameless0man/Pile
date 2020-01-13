@@ -1,14 +1,10 @@
-#include <algorithm>
-#include <cstdio>
 #include <cstring>
 #include <iostream>
 #include <queue>
-#include <string>
-
 using ULL       = unsigned long long;
-const ULL MAX_N = 500007;
+const ULL MAX_N = 5000007;
 const ULL MAX_M = 26;
-const ULL INF   = 10e15;
+const ULL INF   = 0x3fffffff;
 
 inline ULL ctoi(char &c)
 {
@@ -21,9 +17,8 @@ struct Trie
     {
         ULL next[MAX_M];
         ULL fail;
+        ULL last;
         ULL count;
-        ULL cost;
-        ULL len;
     } nodes[MAX_N];
     ULL root, cnt;
 
@@ -33,7 +28,7 @@ struct Trie
         root = newNode();
     }
 
-    inline ULL newNode()
+    ULL newNode()
     {
         Node &cur = nodes[cnt];
         for(ULL i = 0; i < MAX_M; i++)
@@ -42,13 +37,11 @@ struct Trie
         }
         cur.fail  = INF;
         cur.count = 0;
-        cur.cost  = INF;
-        cur.len   = 0;
         ++cnt;
         return cnt - 1;
     }
 
-    inline void insert(char buf[], ULL cost = 0)
+    void insert(char buf[])
     {
         auto len = strlen(buf);
         ULL  cur = root;
@@ -61,9 +54,7 @@ struct Trie
             }
             cur = next;
         }
-        nodes[cur].count = 1;
-        nodes[cur].cost  = std::min(nodes[cur].cost, cost);
-        nodes[cur].len   = len;
+        nodes[cur].count++;
     }
 
     void buildFailTree(void)
@@ -90,108 +81,86 @@ struct Trie
             for(ULL i = 0; i < MAX_M; ++i)
             {
                 ULL next = nodes[cur].next[i];
-                if(next == INF)
+                if(next==INF)
                 {
                     nodes[cur].next[i] = nodes[nodes[cur].fail].next[i];
                 }
                 else
                 {
                     nodes[next].fail = nodes[nodes[cur].fail].next[i];
+                    // std::cerr << next << "\n";
                     que.push(next);
                 }
             }
         }
     }
-    void query(char buf[], ULL dp[])
+    int query(char buf[])
     {
         ULL len = strlen(buf);
         ULL cur = root;
+        ULL ans = 0;
         for(ULL i = 0; i < len; i++)
         {
-            cur      = nodes[cur].next[ctoi(buf[i])];
-            ULL tmp  = cur;
-            ULL tmp2 = tmp;
-            dp[i]    = INF;
-            while(tmp != root)
+            cur     = nodes[cur].next[ctoi(buf[i])];
+            ULL tmp = cur;
+            while(tmp != root&&nodes[tmp].count!=INF)
             {
-                if(nodes[tmp].count)
-                {
-                    if(tmp2!=tmp)
-                    {  // Skip the useless fail jump;
-                        nodes[tmp2].fail = tmp;
-                        tmp2             = tmp;
-                    }
-                    if(i >= nodes[tmp].len)
-                    {
-                        dp[i] = std::min(dp[i], dp[i - nodes[tmp].len] + nodes[tmp].cost);
-                    }
-                    else
-                    {
-                        dp[i] = std::min(dp[i], nodes[tmp].cost);
-                    }
-                }
+                ans += nodes[tmp].count;
+                nodes[tmp].count = INF;
                 tmp = nodes[tmp].fail;
             }
         }
+        return ans;
+    }
+    void debug(void)
+    {
+        for(ULL i = 0; i < cnt; i++)
+        {
+            printf("{\"id\" : %3llu , \"fail\" : %3llu , \"chi\" : [", i, nodes[i].fail);
+            for(ULL j = 0; j < MAX_M; j++)
+            {
+                printf(" %3llu ,", nodes[i].next[j]);
+            }
+            printf("],\n");
+        }
     }
 };
+
 char buf[MAX_N];
-ULL  dp[MAX_N];
 Trie acm;
 int  main(void)
 {
-    int n;
-    while(scanf("%d", &n) != EOF)
+    int n = 1;
+    // scanf("%d", &n);
+    while(n--)
     {
+        int m;
+        scanf("%d", &m);
         acm.clear();
-        while(n--)
+        while(m--)
         {
-            int cost;
             scanf("%s", buf);
-            // std::cin >> cost;
-            scanf("%d", &cost);
-            acm.insert(buf, cost);
+            acm.insert(buf);
         }
-        scanf("%s", buf);
         acm.buildFailTree();
-        acm.query(buf, dp);
-        ULL len = strlen(buf);
-        // for(int i = 0; i < len;i++)
-        // {
-        //     std::cout << dp[i] << " ";
-        // }
-        // std::cout << std::endl;
-        if(dp[len - 1] != INF)
-        {
-            std::cout << dp[len - 1] << std::endl;
-        }
-        else
-        {
-            std::cout << -1 << std::endl;
-        }
+        scanf("%s", buf);
+        printf("%d\n", acm.query(buf));
+        // acm.debug();
     }
     return 0;
 }
 /*
-4
-ab 5
-cd 10
-abc 100
-d 1
+1
+10
+a
+b
+ab
+c
+d
+cd
 abcd
-3
-ab 10
-ab 5
-a 1
-ababa
-3
-ba 10
-ab 5
-a 1
-ababa
-3
-ba 10
-b 2
-a 1
-ababa
+e
+f
+ef
+abcdef
 */

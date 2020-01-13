@@ -182,4 +182,5 @@ int main(void)
         //std::cout << std::fixed << std::setprecision(11) << ans << std::endl;
         printf("%.11Lf\n", ans);
     }
+    return 0;
 }
