@@ -8,7 +8,7 @@
 
 using LL = int;
 
-const LL    MAX_N = 1000000;
+const LL    MAX_N = 10000007;
 char        s[MAX_N];
 LL          sa[MAX_N];
 LL          rnk[MAX_N];
@@ -90,16 +90,15 @@ void buildSa(void)
         {
             j++;
         }
-        h[rnk[i]] = st[rnk[i]][0] = j;
+        st[rnk[i]][0] = j;
     }
-    for(ULL i = 1; (1 << (i - 1)) < n; ++i)
+    for(ULL i = 1; i < n; i <<= 1)
     {
         for(ULL j = 0; j < n; ++j)
         {
-            if((1 << (i - 1)) + j < n)
+            if((1 >> i) + j < n)
             {
-                // st[j][i] = std::min(st[j][i - 1], st[j + (1 << i)][i - 1]);
-                st[j][i] = std::min(st[j][i - 1], st[j + (1 << (i - 1))][i - 1]);
+                st[j][i] = std::min(st[j][i - 1], st[j + (1 << i)][i - 1]);
             }
             else
             {
@@ -109,12 +108,8 @@ void buildSa(void)
     }
 }
 
-ULL LCA(ULL i, ULL j, ULL n = 0xfffff)
+ULL LCA(ULL i, ULL j)
 {
-    if(i >= n || j >= n)
-    {
-        return 0;
-    }
     ULL l = std::min(rnk[i], rnk[j]);
     ULL r = std::max(rnk[i], rnk[j]);
     --r;
@@ -126,7 +121,7 @@ ULL LCA(ULL i, ULL j, ULL n = 0xfffff)
         {
             --logDis;
         }
-        return std::min(st[l][logDis], st[r - (1 << logDis) + 1][logDis]);
+        return std::min(st[l][logDis], st[r - (1 << logDis)][logDis]);
     }
     else
     {
@@ -162,72 +157,31 @@ int main(void)
         {
             int l, k;
             scanf("%d%d", &l, &k);
-
-            // std::cout << l << "#" << k << std::endl;
-            // std::cout << "&" << n << std::endl;
-            // if(ans[l-1]==n)
-            // {
-            //     std::cout << l << " " << n << std::endl;
-            //     continue;
-            // }
-            ULL  prefixWide = ans[l - 1] - (l - 1);
-            ULL  lca        = LCA(l - 1, l + prefixWide - 1, n);
-            ULL  hz         = lca / prefixWide + 1;
-            ULL  upperLen   = ((hz - 1) / k + 1) * prefixWide;
-            ULL  lowerLen   = ((hz) / k) * prefixWide;
-            ULL  allLen     = hz * prefixWide;
-            bool tail       = (n != l + allLen - 1);
+            ULL prefixWide = ans[l - 1] - (l - 1);
+            ULL lca        = LCA(l - 1, l + prefixWide - 1);
+            ULL hz         = lca / prefixWide + 1;
+            ULL upperLen   = ((hz - 1) / k + 1) * prefixWide;
+            ULL lowerLen   = ((hz) / k) * prefixWide;
+            ULL allLen     = hz * prefixWide;
             // if(hz >= k && hz % k == 0 && l + hz * prefixWide - 1 != n)  //整除
-            // if(n != l + allLen - 1)
-            // {
-            //     if(hz % k != 0)
-            //     {
-            //         if(hz < k)
-            //         {
-            //             std::cout << l << " " << l + prefixWide - 1 << std::endl;
-            //         }
-            //         else
-            //         {
-            //             std::cout << l << " " << l + upperLen - 1 << std::endl;
-            //         }
-            //     }
-            //     else
-            //     {
-            //         std::cout << l + hz * prefixWide - lowerLen << " " << n << std::endl;
-            //     }
-            // }
-            // else
-            // {
-            //     std::cout << l << " " << l + upperLen - 1 << std::endl;
-            // }
-            if(k == 1)
+            if(n != l + allLen - 1)
             {
-                std::cout << l << " " << n << '\n';
-            }
-            else if(hz < k)
-            {
-                std::cout << l << " " << l + prefixWide - 1 << '\n';
-            }
-            else
-            {
-                if(hz % k == 0)
+                if(hz % k != 0)
                 {
-                    if(!tail)
-                    {
-                        std::cout << l << " " << l + lowerLen - 1 << '\n';
-                    }
-                    else
-                    {
-                        std::cout << l + allLen - lowerLen << " " << n << '\n';
-                    }
+                    std::cout << l << " " << l + upperLen - 1 << std::endl;
                 }
                 else
                 {
-                    std::cout << l << " " << l + upperLen - 1 << '\n';
+                    std::cout << l + hz * prefixWide - lowerLen << " " << n << std::endl;
                 }
+            }
+            else
+            {
+                std::cout << l << " " << l + upperLen - 1 << std::endl;
             }
         }
     }
+
     return 0;
 }
 /*
@@ -269,18 +223,4 @@ so it's like sub_1^(p_1)+sub_2^(p_2) ...
 as we know,sub_1>sub_2
 
 that is sub_1+sub_2>sub_2 ,and this will do no harm to our ans
-*/
-
-/*
-abababab
-2
-8 3
-8 4
-*/
-/*
-accddcaaad 1 9 1
-accddcaaad 64 1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8 1 9 1 10 2 1 2 2 2 3 2 4 2 5 2 6 2 7 2 8 2 9 2 10 3 1
-3 2 3 3 3 4 3 5 3 6 3 7 3 8 3 9 3 10 4 1 4 2 4 3 4 4 4 5 4 6 4 7 4 8 4 9 4 10 5 1 5 2 5 3 5 4 5 5 5
-6 5 7 5 8 5 9 5 10 6 1 6 2 6 3 6 4 6 5 6 6 6 7 6 8 6 9 6 10 7 1 7 2 7 3 7 4 7 5 7 6 7 7 7 8 7 9 7 10
-8 1 8 2 8 3 8 4 8 5 8 6 8 7 8 8 8 9 8 10
 */
