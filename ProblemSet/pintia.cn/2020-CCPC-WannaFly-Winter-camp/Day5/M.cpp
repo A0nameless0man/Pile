@@ -9,7 +9,7 @@ const long long MAX_N = 100;
 const long long MAX_M = 10;
 const long long MAX_W = 5000;
 
-int  AcceptCount[MAX_M];
+int  ProblemAcceptCount[MAX_M];
 bool Accepted[MAX_N][MAX_M];
 int  MemberAcceptCount[MAX_N];
 int  SubmitCount[MAX_N];
@@ -27,7 +27,7 @@ void init(void)
 {
     for(LL m = 0; m < MAX_M; ++m)
     {
-        AcceptCount[m] = 0;
+        ProblemAcceptCount[m] = 0;
         for(LL n = 0; n < MAX_N; ++n)
         {
             Accepted[n][m]           = false;
@@ -66,7 +66,7 @@ int main(void)
                     if(!Accepted[x][y])  // Is His First Accept
                     {
                         Accepted[x][y] = true;
-                        ++AcceptCount[y];
+                        ++ProblemAcceptCount[y];
                         ++MemberAcceptCount[x];
                     }
                     CurentContinueFail[x][y] = 0;
@@ -109,10 +109,10 @@ int main(void)
                 {//Rule 4 && 5
                     for(LL mi = 0; mi < m;++mi)
                     {
-                        if(AcceptCount[mi]>0&&!Accepted[i][mi])
+                        if(ProblemAcceptCount[mi]>0&&!Accepted[i][mi])
                         {
                             ans += 20;
-                            if(AcceptCount[mi]>=n/2)
+                            if(ProblemAcceptCount[mi]>=n/2)
                             {
                                 ans += 10;
                             }

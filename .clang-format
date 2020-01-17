@@ -24,7 +24,7 @@ AlwaysBreakBeforeMultilineStrings: 'true'
 AlwaysBreakTemplateDeclarations: 'Yes'
 BinPackArguments: 'false'
 BinPackParameters: 'false'
-BreakBeforeBinaryOperators: None
+BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: AfterColon
