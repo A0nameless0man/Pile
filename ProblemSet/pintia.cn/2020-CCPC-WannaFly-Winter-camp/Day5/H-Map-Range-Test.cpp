@@ -65,6 +65,7 @@ int main(void)
         }
         // std::cout << "readed" << std::endl;
 
+        // if(false)
         {  // saffix
             ULL segmaCon = 0;
             ULL segmaCnt = 0;
