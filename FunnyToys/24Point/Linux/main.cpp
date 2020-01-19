@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿#include <cstdio>
+#include <iostream>
 #include <math.h>
 static double easy(double a, double b, int way)
 {
@@ -41,8 +42,9 @@ static bool count(int *input, int *caculate)
 
                         if(fabs(easy(easy(input[0], input[1], caculate[0]),
                                      easy(input[2], input[3], caculate[1]),
-                                     caculate[2]) -
-                                24) <= 0.00005)
+                                     caculate[2])
+                                - 24)
+                           <= 0.00005)
                         {
 
                             return true;
@@ -54,8 +56,9 @@ static bool count(int *input, int *caculate)
                              easy(
                                easy(easy(input[0], input[1], caculate[0]), input[2], caculate[1]),
                                input[3],
-                               caculate[2]) -
-                             24) <= 0.00005)
+                               caculate[2])
+                             - 24)
+                           <= 0.00005)
                         {
                             return true;
                         }
@@ -111,14 +114,19 @@ int main()
     int  caculate[4] = { 0, 0, 0, 0 };
     //获取输入
     //计算并输出结果
-    for(input[0] = 0; input[0] < 14; input[0]++)
+    // for(input[0] = 0; input[0] < 14; input[0]++)
     {
-        for(input[1] = 0; input[1] < 14; input[1]++)
+        // for(input[1] = 0; input[1] < 14; input[1]++)
         {
-            for(input[2] = 0; input[2] < 14; input[2]++)
+            // for(input[2] = 0; input[2] < 14; input[2]++)
             {
-                for(input[3] = 0; input[3] < 14; input[3]++)
+                while(true)
+                // for(input[3] = 0; input[3] < 14; input[3]++)
                 {
+                    for(int i = 0; i < 4; ++i)
+                    {
+                        std::cin >> input[i];
+                    }
                     for(size_t i = 0; i < 4; i++)
                     {
                         printf("%d#", input[i]);
