@@ -9,14 +9,17 @@
 #define G 1 << 21
 using namespace std;
 
-vector<int> g[N];
-int         n;
-int         lgh[G];//dis from begin status
-int cnt[N], tot[G][N], ans[N][G];
-int  cyc;      // final point and the first point on circle
-int  cyclen;   // full pathlen
-int  pathlen;  // the len of chain
-bool col[N], vis[G];
+vector<int> g[N];    // the inputed graph
+int         n;       // the size of inputed graph
+int         lgh[G];  // dis from begin status
+int         cnt[N];  // count of color
+int         tot[G][N];//counter of color by len
+int         ans[N][G];  // kOnChain
+int         cyc;        // final point and the first point on circle
+int         cyclen;     // full pathlen
+int         pathlen;    // the len of chain
+bool        col[N];     // color
+bool        vis[G];
 
 void dfs(int u, int len)
 {
@@ -87,6 +90,7 @@ int main()
                 int tms = (k - 1) / t;
                 k       = (k - 1) % t + 1;
                 k += tot[pathlen][x];
+                std::cout << tms << "X" << k << std::endl;
                 cout << ans[x][k] + tms * (cyclen - pathlen) - 1 << endl;
             }
         }
