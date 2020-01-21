@@ -88,10 +88,10 @@ std::array<LF, 2> getTanAngle(const Round &a, const Round &b)
 std::array<Point, 4> getTanPoint(const Round &a, const Round &b)
 {
     auto angle = getTanAngle(a, b);
-    return { { Point(a.x + sin(angle[0]), a.y - cos(angle[0])),
-               Point(a.x - sin(angle[1]), a.y + cos(angle[1])),
-               Point(b.x + sin(angle[0]), b.y - cos(angle[0])),
-               Point(b.x - sin(angle[1]), b.y + cos(angle[1])) } };
+    return { { Point(a.x + a.r * sin(angle[0]), a.y - a.r * cos(angle[0])),
+               Point(a.x - a.r * sin(angle[1]), a.y + a.r * cos(angle[1])),
+               Point(b.x + b.r * sin(angle[0]), b.y - b.r * cos(angle[0])),
+               Point(b.x - b.r * sin(angle[1]), b.y + b.r * cos(angle[1])) } };
 }
 
 int onRound(const Point &p, const Round &r)
@@ -101,7 +101,7 @@ int onRound(const Point &p, const Round &r)
 
 bool onSameRound(const Point &pa, const Point &pb, const Round &r)
 {
-    return onRound(pa, r) && onRound(pb, r);
+    return onRound(pa, r) == 0 && onRound(pb, r) == 0;
 }
 
 int main(void)
@@ -144,14 +144,14 @@ int main(void)
                     }
                 }
             }
-            {
-                std::cout << "###Points" << std::endl;
-                for(auto p: points)
-                {
-                    std::cout << p.x << ":" << p.y << std::endl;
-                }
-                std::cout << "PointsEnd" << std::endl;
-            }
+            // {
+            //     std::cout << "###Points" << std::endl;
+            //     for(auto p: points)
+            //     {
+            //         std::cout << p.x << ":" << p.y << std::endl;
+            //     }
+            //     std::cout << "PointsEnd" << std::endl;
+            // }
             {  // check if a great round covered all
                 bool  oneRound = true;
                 Round r        = Round { 0, 0, 0 };
@@ -181,7 +181,7 @@ int main(void)
             if(true)
             {  // a better way to caculate convex hull
                 std::sort(points.begin(), points.end(), [](const Point &a, const Point &b) -> bool {
-                    if(a.x != b.x)
+                    if(sign(a.x - b.x) != 0)
                     {
                         return a.x < b.x;
                     }
@@ -190,10 +190,24 @@ int main(void)
                         return a.y < b.y;
                     }
                 });
+                {  // remove close points;
+                    decltype(points) singlePoints;
+
+                    for(size_t i = 0; i < points.size(); ++i)
+                    {
+                        auto &a = points[i];
+                        auto &b = points[(i + 1) % points.size()];
+                        if(sign(a.x - b.x) != 0 || sign(a.y - b.y) != 0)
+                        {
+                            singlePoints.push_back(a);
+                        }
+                    }
+                    std::swap(points, singlePoints);
+                }
                 std::vector<Point> vecStc;
                 for(size_t i = 0; i < points.size(); ++i)
                 {
-                    while(vecStc.size() >=2
+                    while(vecStc.size() >= 2
                           && directionJudge(vecStc[vecStc.size() - 2],
                                             vecStc[vecStc.size() - 1],
                                             points[i])
@@ -221,7 +235,7 @@ int main(void)
                     }
                     vecStc.push_back(points[j]);
                 }
-                for(size_t i = 0; i < vecStc.size()-1; ++i)
+                for(size_t i = 0; i < vecStc.size() - 1; ++i)
                 {
                     hull.push_back(vecStc[i]);
                 }
@@ -262,33 +276,42 @@ int main(void)
             {  // calcuate ans and output
                 LF ans = 0;
 
-                std::cout << "###convex hull:" << std::endl;
+                // std::cout << "###caculating ..." << std::endl;
                 for(size_t i = 0; i < hull.size(); ++i)
                 {
                     size_t a = i, b = (i + 1) % hull.size();
-                    std::cout << hull[a].x << ":" << hull[a].y << std::endl;
+                    LF     thisLen = 0;
+                    bool   onRound = false;
+                    // std::cout << "Point pair:" << std::endl;
+                    // std::cout << hull[a].x << ":" << hull[a].y << std::endl;
                     // std::cout << hull[b].x << ":" << hull[b].y << std::endl;
                     for(size_t j = 0; j < rounds.size(); ++j)
                     {
-                        if(onSameRound(hull[a], hull[b], rounds[j]) == 0)
+                        if(onSameRound(hull[a], hull[b], rounds[j]))
                         {
                             LF angle = normalizeAngle(
-                              angleOfVector(hull[a].x - rounds[j].x, hull[a].y - rounds[j].y)
-                              - angleOfVector(hull[b].x - rounds[j].x, hull[b].y - rounds[j].y));
-                            if(angle > PI)
-                                angle = 2 * PI - angle;
-                            ans += angle * rounds[j].r;
+                              -angleOfVector(hull[a].x - rounds[j].x, hull[a].y - rounds[j].y)
+                              + angleOfVector(hull[b].x - rounds[j].x, hull[b].y - rounds[j].y));
+                            // if(angle > PI)
+                            //     angle = 2 * PI - angle;
+                            thisLen = angle * rounds[j].r;
 
-                            // std::cout << "#" << angle << std::endl;
+                            // std::cout << "#onRound" << angle << std::endl;
                             // std::cout << rounds[j].x << ":" << rounds[j].y << "by" << rounds[j].r
                             //           << std::endl;
-                            goto nextPoint;
+                            onRound = true;
+                            break;
                         }
                     }
-                    ans += sqrt(square(hull[a].x - hull[b].x) + square(hull[a].y - hull[b].y));
-                nextPoint:;
+                    if(!onRound)
+                    {
+                        thisLen =
+                          sqrt(square(hull[a].x - hull[b].x) + square(hull[a].y - hull[b].y));
+                    }
+                    // std::cout << "contirbution:" << thisLen << std::endl;
+                    ans += thisLen;
                 }
-                std::cout << "###end###" << std::endl;
+                // std::cout << "###end###" << std::endl;
                 std::cout << std::setprecision(16) << ans << std::endl;
             }
         }
