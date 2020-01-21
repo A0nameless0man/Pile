@@ -1,5 +1,5 @@
+#include <algorithm>
 #include <array>
-#include<algorithm>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -9,7 +9,7 @@ using LF     = long double;
 const LF PCS = 0.000000000007;
 const LF PI  = acos(-1);
 
-int sign(const &LF a)
+int sign(const LF &a)
 {
     if(a > PCS)
     {
@@ -108,131 +108,201 @@ int main(void)
 {
     int t;
     int n;
-    std::cin >> t;
-    while(t--)
-    {
-        std::vector<Round> rounds;
-        std::vector<Point> points;
-        std::vector<Point> hull;
-        Point              startPoint(0, 0xfffff);
-        Point              hullPoint;
-        long double        startAngle = 0;
-        std::cin >> n;
+    while(std::cin >> t)
+        while(t--)
+        {
+            std::vector<Round> rounds;
+            std::vector<Point> points;
+            std::vector<Point> hull;
+            Point              startPoint(0, 0xfffff);
+            Point              hullPoint;
+            long double        startAngle = 0;
+            std::cin >> n;
 
-        {  // input rounds
-            for(int i = 0; i < n; ++i)
-            {
-                long double x, y, r;
-                std::cin >> x >> y >> r;
-                rounds.push_back(Round(x, y, r));
-            }
-        }
-
-        {  // caculate tango point
-            for(int i = 0; i < n; ++i)
-            {
-                for(int j = 0; j < i; ++j)
+            {  // input rounds
+                for(int i = 0; i < n; ++i)
                 {
-                    if(tanAble(rounds[i], rounds[j]))
+                    long double x, y, r;
+                    std::cin >> x >> y >> r;
+                    rounds.push_back(Round(x, y, r));
+                }
+            }
+
+            {  // caculate tango point
+                for(int i = 0; i < n; ++i)
+                {
+                    for(int j = 0; j < i; ++j)
                     {
-                        auto ps = getTanPoint(rounds[i], rounds[j]);
-                        for(auto p: ps)
+                        if(tanAble(rounds[i], rounds[j]))
                         {
-                            points.push_back(p);
+                            auto ps = getTanPoint(rounds[i], rounds[j]);
+                            for(auto p: ps)
+                            {
+                                points.push_back(p);
+                            }
                         }
                     }
                 }
             }
-        }
-
-        {  // check if a great round covered all
-            bool  oneRound = true;
-            Round r        = Round { 0, 0, 0 };
-
-            for(auto i: rounds)
             {
-                if(i.r > r.r)
+                std::cout << "###Points" << std::endl;
+                for(auto p: points)
                 {
-                    r = i;
+                    std::cout << p.x << ":" << p.y << std::endl;
+                }
+                std::cout << "PointsEnd" << std::endl;
+            }
+            {  // check if a great round covered all
+                bool  oneRound = true;
+                Round r        = Round { 0, 0, 0 };
+
+                for(auto i: rounds)
+                {
+                    if(i.r > r.r)
+                    {
+                        r = i;
+                    }
+                }
+                for(const auto &p: points)
+                {
+                    if(onRound(p, r) > 0)
+                    {
+                        oneRound = false;
+                        break;
+                    }
+                }
+                if(oneRound)
+                {
+                    std::cout << std::setprecision(16) << r.r * 2 * PI << std::endl;
+                    continue;
                 }
             }
-            for(const auto &p: points)
-            {
-                if(onRound(p, r) > 0)
+
+            if(true)
+            {  // a better way to caculate convex hull
+                std::sort(points.begin(), points.end(), [](const Point &a, const Point &b) -> bool {
+                    if(a.x != b.x)
+                    {
+                        return a.x < b.x;
+                    }
+                    else
+                    {
+                        return a.y < b.y;
+                    }
+                });
+                std::vector<Point> vecStc;
+                for(size_t i = 0; i < points.size(); ++i)
                 {
-                    oneRound = false;
-                    break;
+                    while(vecStc.size() >=2
+                          && directionJudge(vecStc[vecStc.size() - 2],
+                                            vecStc[vecStc.size() - 1],
+                                            points[i])
+                               < 0)
+                    {
+                        vecStc.pop_back();
+                    }
+                    vecStc.push_back(points[i]);
+                }
+                for(size_t i = 0; i < vecStc.size() - 1; ++i)
+                {
+                    hull.push_back(vecStc[i]);
+                }
+                vecStc.clear();
+                for(size_t i = 0; i < points.size(); ++i)
+                {
+                    size_t j = points.size() - i - 1;
+                    while(vecStc.size() > 1
+                          && directionJudge(vecStc[vecStc.size() - 2],
+                                            vecStc[vecStc.size() - 1],
+                                            points[j])
+                               < 0)
+                    {
+                        vecStc.pop_back();
+                    }
+                    vecStc.push_back(points[j]);
+                }
+                for(size_t i = 0; i < vecStc.size()-1; ++i)
+                {
+                    hull.push_back(vecStc[i]);
                 }
             }
-            if(oneRound)
-            {
-                std::cout << std::setprecision(16) << r * 2 * PI << std::endl;
-                continue;
-            }
-        }
-
-        {  // caculate hull
-            for(auto &p: points)
-            {
-                if(p.y < startPoint.y)
-                {
-                    startPoint = p;
-                }
-            }
-            hullPoint = startPoint;
-
-            do
-            {
-                Point nextpoint;
-                LF    angleDif = 2 * PI;
-                hull.push_back(startPoint);
+            else
+            {  // caculate hull
                 for(auto &p: points)
                 {
-                    LF dif = normalizeAngle(angleOfVector(p.x - startPoint.x, p.y - startPoint.y)
-                                            - startAngle);
-                    if(dif < angleDif)
+                    if(p.y < startPoint.y)
                     {
-                        nextpoint = p;
-                        angleDif  = dif;
+                        startPoint = p;
                     }
                 }
-                startPoint = nextpoint;
-                startAngle += angleDif;
-            } while(startAngle < 2 * PI);
-            if(hull[0].x == hull.rbegin()->x && hull[0].y == hull.rbegin()->y)
-                hull.pop_back();
-        }
+                hullPoint = startPoint;
 
-        {//calcuate ans and output
-            LF ans = 0;
-            for(size_t i = 0; i < hull.size(); ++i)
-            {
-                size_t a = i, b = (i + 1) % hull.size();
-                for(size_t j = 0; j < rounds.size(); ++j)
+                do
                 {
-                    if(onSameRound(hull[a], hull[b], rounds[j]))
+                    Point nextpoint;
+                    LF    angleDif = 2 * PI;
+                    hull.push_back(startPoint);
+                    for(auto &p: points)
                     {
-                        LF angle = normalizeAngle(
-                          angleOfVector(hull[a].x - rounds[j].x, hull[a].y - rounds[j].y)
-                          - angleOfVector(hull[b].x - rounds[j].x, hull[b].y - rounds[j].y));
-                        if(angle > PI)
-                            angle = 2 * PI - angle;
-                        ans += angle * rounds[j].r;
-
-                        // std::cout << "#" << angle << std::endl;
-                        // std::cout << hull[a].x << ":" << hull[a].y << std::endl;
-                        // std::cout << hull[b].x << ":" << hull[b].y << std::endl;
-                        // std::cout << rounds[j].x << ":" << rounds[j].y << "by" << rounds[j].r
-                        //           << std::endl;
-                        goto nextPoint;
+                        LF dif = normalizeAngle(
+                          angleOfVector(p.x - startPoint.x, p.y - startPoint.y) - startAngle);
+                        if(dif < angleDif)
+                        {
+                            nextpoint = p;
+                            angleDif  = dif;
+                        }
                     }
-                }
-                ans += sqrt(square(hull[a].x - hull[b].x) + square(hull[a].y - hull[b].y));
-            nextPoint:;
+                    startPoint = nextpoint;
+                    startAngle += angleDif;
+                } while(startAngle < 2 * PI);
+                if(hull[0].x == hull.rbegin()->x && hull[0].y == hull.rbegin()->y)
+                    hull.pop_back();
             }
 
-            std::cout << std::setprecision(16) << ans << std::endl;
+            {  // calcuate ans and output
+                LF ans = 0;
+
+                std::cout << "###convex hull:" << std::endl;
+                for(size_t i = 0; i < hull.size(); ++i)
+                {
+                    size_t a = i, b = (i + 1) % hull.size();
+                    std::cout << hull[a].x << ":" << hull[a].y << std::endl;
+                    // std::cout << hull[b].x << ":" << hull[b].y << std::endl;
+                    for(size_t j = 0; j < rounds.size(); ++j)
+                    {
+                        if(onSameRound(hull[a], hull[b], rounds[j]) == 0)
+                        {
+                            LF angle = normalizeAngle(
+                              angleOfVector(hull[a].x - rounds[j].x, hull[a].y - rounds[j].y)
+                              - angleOfVector(hull[b].x - rounds[j].x, hull[b].y - rounds[j].y));
+                            if(angle > PI)
+                                angle = 2 * PI - angle;
+                            ans += angle * rounds[j].r;
+
+                            // std::cout << "#" << angle << std::endl;
+                            // std::cout << rounds[j].x << ":" << rounds[j].y << "by" << rounds[j].r
+                            //           << std::endl;
+                            goto nextPoint;
+                        }
+                    }
+                    ans += sqrt(square(hull[a].x - hull[b].x) + square(hull[a].y - hull[b].y));
+                nextPoint:;
+                }
+                std::cout << "###end###" << std::endl;
+                std::cout << std::setprecision(16) << ans << std::endl;
+            }
         }
-    }
     return 0;
 }
+/*
+0 -1
+0 1
+1 -1
+*/
+/*
+0 2
+1 -2
+*/
+/*
+-4
+*/
