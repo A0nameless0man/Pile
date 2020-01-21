@@ -53,6 +53,7 @@ void dfs(int u, int len)
         return;
     }
     vis[tmp] = 1;
+    std::cout << len << ":" << tmp << std::endl;
     dfs(tmp, len + 1);
 }
 
