@@ -1,4 +1,5 @@
 #include <array>
+#include<algorithm>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -7,6 +8,19 @@
 using LF     = long double;
 const LF PCS = 0.000000000007;
 const LF PI  = acos(-1);
+
+int sign(const &LF a)
+{
+    if(a > PCS)
+    {
+        return 1;
+    }
+    if(a < -PCS)
+    {
+        return -1;
+    }
+    return 0;
+}
 
 LF square(LF a)
 {
@@ -23,6 +37,21 @@ struct Point
     LF x, y;
     Point(LF xx = 0, LF yy = 0): x(xx), y(yy) {}
 };
+
+Point sub(const Point &a, const Point &b)
+{
+    return Point { a.x - b.x, a.y - b.y };
+}
+
+LF dot(const Point &a, const Point &b)
+{
+    return (a.x * b.y - a.y * b.x);
+}
+
+LF directionJudge(const Point &a, const Point &b, const Point &c)
+{
+    return dot(sub(b, a), sub(c, b));
+}
 
 struct Round: public Point
 {
@@ -65,9 +94,9 @@ std::array<Point, 4> getTanPoint(const Round &a, const Round &b)
                Point(b.x - sin(angle[1]), b.y + cos(angle[1])) } };
 }
 
-bool onRound(const Point &p, const Round &r)
+int onRound(const Point &p, const Round &r)
 {
-    return (fabs(square(p.x - r.x) + square(p.y - r.y) - square(r.r)) < PCS);
+    return (sign(square(p.x - r.x) + square(p.y - r.y) - square(r.r)));
 }
 
 bool onSameRound(const Point &pa, const Point &pb, const Round &r)
@@ -89,97 +118,121 @@ int main(void)
         Point              hullPoint;
         long double        startAngle = 0;
         std::cin >> n;
-        for(int i = 0; i < n; ++i)
-        {
-            long double x, y, r;
-            std::cin >> x >> y >> r;
-            rounds.push_back(Round(x, y, r));
+
+        {  // input rounds
+            for(int i = 0; i < n; ++i)
+            {
+                long double x, y, r;
+                std::cin >> x >> y >> r;
+                rounds.push_back(Round(x, y, r));
+            }
         }
 
-        for(int i = 0; i < n; ++i)
-        {
-            for(int j = 0; j < i; ++j)
+        {  // caculate tango point
+            for(int i = 0; i < n; ++i)
             {
-                if(tanAble(rounds[i], rounds[j]))
+                for(int j = 0; j < i; ++j)
                 {
-                    auto ps = getTanPoint(rounds[i], rounds[j]);
-                    for(auto p: ps)
+                    if(tanAble(rounds[i], rounds[j]))
                     {
-                        points.push_back(p);
+                        auto ps = getTanPoint(rounds[i], rounds[j]);
+                        for(auto p: ps)
+                        {
+                            points.push_back(p);
+                        }
                     }
                 }
             }
         }
 
-        if(points.size() == 0)
-        {
-            LF r = 0;
+        {  // check if a great round covered all
+            bool  oneRound = true;
+            Round r        = Round { 0, 0, 0 };
+
             for(auto i: rounds)
             {
-                r = std::max(r, i.r);
+                if(i.r > r.r)
+                {
+                    r = i;
+                }
             }
-            std::cout << std::setprecision(16) << r * 2 * PI << std::endl;
-            continue;
-        }
-
-        for(auto &p: points)
-        {
-            if(p.y < startPoint.y)
+            for(const auto &p: points)
             {
-                startPoint = p;
+                if(onRound(p, r) > 0)
+                {
+                    oneRound = false;
+                    break;
+                }
+            }
+            if(oneRound)
+            {
+                std::cout << std::setprecision(16) << r * 2 * PI << std::endl;
+                continue;
             }
         }
-        hullPoint = startPoint;
 
-        do
-        {
-            Point nextpoint;
-            LF    angleDif = 2 * PI;
-            hull.push_back(startPoint);
+        {  // caculate hull
             for(auto &p: points)
             {
-                LF dif = normalizeAngle(angleOfVector(p.x - startPoint.x, p.y - startPoint.y) -
-                                        startAngle);
-                if(dif < angleDif)
+                if(p.y < startPoint.y)
                 {
-                    nextpoint = p;
-                    angleDif  = dif;
+                    startPoint = p;
                 }
             }
-            startPoint = nextpoint;
-            startAngle += angleDif;
-        } while(startAngle < 2 * PI);
-        if(hull[0].x == hull.rbegin()->x && hull[0].y == hull.rbegin()->y)
-            hull.pop_back();
+            hullPoint = startPoint;
 
-        LF ans = 0;
-        for(size_t i = 0; i < hull.size(); ++i)
-        {
-            size_t a = i, b = (i + 1) % hull.size();
-            for(size_t j = 0; j < rounds.size(); ++j)
+            do
             {
-                if(onSameRound(hull[a], hull[b], rounds[j]))
+                Point nextpoint;
+                LF    angleDif = 2 * PI;
+                hull.push_back(startPoint);
+                for(auto &p: points)
                 {
-                    LF angle = normalizeAngle(
-                      angleOfVector(hull[a].x - rounds[j].x, hull[a].y - rounds[j].y) -
-                      angleOfVector(hull[b].x - rounds[j].x, hull[b].y - rounds[j].y));
-                    if(angle > PI)
-                        angle = 2 * PI - angle;
-                    ans += angle * rounds[j].r;
-
-                    // std::cout << "#" << angle << std::endl;
-                    // std::cout << hull[a].x << ":" << hull[a].y << std::endl;
-                    // std::cout << hull[b].x << ":" << hull[b].y << std::endl;
-                    // std::cout << rounds[j].x << ":" << rounds[j].y << "by" << rounds[j].r
-                    //           << std::endl;
-                    goto nextPoint;
+                    LF dif = normalizeAngle(angleOfVector(p.x - startPoint.x, p.y - startPoint.y)
+                                            - startAngle);
+                    if(dif < angleDif)
+                    {
+                        nextpoint = p;
+                        angleDif  = dif;
+                    }
                 }
-            }
-            ans += sqrt(square(hull[a].x - hull[b].x) + square(hull[a].y - hull[b].y));
-        nextPoint:;
+                startPoint = nextpoint;
+                startAngle += angleDif;
+            } while(startAngle < 2 * PI);
+            if(hull[0].x == hull.rbegin()->x && hull[0].y == hull.rbegin()->y)
+                hull.pop_back();
         }
 
-        std::cout << std::setprecision(16) << ans << std::endl;
+        {//calcuate ans and output
+            LF ans = 0;
+            for(size_t i = 0; i < hull.size(); ++i)
+            {
+                size_t a = i, b = (i + 1) % hull.size();
+                for(size_t j = 0; j < rounds.size(); ++j)
+                {
+                    if(onSameRound(hull[a], hull[b], rounds[j]))
+                    {
+                        LF angle = normalizeAngle(
+                          angleOfVector(hull[a].x - rounds[j].x, hull[a].y - rounds[j].y)
+                          - angleOfVector(hull[b].x - rounds[j].x, hull[b].y - rounds[j].y));
+                        if(angle > PI)
+                            angle = 2 * PI - angle;
+                        ans += angle * rounds[j].r;
+
+                        // std::cout << "#" << angle << std::endl;
+                        // std::cout << hull[a].x << ":" << hull[a].y << std::endl;
+                        // std::cout << hull[b].x << ":" << hull[b].y << std::endl;
+                        // std::cout << rounds[j].x << ":" << rounds[j].y << "by" << rounds[j].r
+                        //           << std::endl;
+                        goto nextPoint;
+                    }
+                }
+                ans += sqrt(square(hull[a].x - hull[b].x) + square(hull[a].y - hull[b].y));
+            nextPoint:;
+            }
+
+            std::cout << std::setprecision(16) << ans << std::endl;
+        }
     }
     return 0;
 }
