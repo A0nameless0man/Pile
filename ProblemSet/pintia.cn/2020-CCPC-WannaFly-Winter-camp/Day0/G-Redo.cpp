@@ -109,6 +109,7 @@ int main(void)
     int t;
     int n;
     while(std::cin >> t)
+    {
         while(t--)
         {
             std::vector<Round> rounds;
@@ -173,7 +174,7 @@ int main(void)
                 }
                 if(oneRound)
                 {
-                    std::cout << std::setprecision(16) << r.r * 2 * PI << std::endl;
+                    std::cout << std::setprecision(11) << r.r * 2 * PI << std::endl;
                     continue;
                 }
             }
@@ -240,38 +241,7 @@ int main(void)
                     hull.push_back(vecStc[i]);
                 }
             }
-            else
-            {  // caculate hull
-                for(auto &p: points)
-                {
-                    if(p.y < startPoint.y)
-                    {
-                        startPoint = p;
-                    }
-                }
-                hullPoint = startPoint;
 
-                do
-                {
-                    Point nextpoint;
-                    LF    angleDif = 2 * PI;
-                    hull.push_back(startPoint);
-                    for(auto &p: points)
-                    {
-                        LF dif = normalizeAngle(
-                          angleOfVector(p.x - startPoint.x, p.y - startPoint.y) - startAngle);
-                        if(dif < angleDif)
-                        {
-                            nextpoint = p;
-                            angleDif  = dif;
-                        }
-                    }
-                    startPoint = nextpoint;
-                    startAngle += angleDif;
-                } while(startAngle < 2 * PI);
-                if(hull[0].x == hull.rbegin()->x && hull[0].y == hull.rbegin()->y)
-                    hull.pop_back();
-            }
 
             {  // calcuate ans and output
                 LF ans = 0;
@@ -312,9 +282,10 @@ int main(void)
                     ans += thisLen;
                 }
                 // std::cout << "###end###" << std::endl;
-                std::cout << std::setprecision(16) << ans << std::endl;
+                std::cout << std::setprecision(12) << ans << std::endl;
             }
         }
+    }
     return 0;
 }
 /*
