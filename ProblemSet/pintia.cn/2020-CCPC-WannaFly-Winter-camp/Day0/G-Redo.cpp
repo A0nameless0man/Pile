@@ -6,10 +6,15 @@
 #include <vector>
 
 using LF     = long double;
-const LF PCS = 0.000000000007;
+const LF PCS = 1e-8;
 const LF PI  = acos(-1);
 
 int sign(const LF &a)
+/*
+Time: 2020-01-22 11:14:02
+Describe: return the sign of given value
+Statue: CHECKED
+*/
 {
     if(a > PCS)
     {
@@ -23,11 +28,21 @@ int sign(const LF &a)
 }
 
 LF square(LF a)
+/*
+Time: 2020-01-22 11:14:51
+Describe: return the squared value of given long double ,aka y=x^2
+Statue: CHECKED
+*/
 {
     return a * a;
 }
 
 LF normalizeAngle(LF a)
+/*
+Time: 2020-01-22 11:16:33
+Describe: transfer a given angle in to range [0,2pi)
+Statue: CHECKED
+*/
 {
     return a - floor(a / (2 * PI)) * 2 * PI;
 }
@@ -39,11 +54,21 @@ struct Point
 };
 
 Point sub(const Point &a, const Point &b)
+/*
+Time: 2020-01-22 11:18:47
+Describe: point sub point aka "a-b"
+Statue: CHECKED
+*/
 {
     return Point { a.x - b.x, a.y - b.y };
 }
 
 LF dot(const Point &a, const Point &b)
+/*
+Time: 2020-01-22 11:22:09
+Describe: actually ,this is det
+Statue: CHECKED
+*/
 {
     return (a.x * b.y - a.y * b.x);
 }
@@ -66,15 +91,16 @@ bool tanAble(const Round &a, const Round &b)
 
 LF angleOfVector(const LF &a, const LF &b)
 {
-    if(fabs(a) > PCS)
-    {
-        auto ans = atan(b / a);
-        return ((a > 0) ? ans : ans + PI);
-    }
-    else
-    {
-        return (b / fabs(b) * 0.5 * PI);
-    }
+    return atan2(b, a);
+    // if(fabs(a) > PCS)
+    // {
+    //     auto ans = atan(b / a);
+    //     return ((a > 0) ? ans : ans + PI);
+    // }
+    // else
+    // {
+    //     return (b / fabs(b) * 0.5 * PI);
+    // }
 }
 
 std::array<LF, 2> getTanAngle(const Round &a, const Round &b)
@@ -153,33 +179,44 @@ int main(void)
             //     }
             //     std::cout << "PointsEnd" << std::endl;
             // }
-            {  // check if a great round covered all
-                bool  oneRound = true;
-                Round r        = Round { 0, 0, 0 };
+            // {  // check if a great round covered all
+            //     bool  oneRound = true;
+            //     Round r        = Round { 0, 0, 0 };
 
-                for(auto i: rounds)
+            //     for(auto i: rounds)
+            //     {
+            //         if(i.r > r.r)
+            //         {
+            //             r = i;
+            //         }
+            //     }
+            //     for(const auto &p: points)
+            //     {
+            //         if(onRound(p, r) > 0)
+            //         {
+            //             oneRound = false;
+            //             break;
+            //         }
+            //     }
+            //     if(oneRound)
+            //     {
+            //         std::cout << std::setprecision(std::numeric_limits<long double>::digits10 + 1)
+            //                   << r.r * 2 * PI << std::endl;
+            //         // throw 1;
+            //         continue;
+            //     }
+            // }
+
+            {  // add extra point
+                for(const auto &r: rounds)
                 {
-                    if(i.r > r.r)
+                    for(LF i = 0; i < 2 * PI; i += 0.1 * PI)
                     {
-                        r = i;
+                        points.push_back(Point(r.x + r.r * cos(i), r.y + r.r * sin(i)));
                     }
-                }
-                for(const auto &p: points)
-                {
-                    if(onRound(p, r) > 0)
-                    {
-                        oneRound = false;
-                        break;
-                    }
-                }
-                if(oneRound)
-                {
-                    std::cout << std::setprecision(11) << r.r * 2 * PI << std::endl;
-                    continue;
                 }
             }
 
-            if(true)
             {  // a better way to caculate convex hull
                 std::sort(points.begin(), points.end(), [](const Point &a, const Point &b) -> bool {
                     if(sign(a.x - b.x) != 0)
@@ -196,8 +233,8 @@ int main(void)
 
                     for(size_t i = 0; i < points.size(); ++i)
                     {
-                        auto &a = points[i];
-                        auto &b = points[(i + 1) % points.size()];
+                        const auto &a = points[i];
+                        const auto &b = points[(i + 1) % points.size()];
                         if(sign(a.x - b.x) != 0 || sign(a.y - b.y) != 0)
                         {
                             singlePoints.push_back(a);
@@ -226,7 +263,7 @@ int main(void)
                 for(size_t i = 0; i < points.size(); ++i)
                 {
                     size_t j = points.size() - i - 1;
-                    while(vecStc.size() > 1
+                    while(vecStc.size() >= 2
                           && directionJudge(vecStc[vecStc.size() - 2],
                                             vecStc[vecStc.size() - 1],
                                             points[j])
@@ -241,7 +278,6 @@ int main(void)
                     hull.push_back(vecStc[i]);
                 }
             }
-
 
             {  // calcuate ans and output
                 LF ans = 0;
@@ -268,7 +304,7 @@ int main(void)
 
                             // std::cout << "#onRound" << angle << std::endl;
                             // std::cout << rounds[j].x << ":" << rounds[j].y << "by" << rounds[j].r
-                            //           << std::endl;
+                            //   << std::endl;
                             onRound = true;
                             break;
                         }
@@ -282,7 +318,8 @@ int main(void)
                     ans += thisLen;
                 }
                 // std::cout << "###end###" << std::endl;
-                std::cout << std::setprecision(12) << ans << std::endl;
+                std::cout << std::setprecision(std::numeric_limits<LF>::digits10 + 1) << ans
+                          << std::endl;
             }
         }
     }
