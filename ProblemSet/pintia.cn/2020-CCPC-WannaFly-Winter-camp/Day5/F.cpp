@@ -8,7 +8,11 @@ long long square(long long i)
 {
     return i * i;
 }
-
+/*
+Time: 2020-01-23 11:29:07
+Describe: the triangle with different color is easier to count
+Statue: ACCEPTED
+*/
 int main(void)
 {
     long long n, a, b, c, p, d;

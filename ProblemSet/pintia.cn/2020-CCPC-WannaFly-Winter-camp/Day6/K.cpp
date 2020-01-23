@@ -5,7 +5,11 @@ struct S
 {
     long long a, b;
 };
-
+/*
+Time: 2020-01-23 11:32:05
+Describe: any profit from k cnt be splited arbitrarily
+Statue: ACCEPTED
+*/
 bool possible(long long k, const S &s, const S &b)
 {
     // after k day

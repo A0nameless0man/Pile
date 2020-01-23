@@ -16,7 +16,11 @@ static void                         ini(std::vector<std::vector<long long>> &vec
         r.resize(n);
     }
 }
-
+/*
+Time: 2020-01-23 11:09:22
+Describe: This is a fake algorithm
+Statue: DEPRECATED
+*/
 long long contributionOfEdge(long long i, long long j)
 {
     long long parta, partb, partc;

@@ -1,6 +1,10 @@
 #include <iostream>
 #include <vector>
-
+/*
+Time: 2020-01-23 11:19:47
+Describe: accepted after I realize that n==2 <==> ans == [1,1]
+Statue: ACCEPTED
+*/
 int main(void)
 {
     int n;

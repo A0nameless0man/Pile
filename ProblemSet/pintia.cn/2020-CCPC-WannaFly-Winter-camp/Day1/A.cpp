@@ -3,7 +3,11 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-
+/*
+Time: 2020-01-23 11:16:23
+Describe: Accepted with my code
+Statue: ACCEPTED
+*/
 const long long MAX_N = 1e6 + 7;
 char            buf[MAX_N];
 

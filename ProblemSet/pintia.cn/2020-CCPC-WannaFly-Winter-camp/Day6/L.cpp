@@ -8,6 +8,11 @@ Time: 2020-01-18 19:12:42
 Describe: FindOut What when wrong
 Statue: TODO
 */
+/*
+Time: 2020-01-23 11:34:34
+Describe: found that I made mistake when caculate the times in loop
+Statue: ACCEPTED
+*/
 
 const long long MAX_STA = 1 << 20;
 const long long INF     = (1 << 30);

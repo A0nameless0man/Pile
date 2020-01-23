@@ -3,7 +3,11 @@
 #include <cstring>
 #include <iostream>
 #include <stack>
-
+/*
+Time: 2020-01-23 11:22:54
+Describe: Accepted after corrected my lca
+Statue: ACCEPTED
+*/
 #define ULL unsigned long long
 
 using LL = int;

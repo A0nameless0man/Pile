@@ -8,7 +8,11 @@
 using LF     = long double;
 const LF PCS = 1e-8;
 const LF PI  = acos(-1);
-
+/*
+Time: 2020-01-23 11:11:44
+Describe: accepted after change pcs from 1e-20 to 1e-8
+Statue: ACCEPTED
+*/
 int sign(const LF &a)
 /*
 Time: 2020-01-22 11:14:02

@@ -5,6 +5,12 @@
 #include <map>
 #include <vector>
 
+/*
+Time: 2020-01-23 11:12:36
+Describe: tried again from scratch in ./G-Redo.cpp
+Statue: FINISHED
+*/
+
 const long double ex = 0.000000000007;
 const long double PI = acos(-1);
 struct Point

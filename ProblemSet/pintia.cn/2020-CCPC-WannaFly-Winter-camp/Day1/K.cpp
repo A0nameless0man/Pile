@@ -4,7 +4,11 @@
 #include <iostream>
 #include <queue>
 #include <string>
-
+/*
+Time: 2020-01-23 11:18:14
+Describe: accepted after learned to jump over meaning less jump on fail tree
+Statue: ACCEPTED
+*/
 using ULL       = unsigned long long;
 const ULL MAX_N = 500007;
 const ULL MAX_M = 26;
