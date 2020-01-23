@@ -1,5 +1,9 @@
 #include <iostream>
-
+/*
+Time: 2020-01-23 11:21:34
+Describe: the door that used to be selected is different from those never selected
+Statue: TODO
+*/
 int main(void)
 {
     int t;

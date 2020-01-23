@@ -1,7 +1,11 @@
 #include <iostream>
 #include <queue>
 #include <vector>
-
+/*
+Time: 2020-01-23 11:20:58
+Describe: binary search plus k-coloring
+Statue: TODO
+*/
 std::vector<std::vector<int>> G;
 std::vector<int>              color, vis;
 

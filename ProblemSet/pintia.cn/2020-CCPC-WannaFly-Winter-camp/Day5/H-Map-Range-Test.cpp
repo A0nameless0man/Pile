@@ -9,7 +9,11 @@
 #include <unordered_map>
 
 using ULL = unsigned long long;
-
+/*
+Time: 2020-01-23 11:30:01
+Describe: time complexity isn't good enough
+Statue: TIME LIMIT EXCITED
+*/
 const ULL MOD = 998244353;
 
 inline int log2(ULL i)
