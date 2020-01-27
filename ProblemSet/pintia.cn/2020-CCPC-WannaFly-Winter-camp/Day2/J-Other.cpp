@@ -194,7 +194,7 @@ int main()
     {
         int st, k;
         cin >> st >> k;
-        cout << st << "#" << '\n';
+        // cout << st << "#" << '\n';
         int f = st + len[st] * cnt[st] - 1 != n;
         if(k == 1)
             cout << st << ' ' << n << '\n';
