@@ -145,9 +145,6 @@ int main(void)
             std::vector<Round> rounds;
             std::vector<Point> points;
             std::vector<Point> hull;
-            Point              startPoint(0, 0xfffff);
-            Point              hullPoint;
-            long double        startAngle = 0;
             std::cin >> n;
 
             {  // input rounds
@@ -204,7 +201,8 @@ int main(void)
             //     }
             //     if(oneRound)
             //     {
-            //         std::cout << std::setprecision(std::numeric_limits<long double>::digits10 + 1)
+            //         std::cout << std::setprecision(std::numeric_limits<long double>::digits10 +
+            //         1)
             //                   << r.r * 2 * PI << std::endl;
             //         // throw 1;
             //         continue;
@@ -232,6 +230,7 @@ int main(void)
                         return a.y < b.y;
                     }
                 });
+
                 {  // remove close points;
                     decltype(points) singlePoints;
 
@@ -246,6 +245,7 @@ int main(void)
                     }
                     std::swap(points, singlePoints);
                 }
+
                 std::vector<Point> vecStc;
                 for(size_t i = 0; i < points.size(); ++i)
                 {
