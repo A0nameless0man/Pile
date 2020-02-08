@@ -62,17 +62,21 @@ int              main(void)
             std::cout << cnt << std::endl;
             for(int j = 0; j < cnt; j++)
             {
-                std::cout << vecs[j].size() << " ";
+                // std::cout << vecs[j].size() << " ";
+                printf("%d ", vecs[j].size());
                 for(int i = 0; i < vecs[j].size(); i++)
                 {
-                    std::cout << vecs[j][i] + 1;
+                    // std::cout << vecs[j][i] + 1;
+                    printf("%d", vecs[j][i] + 1);
                     if(i != vecs[j].size() - 1)
                     {
-                        std::cout << " ";
+                        // std::cout << " ";
+                        printf(" ");
                     }
                     else
                     {
-                        std::cout << "\n";
+                        // std::cout << "\n";
+                        printf("\n");
                     }
                 }
             }

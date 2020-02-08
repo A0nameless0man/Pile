@@ -1,18 +1,20 @@
 #include <iostream>
 int main(void)
 {
-    int n, q;
+    long long n, q;
     while(std::cin >> n >> q)
     {
-        for(int i = 0; i < q; i++)
+        for(long long i = 0; i < q; i++)
         {
-            int x;
-            std::cin >> x;
+            long long x;
+            // std::cin >> x;
+            scanf("%lld", &x);
             while(x % 2 == 0)
             {
                 x = n + x / 2;
             }
-            std::cout << (x + 1) / 2 << std::endl;
+            // std::cout << (x + 1) / 2 << std::endl;
+            printf("%lld\n", (x + 1) / 2);
         }
     }
 }
