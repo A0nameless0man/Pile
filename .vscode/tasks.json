@@ -19,7 +19,7 @@
                     "-o",
                     "${fileDirname}\\${fileBasenameNoExtension}.exe",
                     "${file}"
-                ],
+                ]
             },
             "windows": {
                 "command": "clang-cl",
@@ -42,7 +42,7 @@
                     "-o",
                     "${fileDirname}\\${fileBasenameNoExtension}.exe",
                     "${file}"
-                ],
+                ]
             },
             "problemMatcher": [
                 "$gcc"
@@ -109,12 +109,12 @@
                     ",",
                     "${fileDirname}\\${fileBasenameNoExtension}.pdb",
                     "|Out-Null"
-                ],
+                ]
             },
-            "linux":{
+            "linux": {
                 "args": [
-                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                ],
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                ]
             }
         },
         {
@@ -136,17 +136,17 @@
             "type": "shell",
             "label": "CompleteClean",
             "windows": {
-                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}",
+                "command": "ls ${workspaceRoot} -r|%{if($_.name -match \\\"(\\.exe$)|(\\.ilk$)|(\\.pdb$)|(\\.pch$)|(\\.class$)\\\" -and $_.mode -notmatch \\\"d\\\"){echo $_.FullName;del $_.FullName}}"
             },
             "linux": {
-                "command": "find ${workspaceRoot} -regextype posix-extended -regex '.*\\.(exe$|ilk$|pch$|pdb$|out$)' |tee ./deletedFiles|xargs rm\ncat ./deletedFiles\nrm ./deletedFiles" //xargs rm"
+                "command": "find ${workspaceRoot} -regextype posix-extended -regex '.*\\.(exe$|ilk$|pch$|pdb$|out$|class$)' |tee ./deletedFiles|xargs rm\ncat ./deletedFiles\nrm ./deletedFiles"
             },
             "problemMatcher": []
         },
         {
             "type": "shell",
             "label": "TScompile",
-            "command":"tsc",
+            "command": "tsc",
             "args": [
                 "-p",
                 "${fileDirname}\\..\\"
@@ -156,7 +156,7 @@
         {
             "type": "shell",
             "label": "TSrun",
-            "command":"node",
+            "command": "node",
             "args": [
                 "${fileDirname}\\..\\dist\\${fileBasenameNoExtension}.js"
             ]
@@ -165,10 +165,30 @@
             "type": "shell",
             "label": "TStest",
             "dependsOrder": "sequence",
-            "dependsOn":[
+            "dependsOn": [
                 "TScompile",
                 "TSrun"
             ]
+        },
+        {
+            "type": "shell",
+            "label": "JavaCompile",
+            "command": "javac",
+            "args": [
+                "${file}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "JavaRun",
+            "command": "java",
+            "args": [
+                "-cp",
+                "${fileDirname}",
+                "${fileBasenameNoExtension}"
+            ],
+            "problemMatcher": []
         }
     ]
 }
