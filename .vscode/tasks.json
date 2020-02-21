@@ -169,26 +169,6 @@
                 "TScompile",
                 "TSrun"
             ]
-        },
-        {
-            "type": "shell",
-            "label": "JavaCompile",
-            "command": "javac",
-            "args": [
-                "${file}"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "type": "shell",
-            "label": "JavaRun",
-            "command": "java",
-            "args": [
-                "-cp",
-                "${fileDirname}",
-                "${fileBasenameNoExtension}"
-            ],
-            "problemMatcher": []
         }
     ]
 }

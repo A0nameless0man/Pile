@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "JavaCompile",
+            "command": "javac",
+            "args": [
+                "${file}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "JavaRun",
+            "command": "java",
+            "args": [
+                "-cp",
+                "${fileDirname}",
+                "${fileBasenameNoExtension}"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
