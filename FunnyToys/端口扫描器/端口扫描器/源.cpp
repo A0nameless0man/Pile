@@ -168,7 +168,7 @@ DWORD portscan()
         //返回值为0代表成功
         if(nret == 0)
         {
-            //printf("\n\t%d\n", i);
+            printf("\nPort:%10d Opened\n", i);
             ++nopen;
         }
     }
