@@ -1,6 +1,7 @@
 
 *.txt
-!in.txt
+*.doc
+*.docx
 .vs/
 Debug/
 [xX]64/
@@ -11,7 +12,8 @@ Debug/
 *.pdb
 *.ipch
 *.db
-*.htm[l]?
+*.htm
+*.html
 *.pdf
 dist/
 *.stackdump
