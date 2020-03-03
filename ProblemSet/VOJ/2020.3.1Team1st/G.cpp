@@ -37,12 +37,13 @@ int main(void)
             {
                 prefix[i] ^= prefix[i - 1];
             }
+            if(map[prefix[i]]==-1)
+            {
+                map[prefix[i]] == i;
+            }
         }
-        for(int mask = 0; mask < 20; ++mask)
         {
-            int curans  = 0;
-            int cnt[20] = { 0 };
-            for(int i = 0; i < N; ++i) {}
+
         }
     }
 }
