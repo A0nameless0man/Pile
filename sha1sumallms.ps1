@@ -2,7 +2,8 @@ param(
     $Dir = "./",
     $OutFile = $("sha1sumAt$(Get-Date -Format "yyyy-mm-dd--HH-mm").txt"),
     $fill = "*",
-    $empty = " "
+    $empty = " ",
+    $updateSpeed = 1000
 )
 Write-Output "Will Write to $OutFile";
 
@@ -49,19 +50,22 @@ try {
             $i++
         }
         if (-not $done) { 
-            $percent = [int]((1 - ($running / $cnt)) * 100);
+            $dpercent = (1 - ($running / $cnt))
+            $percent = [int]($dpercent * 100);
             $pos = $Host.UI.RawUI.CursorPosition
             $pos.x = 0;
             # $pos.y = $pos.y;
             if ($Host.UI.RawUI.WindowSize.Height - $pos.y -le 2) {
                 $pos.y -= 2;
             }
-            Write-Host "$cnt Mission ,$running is Running , $percent % Complite"
-            Write-Host "[$($fill * $([int]$percent / 5))$( $empty *([int](100-$percent)/5))]"
+            $fillWide = $Host.UI.RawUI.WindowSize.Width - 2;
+            $fillStr = "[$($fill * ([int]($dpercent * $fillWide)))$($empty*([int]((1-$dpercent)*$fillWide)))]";
+            Write-Host "$cnt Mission ,$running is Waiting , $percent % Complite"
+            Write-Host "$fillStr"
             $Host.UI.RawUI.CursorPosition = $pos;
-            Start-Sleep -Milliseconds 100 
+            Start-Sleep -Milliseconds $updateSpeed 
         }
-    } until ($done)    
+    } until ($done)
     $ansers = $ansers | Sort-Object -Property Path
     foreach ($rec in $ansers) {
         $ans = "$($rec.Path) $($rec.Hash)"
