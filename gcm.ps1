@@ -18,7 +18,7 @@ if ($currentStatus.Contains($goodStatus)) {
     Write-Output $goodStatus
 }
 else {
-    $date = Get-Date
+    $date = Get-Date -Format "yyyy-mm-dd--HH-mm"
     git add *
     if ($args.Count -eq 0) {
         git commit -a -m "$date" 
