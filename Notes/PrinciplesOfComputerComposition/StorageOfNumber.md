@@ -2,6 +2,7 @@
 author: "胡广"
 date: 2020-03-04
 title: "Storage of number"
+markdown:
 ---
 
 众所周知，计算机采用二进制来存储信息，本文是我对于`计算机如何进行数字的存储与运算`这一主题的理解与思考。
@@ -56,5 +57,51 @@ $$\forall x \in [0,2^{n-1}],f(x)=2^n-x$$
 $$\forall x \in [0,2^{n-1}],f(x)=\overline{x}+1$$
 
 真是优雅
+
+### Integer adder
+
+最简单的设计当然是行波进位加法器了。
+这种加法器由全加器单元组成，简单快捷，但是速度不快。
+
+```puml
+() inputA as A
+() inputB as B
+() CarryInput as CI #gray
+() CarryOutput as CO #gray
+() AnsOutput as AO
+
+rectangle Adder
+A-->Adder
+B-->Adder
+CI-r->Adder
+Adder-r->CO
+Adder-->AO
+```
+
+多个此种单元串联即可
+
+```puml
+!function Adder($Num)
+  () inputA.$Num as A.$Num #gray
+  () inputB.$Num as B.$Num
+  () AnsOutput.$Num as AO.$Num
+  !$Last=$Num-1
+  !if $Num!=0
+  Adder2($Num - 1)
+  !endif
+  rectangle Adder.$Num
+  A.$Num-down->Adder.$Num
+  B.$Num-d->Adder.$Num
+  !if $Num != 0
+  Adder.$Last-r->Adder.$Num :Carry
+  !endif
+  Adder.$Num-->AO.$Num
+!endfunction
+!function Adder2($a)
+Adder($a)
+!endfunction
+Adder(3)
+Adder.3-r-> [...]
+```
 
 ## Float
