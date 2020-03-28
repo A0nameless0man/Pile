@@ -1,0 +1,1 @@
+create unique clustered index ItemIndex on Item(ItemNumber);

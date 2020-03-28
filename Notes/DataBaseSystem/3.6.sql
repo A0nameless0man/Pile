@@ -1,0 +1,1 @@
+create index CustomerIndex on Customer(CustomerNumber);

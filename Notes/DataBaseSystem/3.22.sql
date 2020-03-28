@@ -1,0 +1,1 @@
+select * from Item where Price > 50;

@@ -1,0 +1,1 @@
+select ItemName , Price*0.6 as Discount from Items;

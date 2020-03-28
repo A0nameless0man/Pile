@@ -1,0 +1,1 @@
+select "Customer name" = CustomerName , "Customer number" = CustomerNumber from Customer;
