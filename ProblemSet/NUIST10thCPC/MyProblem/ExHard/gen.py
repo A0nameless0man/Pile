@@ -12,13 +12,21 @@ def hack1(i, j):
 def hack2(i, j):
     return (i + j) % 2
 
+def hack3(i, j):
+    return 0
+
+def hack4(i, j):
+    return 1
+
 scale = [[(5, 10, rand)] * 20] * 2
 scale += [[(10, 20, rand)] * 20] * 15
 scale += [[(50, 50, rand)] * 4] * 3
-scale += [[(60, 60, rand)]] * 3
+scale += [[(60, 60, rand)]] * 1
 scale += [[(500, 500, rand)]]*2
 scale += [[(500, 500, hack1)]]
 scale += [[(500, 500, hack2)]]
+scale += [[(500, 500, hack3)]]
+scale += [[(500, 500, hack4)]]
 scale += [[(1000, 250, rand)]]
 scale += [[(250, 1000, rand)]]
 
