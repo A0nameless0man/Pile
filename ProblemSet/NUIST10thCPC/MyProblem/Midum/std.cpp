@@ -4,6 +4,11 @@
 #include <iostream>
 #include <vector>
 
+int decode(int i)
+{
+    return (i / 10000) * 1440 + 60 * (i % 10000 / 100) + i % 60;
+}
+
 int main(void)
 {
     int T;
@@ -11,8 +16,8 @@ int main(void)
     {
         for(int t = 0; t < T; ++t)
         {
-            std::array<int, 1441> ary = { 0 };
-            int                   n;
+            std::array<int, 43200 + 1> ary = { 0 };
+            int                        n;
             // std::cin >> n;
             scanf("%d", &n);
             for(int i = 0; i < n; ++i)
@@ -25,28 +30,26 @@ int main(void)
                     int beg, end;
                     // std::cin >> beg >> end;
                     scanf("%d%d", &beg, &end);
-                    beg = 60 * (beg / 100) + beg % 100;
-                    end = 60 * (end / 100) + end % 100;
-                    end = std::min(end, 1440);
-                    for(int i = beg; i < end; ++i)
-                    {
-                        ++ary[i];
-                    }
+                    beg = decode(beg);
+                    end = decode(end);
+                    end = std::min(end, 43200);
+                    ++ary[beg];
+                    --ary[end];
                 }
             }
 #ifdef DEBUG
-            for(int i = 0; i < 1440; ++i)
+            for(int i = 0; i < 43200; ++i)
             {
                 std::cout << ary[i] << " ";
             }
             std::cout << std::endl;
 #endif  // DEBUG
-            // for(int i = 1; i < 1441; ++i)
-            // {
-            //     ary[i] += ary[i - 1];
-            // }
+            for(int i = 1; i < 43201; ++i)
+            {
+                ary[i] += ary[i - 1];
+            }
             int a = 0, b = 0, c = 0;
-            for(int i = 0; i < 1440; ++i)
+            for(int i = 0; i < 43200; ++i)
             {
                 if(ary[i] > 4)
                 {
@@ -54,7 +57,7 @@ int main(void)
                 }
                 else if(ary[i] == 0)
                 {
-                    if(i < 360 || i >= 1080)
+                    if(i%1440 < 360 || i%1440 >= 1080)
                     {
                         ++c;
                     }
