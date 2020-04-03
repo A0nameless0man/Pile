@@ -6,44 +6,19 @@
         {
             "type": "shell",
             "label": "ClangBuild",
-            // "linux": {
-                "command": "clang++",
-                "args": [
-                    "-std=c++17",
-                    "-Werror",
-                    "-Wall",
-                    "-Wno-c++98-compat",
-                    "-Wno-c++98-compat-pedantic",
-                    "-Wno-newline-eof",
-                    "-O2",
-                    "-o",
-                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                    "${file}"
-                ]
-            // },
-            // "windows": {
-            //     "command": "clang-cl",
-            //     "args": [
-            //         "-Zi",
-            //         "-EHac",
-            //         "-Xclang",
-            //         "-std=c++2a",
-            //         "-Werror",
-            //         "-Wall",
-            //         "-Wno-c++98-compat",
-            //         "-Wno-c++98-compat-pedantic",
-            //         "-Wno-newline-eof",
-            //         "-Xclang",
-            //         "-fconstexpr-steps",
-            //         "-Xclang",
-            //         "2147483647",
-            //         "-Xclang",
-            //         "-O2",
-            //         "-o",
-            //         "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            //         "${file}"
-            //     ]
-            },
+            "command": "clang++",
+            "args": [
+                "-std=c++17",
+                "-Werror",
+                "-Wall",
+                "-Wno-c++98-compat",
+                "-Wno-c++98-compat-pedantic",
+                "-Wno-newline-eof",
+                "-O2",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
             "problemMatcher": [
                 "$gcc"
             ],
