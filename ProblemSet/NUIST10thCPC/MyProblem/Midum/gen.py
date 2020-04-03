@@ -13,7 +13,7 @@ def gen1(n):
             else:
                 beg = random.randint(decode(vtb[-1][1]), 43199)
             end = random.randint(beg + 1, 43200 + 60 * 6)
-            if end % 1440 - beg % 1440 == 1 and end % 1440 <= 360:
+            if end // 1440 - beg // 1440 == 1 and end % 1440 <= 360:
                 end = (end // 1440 - 1) * 10000 + encode(end % 1440 + 1440)+10000
             else:
                 end = (end // 1440) * 10000 + encode(end % 1440)+10000
