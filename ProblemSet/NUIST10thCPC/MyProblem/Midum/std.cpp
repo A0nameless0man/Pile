@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <algorithm>
 #include <array>
 #include <cstdio>
@@ -6,7 +7,11 @@
 
 int decode(int i)
 {
-    return (i / 10000) * 1440 + 60 * (i % 10000 / 100) + i % 60;
+#ifdef DEBUG
+    std::cout << i << "Decode into" << (i / 10000 - 1) * 1440 + 60 * ((i % 10000) / 100) + (i) % 100
+              << std::endl;
+#endif
+    return (i / 10000 - 1) * 1440 + 60 * ((i % 10000) / 100) + i % 100;
 }
 
 int main(void)
@@ -57,7 +62,7 @@ int main(void)
                 }
                 else if(ary[i] == 0)
                 {
-                    if(i%1440 < 360 || i%1440 >= 1080)
+                    if(i % 1440 < 360 || i % 1440 >= 1080)
                     {
                         ++c;
                     }

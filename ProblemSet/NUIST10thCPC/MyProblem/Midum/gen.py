@@ -14,10 +14,10 @@ def gen1(n):
                 beg = random.randint(decode(vtb[-1][1]), 43199)
             end = random.randint(beg + 1, 43200 + 60 * 6)
             if end % 1440 - beg % 1440 == 1 and end % 1440 <= 360:
-                end = (end // 1440 - 1) * 10000 + encode(end % 1440 + 1440)
+                end = (end // 1440 - 1) * 10000 + encode(end % 1440 + 1440)+10000
             else:
-                end = (end // 1440) * 10000 + encode(end % 1440)
-            beg = (beg // 1440) * 10000 + encode(beg % 1440)
+                end = (end // 1440) * 10000 + encode(end % 1440)+10000
+            beg = (beg // 1440) * 10000 + encode(beg % 1440)+10000
             vtb.append((beg, end))
             n = n - 1
             if decode(end) >= 43200:
@@ -27,7 +27,7 @@ def gen1(n):
 
 
 def gen2(n):
-    vtbs = [[(0, 302400)]] * n
+    vtbs = [[(10000, 302400)]] * n
     return vtbs
 
 
@@ -36,7 +36,7 @@ def encode(n):
 
 
 def decode(i):
-    return (i // 10000) * 1440 + 60 * (i % 10000 // 100) + i % 60
+    return (i // 10000 -1) * 1440 + 60 * (i % 10000 // 100) + i % 100
 
 
 scale = [[(10, gen1)] * 10] * 4
