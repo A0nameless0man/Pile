@@ -6,13 +6,11 @@ struct ArrayType
 {
     using Result = T;
 };
-
 template <typename T, size_t N>
 struct ArrayType<T[N]>
 {
     using Result = typename ArrayType<T>::Result;
 };
-
 template <size_t N, typename T>
 typename ArrayType<T>::Result sum(T (&a)[N])
 {
@@ -24,12 +22,12 @@ typename ArrayType<T>::Result sum(T (&a)[N])
     }
     return s;
 }
+
 template <typename T>
-T sum(T &a)
+const T& sum(const T &a)
 {
     return a;
 }
-
 int main(void)
 {
     long long   a[4][4][5] = { { { 1, 2, 3, 4, 5 }, { 2, 4, 6, 8, 10 } } };
@@ -39,4 +37,5 @@ int main(void)
     std::cout << sum(a) << std::endl;
     std::cout << sum(b) << std::endl;
     std::cout << sum(s) << std::endl;
+    std::cout << sum(1) << std::endl;
 }
