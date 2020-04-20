@@ -47,12 +47,17 @@ public class SimpleClass {
             assert c2 == c1 : "setRadious returns Same Object";
             c2 = new Circle(2);
             Circle c3 = new Circle(2.0);
-            assert (c2.getArea() - c3.getArea())<EXP;
-            assert (Circle.area(2.0) - c3.getArea())<EXP;
+            assert (c2.getArea() - c3.getArea() < EXP);
+            assert (Circle.area(2.0) - c3.getArea() < EXP);
             System.out.println(c2.getArea().toString());
+            Double d = 1.0;
+            Circle c4 = new Circle(d);
+            d = 2.0;
+            assert (Circle.area(1.0) - c4.getArea() < EXP);
             return true;
         }
     }
+
     public static void main(String[] args) {
         assert Circle.test() : "Test Fail";
         System.out.println("Test Finish");
