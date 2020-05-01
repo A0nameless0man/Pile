@@ -24,7 +24,7 @@
             "MIMode": "gdb",
             "windows": {
                 "sourceFileMap": {
-                    "/k": "K:/",
+                    "/d": "d:/",
                     "/c": "C:/"
                 },
                 "miDebuggerPath": "C:/msys64/usr/bin/gdb.exe"
@@ -51,7 +51,7 @@
             "MIMode": "gdb",
             "windows": {
                 "sourceFileMap": {
-                    "/k": "K:/",
+                    "/d": "d:/",
                     "/c": "C:/"
                 },
                 "miDebuggerPath": "C:/msys64/usr/bin/gdb.exe"
