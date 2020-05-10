@@ -1,6 +1,6 @@
 package Sum;
 
-import HelloWorld.App;
+// import HelloWorld.App;
 
 public class Sum {
     public static void main(String[] args) {
