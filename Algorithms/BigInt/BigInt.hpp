@@ -392,7 +392,7 @@ DigConstRangMul(const typename Base_BigInt<Power, Digt, Base>::DigConstRang &lop
         return X + Y + Z;
     }
 }
-using BigInt = Base_BigInt<2, long long, 10>;
+using BigInt = Base_BigInt<8, long long, 10>;
 
 }  // namespace BigInt
 
