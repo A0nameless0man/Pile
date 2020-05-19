@@ -33,12 +33,13 @@ int main(void)
 {
     BigInt::BigInt a, b, c;
     while(std::cin >> a >> b)
-    {
-        GoodClock gc;
-        gc.begin();
-        for(int i = 0; i < 10; ++i)
-            c = a + b;
-        gc.stop();
-        std::cout << gc.get() << std::endl;
-    }
+        for(int j = 0; j < 20; ++j)
+        {
+            GoodClock gc;
+            gc.begin();
+            for(int i = 0; i < 10; ++i)
+                c = a * b;
+            gc.stop();
+            std::cout << static_cast<long double>(gc.get()) / 10 / 1000000 << std::endl;
+        }
 }
