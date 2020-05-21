@@ -12,8 +12,7 @@
   - [Windows下的开发工具安装](#windows下的开发工具安装)
     - [怎么设置环境变量](#怎么设置环境变量)
     - [安装 `gcc`](#安装-gcc)
-      - [Mingw64](#mingw64)
-      - [msys2](#msys2)
+      - [通过 `msys2` 安装 `GNU` 软件环境](#通过-msys2-安装-gnu-软件环境)
     - [安装 `clang`](#安装-clang)
   - [配置vsc以运行及调试](#配置vsc以运行及调试)
     - [coderunner法](#coderunner法)
@@ -26,11 +25,8 @@
     - [clang-cl](#clang-cl)
 - [文档工具](#文档工具)
   - [markdown语法](#markdown语法httpswwwrunoobcommarkdownmd-tutorialhtml)
-    - [mermaid插件](#mermaid插件httpsmermaid-jsgithubiomermaid)
-      - [graph](#graph)
-      - [classDiagram](#classdiagram)
-      - [gantt](#gantt)
     - [vsc的markdown插件:Markdown Preview Enhanced](#vsc的markdown插件markdown-preview-enhancedhttpsshd101wyygithubiomarkdown-preview-enhancedzh-cn)
+      - [Markdown Preview Enhanced 内嵌的 PlantUML 工具](#markdown-preview-enhanced-内嵌的-plantuml-工具)
   - [latex语法](#latex语法)
 - [开发流程](#开发流程)
   - [git](#git)
@@ -38,6 +34,9 @@
     - [git连接远程仓库](#git连接远程仓库)
       - [通用远程仓库](#通用远程仓库)
       - [github](#github)
+- [引用](#引用)
+  - [task.json](#taskjson)
+  - [launch.json](#launchjson)
 
 <!-- /code_chunk_output -->
 
@@ -155,7 +154,7 @@ Unix 系统下，多数软件安装在 `/usr/bin` 下，而这个目录默认是
 
 `GCC` 并不提供单独的安装包，因为它的依赖特别多，因此通常是直接提供整个 `GUN` 软件环境。
 
-##### Mingw64
+<!-- ##### Mingw64
 
 这个是 经典的 `Mingw` 的后继者，也是经常被建议使用的软件。
 
@@ -166,7 +165,9 @@ Unix 系统下，多数软件安装在 `/usr/bin` 下，而这个目录默认是
 然后解压，放到合适的地方，比如说 `C:/mingw`。
 找到里面的 `bin` 目录，把这整个目录的路径加进 `PATH`。
 
->安装完毕记得测试，在命令行中执行 `g++ -v` ,输出 版本号 之类的调试信息为正常。
+>安装完毕记得测试，在命令行中执行 `g++ -v` ,输出 版本号 之类的调试信息为正常。 -->
+
+<!--Mingw 已死-->
 
 <!--待确认，有没有gdb-->
 
@@ -179,7 +180,30 @@ Unix 系统下，多数软件安装在 `/usr/bin` 下，而这个目录默认是
 <!--等安个虚拟机测试一下再继续-->
 <!-- 网络反复出错，体验实在辣鸡 -->
 
-##### msys2
+##### 通过 `msys2` 安装 `GNU` 软件环境
+
+简单来说，下载 `msys2` 的安装包，然后直接安装即可。
+
+由于神秘的原因，有时候会卡在 66% 进度，任务管理器杀掉安装进程重开即可。
+
+`msys2` 带了一套包管理系统叫 `pacman`.
+
+基本上，只需要了解如下基础命令：
+
+```sh
+pacman -Syu #检查更新并更新
+#如果pacman被更新了，请在看到提示后遵循提示强行终止pacman并再次执行如上命令
+
+pacman -S *** #安装软件或软件包，比如基础开发环境包 "base-devel"
+```
+
+一般来说，建议安装 `base-devel` ，`make` , `ssh`.这几个，其它的软件可以根据需求选择。
+
+另外，既然是包管理系统，那就不可避免的有源的问题。由于 `msys2` 的默认源在国外，访问速度极其缓慢，建议更换清华大学提供的源，方法见[清华的说明](https://mirror.tuna.tsinghua.edu.cn/help/msys2/)
+
+如果在下载过程中网络波动，导致添加在头部的清华源失败，`pacman` 会回退到默认源。这时最好直接中断（ `ctrl` + `C` ）然后重开。
+
+如果由于下载速度慢，经常失败，可以添加参数 `--disable-download-timeout` 来禁用下载超时。
 
 #### 安装 `clang`
 
@@ -195,13 +219,50 @@ Unix 系统下，多数软件安装在 `/usr/bin` 下，而这个目录默认是
 
 #### coderunner法
 
+据说直接按照这个插件即可
+
 #### launch.json+task.json法
 
-<!-- @import "./.vscode/tasks.json"{as="json" class="line-numbers" hide=true} -->
-<!-- @import "./.vscode/launch.json"{as="json" class="line-numbers" hide=true} -->
 ##### json的格式
 
+`json` 是一种具有格式的文本，它保存着 `json` 对象。
+
+`json` 对象具有成员，成员有名字和值。名字必是字符串，值可以为字符串、数字、`json` 对象或 `json` 对象的数组。
+
+`json` 对象包裹在一对大括号中，`json` 对象数组则是中括号。数组的成员之间，对象的成员之间用 `,` 分隔，最后一个项目后面没有逗号。成员的名字和值之间用 `:` 分隔。
+
 ##### 配置以上json的方法
+
+`task.json` 定义一些 *Task* ，可以在 `F1` 选单中通过 `Run Task` 来执行。
+
+`task.json` 的根对象有两个成员，一个是 `"version"` ,其值为一个字符串，当前为 `"2.0.0"` 。另一个是 `"tasks"` ,其值为一个包含了 `task` 对象的数组。
+
+`task` 对象的成员大部分是可选的，但是有一些是必选的，比如 `"label"` 表示这个任务的名字。 `"type"` 表示这个任务的类型（一般填 `"shell"` )。`"command"` 表示这个任务应当调用哪个程序。还有可选成员 `"args"` 表示要给这个程序传什么样的参数。
+
+这里特别提到，vscode支持一些内置变量，可以以 `shel 变量` 的形式调用，即 `${变量名}` 形式的内容会被替换为对应的变量值。很有用的内置变量比如 ：
+
+|变量名|内容|
+|:-:|:-:|
+|`file`|调用task时编辑焦点所在的文件|
+|`fileBasenameNoExtension`|上述文件的无扩展名的文件名|
+|`fileDirname`|上述文件所在的目录|
+|`workspaceRoot`|当前使用vscode打开的文件夹|
+
+还有 `"dependsOrder"` 和 `"dependsOn"` 成员可以制定任务的依赖关系，极大的扩展了任务的功能。
+
+可选成员 `"group"`则定义了任务的类型，这个对于其运行没有直接影响，但是会影响这个任务被显示时的分组。
+
+为了支持跨平台，可以用 名为 `"linux"` 、`"windows"` 或 `"macos"` 的成员对象包裹个别成员来指定这些成员只在特定系统下有效。
+
+`launch.json` 则定义了调试的不同配置。具体选项可以自行搜索，这里提三个因人而异的成员。
+
+成员 `"preLaunchTask"` 的值应当是 `task.json` 中某个 `task` 的 `"label"`。表示在开始调试前应当调用这个任务，通常都是编译任务之类的。
+
+成员 `"miDebuggerPath"` 应当指向 `gdb` 的绝对路径。
+
+成员 `"program"` 则指向要调试的程序。
+
+具体举例见后方引用小节
 
 ## 开发工具
 
@@ -271,15 +332,9 @@ clang-cl 是个 `clang` 的修改版以兼容 `cl.exe`
 
 ### [markdown语法](https://www.runoob.com/markdown/md-tutorial.html)
 
-#### [mermaid插件](https://mermaid-js.github.io/mermaid/#/)
-
-##### graph
-
-##### classDiagram
-
-##### gantt
-
 #### [vsc的markdown插件:Markdown Preview Enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)
+
+##### [Markdown Preview Enhanced 内嵌的 PlantUML 工具]()
 
 ### latex语法
 
@@ -294,3 +349,13 @@ clang-cl 是个 `clang` 的修改版以兼容 `cl.exe`
 ##### 通用远程仓库
 
 ##### github
+
+## 引用
+
+### task.json
+
+<!-- @import "../.vscode/tasks.json"{as="json" class="line-numbers" hide=false} -->
+
+### launch.json
+
+<!-- @import "../.vscode/launch.json"{as="json" class="line-numbers" hide=false} -->
