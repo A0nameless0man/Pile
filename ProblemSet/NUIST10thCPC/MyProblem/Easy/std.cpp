@@ -6,6 +6,7 @@
 
 int main(void)
 {
+    std::cerr << "watching" << std::endl;
     int T;
     while(std::cin >> T)
     {
@@ -20,6 +21,10 @@ int main(void)
                 int a;
                 // std::cin >> a;
                 scanf("%d", &a);
+                if(a > 10)
+                {
+                    std::cerr << "cust too many" << std::endl;
+                }
                 for(int j = 0; j < a; ++j)
                 {
                     int beg, end;
@@ -41,10 +46,10 @@ int main(void)
             }
             std::cout << std::endl;
 #endif  // DEBUG
-            // for(int i = 1; i < 1441; ++i)
-            // {
-            //     ary[i] += ary[i - 1];
-            // }
+        // for(int i = 1; i < 1441; ++i)
+        // {
+        //     ary[i] += ary[i - 1];
+        // }
             int a = 0, b = 0, c = 0;
             for(int i = 0; i < 1440; ++i)
             {

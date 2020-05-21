@@ -23,7 +23,7 @@ do {
     $i = 0
     $done = $true
     foreach ($handle in $handles) {
-        if ($handle -ne $null) {
+        if ($null -ne $handle) {
             if ($handle.IsCompleted) {
                 $threads[$i].EndInvoke($handle)
                 $threads[$i].Dispose()
