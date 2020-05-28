@@ -334,21 +334,20 @@ clang-cl 是个 `clang` 的修改版以兼容 `cl.exe`
 
 #### [vsc的markdown插件:Markdown Preview Enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/)
 
-##### [Markdown Preview Enhanced 内嵌的 PlantUML 工具]()
+##### [Markdown Preview Enhanced 内嵌的 PlantUML 工具](https://plantuml.com/zh/)
 
 ### latex语法
 
 ## 开发流程
 
-### git
+### [git](https://www.runoob.com/git/git-basic-operations.html)
 
-#### git的使用
+请学习以下章节
 
-#### git连接远程仓库
-
-##### 通用远程仓库
-
-##### github
+- git的使用
+- git连接远程仓库
+- 通用远程仓库
+- github
 
 ## 引用
 
