@@ -7,6 +7,7 @@ scale 0.8
 cloud {
 (i-NUIST) as eth
 }
+package "My Systems"{
 
 package "Dell R510"{
   package "Phy Eth"{
@@ -68,9 +69,9 @@ package "DeskTop" as client{
     (add on) as cpe2
   }
 }
-pe2 <-.r-> pe1
-pe2 <-d-> cpe2
-pe1 <-d-> eth
+}
+pe2 <--> cpe2
+pe1 <----> eth
 ```
 
 ## 存储
@@ -132,7 +133,7 @@ note top : NVMe\n37E32D21-3D28-4A17-9314-EB12E0FA0FFB
 note top : SATA HDD\n00064560
 (挂载) as cmnt
 }
-smb <=u= cmnt #Black
+smb <=d=== cmnt #Black
 ```
 
 ## 服务
@@ -144,8 +145,11 @@ smb <=u= cmnt #Black
 +++ <&pulse>虚拟机控制台
 +++ 虚拟机
 ++++ FreeNAS
-+++++ SMB
-+++++ WebDav
++++++ 文件存储
+++++++ RaidZ1
++++++ 文件共享
+++++++ SMB
+++++++ WebDav
 ++++ UtorrentLoader
 +++++ 挂机下载
 +++++ Wifi覆盖
@@ -155,5 +159,8 @@ smb <=u= cmnt #Black
 +++++ 自动接入
 +++++ DHCP
 +++++ 局域网路由
++++ 硬盘管理
+++++ S.M.A.R.T.
+++++ 硬盘信息查看
 @endmindmap
 ```
