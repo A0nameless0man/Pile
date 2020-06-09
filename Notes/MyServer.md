@@ -16,9 +16,7 @@ package "Dell R510"{
   }
   package "Vir Eth"{
     (vmbr0) as ve0
-    note right: 虚拟交换机0
     (vmbr1) as ve1
-    note left: 虚拟交换机1
   }
   node "FreeNAS" as fn{
     note "10.0.3.2\n82:D3:CB:40:D9:8F" as fnaddr
