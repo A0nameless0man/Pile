@@ -11,9 +11,7 @@ cloud {
 package "Dell R510"{
   package "Phy Eth"{
     (eno1) as pe1
-    note bottom: 物理接口1
     (eno2) as pe2
-    note bottom: 物理接口2
   }
   package "Vir Eth"{
     (vmbr0) as ve0
@@ -62,7 +60,7 @@ package "Dell R510"{
   fn <--> ve0
   ap <--> ve0
   ul <--> ve0
-  pve <--> ve0
+  pve <---> ve0
 }
 package "DeskTop" as client{
     package "Client Phy Eth"{
@@ -70,9 +68,9 @@ package "DeskTop" as client{
     (add on) as cpe2
   }
 }
-
-pe2 <-u-> cpe2
-pe1 -u-> eth
+pe2 <-.r-> pe1
+pe2 <-d-> cpe2
+pe1 <-d-> eth
 ```
 
 ## 存储
