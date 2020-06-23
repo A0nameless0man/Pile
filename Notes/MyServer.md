@@ -37,8 +37,6 @@ package "Dell R510"{
   }
   node UtorrentLoader as ul{
     note "10.0.129\nAA:97:FB:90:4D:FF" as uladdr
-    [Wifi] as wifi
-    note top : HG-508
   }
   node "OpenWrt" as ow{
     (lan)
@@ -61,15 +59,35 @@ package "Dell R510"{
   ul <--> ve0
   pve <---> ve0
 }
+package "WS5200" as router{
+  (switch) as rsw
+  (eno1) as rpe1
+  (eno2) as rpe2
+  (eno3) as rpe3
+  (eno4) as rpe4
+  (WiFi:HG-508) as wifi
+  rsw <--> rpe1
+  rsw <--> rpe2
+  rsw <--> rpe3
+  rsw <--> rpe4
+  rsw <--> wifi
+}
 package "DeskTop" as client{
     package "Client Phy Eth"{
     (built in) as cpe1
     (add on) as cpe2
   }
 }
+package "P06-90" as gpuserver{
+    package "GPU Server Phy Eth"{
+    (WiFi Apaper) as gpe1
+  }
 }
-pe2 <--> cpe2
+}
 pe1 <----> eth
+pe2 <--> rpe1
+rpe2 <---> cpe2
+wifi <-.-> gpe1
 ```
 
 ## 存储
@@ -138,27 +156,29 @@ smb <=d=== cmnt #Black
 
 ```puml
 @startmindmap
-+ Dell R510
-++ pve
-+++ <&pulse>虚拟机控制台
-+++ 虚拟机
-++++ FreeNAS
-+++++ 文件存储
-++++++ RaidZ1
-+++++ 文件共享
-++++++ SMB
-++++++ WebDav
-++++ UtorrentLoader
-+++++ 挂机下载
-+++++ Wifi覆盖
-++++ ApacheProxy
-+++++ 内网穿透
-++++ OpenWrt
-+++++ 自动接入
-+++++ DHCP
-+++++ 局域网路由
-+++ 硬盘管理
-++++ S.M.A.R.T.
-++++ 硬盘信息查看
++硬件系统
+++ Dell R510
++++ pve
+++++ <&pulse>虚拟机控制台
+++++ 虚拟机
++++++ FreeNAS
+++++++ 文件存储
++++++++ RaidZ1
+++++++ 文件共享
++++++++ SMB
++++++++ WebDav
++++++ UtorrentLoader
+++++++ 挂机下载
++++++ ApacheProxy
+++++++ 内网穿透
++++++ OpenWrt
+++++++ 自动接入
+++++++ DHCP
+++++++ 局域网路由
+++++ 硬盘管理
++++++ S.M.A.R.T.
++++++ 硬盘信息查看
+++WS5200
++++WiFi
 @endmindmap
 ```
