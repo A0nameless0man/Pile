@@ -156,7 +156,7 @@ smb <=d=== cmnt #Black
 
 ```puml
 @startmindmap
-+硬件系统
++ 硬件系统
 ++ Dell R510
 +++ pve
 ++++ <&pulse>虚拟机控制台
@@ -178,7 +178,7 @@ smb <=d=== cmnt #Black
 ++++ 硬盘管理
 +++++ S.M.A.R.T.
 +++++ 硬盘信息查看
-++WS5200
-+++WiFi
+++ WS5200
++++ WiFi
 @endmindmap
 ```
