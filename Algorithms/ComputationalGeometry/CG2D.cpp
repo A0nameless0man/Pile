@@ -1,10 +1,48 @@
 #include <algorithm>
 #include <cmath>
+#include <deque>
+#include <exception>
+#include <iostream>
+#include <vector>
+
+#define assert(x)                                      \
+    if(!(x))                                           \
+    {                                                  \
+        std::cout << "Failed asset " << (#x) << " in " \
+                  << __FUNCTION__ << " (line: "        \
+                  << std::to_string(__LINE__) << " )"  \
+                  << std::endl;                        \
+        throw std::runtime_error(                      \
+          "Assert " #x " Filed in line"                \
+          + std::to_string(__LINE__));                 \
+    }                                                  \
+    else                                               \
+    {                                                  \
+        std::cout << "Passed asset " << (#x) << " in " \
+                  << __FUNCTION__ << " (line: "        \
+                  << std::to_string(__LINE__) << " )"  \
+                  << std::endl;                        \
+    }
 
 template <typename T>
 struct CG2D
 {
     static constexpr T EXP = 1e-8;
+    static int         sig(const T &t)
+    {
+        if(std::abs(t) <= EXP)
+        {
+            return 0;
+        }
+        else if(t > EXP)
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+    }
     struct Point
     {
         T x;
@@ -47,7 +85,7 @@ struct CG2D
             return this->x * rop.y - this->y * rop.x;
         }
     };
-    static T distence(const Point &lop, const Point &rop)
+    static T distance(const Point &lop, const Point &rop)
     {
         return (lop.sub(rop)).length();
     }
@@ -89,56 +127,144 @@ struct CG2D
     //         return { this->a.add(dir), this->v };
     //     }
     // };
+    static bool testSig(void)
+    {
+        // return sig(T(0.0)) == 0 && sig(T(2.0) * EXP) == 1
+        //        && sig(T(-0.9) == 0) && sig(T(-2.0)) == -1
+        //        && sig(T(-0.0) == 0);
+        try
+        {
+
+            assert((sig(T(0.0)) == 0));
+            assert((sig(T(2.0) * EXP) == 1));
+            assert((sig(T(-0.9) * EXP) == 0));
+            assert((sig(T(-2.0) * EXP) == -1));
+            assert((sig(T(-2.0)) == -1));
+            assert((sig(T(-0.0)) == 0));
+            assert((sig(T(-0.0) * EXP) == 0));
+            return 1;
+        }
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            return 0;
+        }
+    }
     static bool testPointLength(void)
     {
         Point a    = makePoint(T(4.0), T(3.0));
         Point zero = makePoint(T(0.0), T(0.0));
-        return std::abs(distence(a, zero) - T(5.0)) < EXP
-               && std::abs(a.length() - T(5.0)) < EXP
-               && std::abs(zero.length() < EXP);
+        try
+        {
+            assert(std::abs(distance(a, zero) - T(5.0))
+                   < EXP);
+            assert(std::abs(a.length() - T(5.0)) < EXP);
+            assert(std::abs(zero.length() < EXP));
+            return 1;
+        }
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            return 0;
+        }
     }
     static bool testPointNormel(void)
     {
         Point a = makePoint(T(10.0), T(10.0));
         Point b = makePoint(T(4.0), T(3.0));
-        if(!((std::abs(a.normal().length() - T(1.0)) < EXP)
-             && (std::abs(b.normal().length() - T(1.0))
-                 < EXP)))
+        try
         {
+            assert(std::abs(a.normal().length() - T(1.0))
+                   < EXP);
+            assert(std::abs(b.normal().length() - T(1.0))
+                   < EXP);
+            assert(
+              a.normal()
+                .sub(makePoint(T(5.0), T(5.0)).normal())
+                .length()
+              < EXP);
+            assert(
+              b.normal()
+                .sub(makePoint(T(8.0), T(6.0)).normal())
+                .length()
+              < EXP);
+            return 1;
+        }
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
             return 0;
         }
-        return 1;
     }
     static bool testPointTurn90(void)
     {
         Point a = makePoint(T(10.0), T(10.0));
-        return std::abs(distence(a.turn90().turn90(),
-                                 a.rturn90().rturn90()))
-                 < EXP
-               && std::abs(
-                    distence(a.turn90().rturn90(), a))
-                    < EXP
-               && std::abs(distence(
-                    a.turn90().turn90().turn90().turn90(),
-                    a.rturn90()
-                      .rturn90()
-                      .rturn90()
-                      .rturn90()))
-                    < EXP;
+        try
+        {
+            assert(std::abs(distance(a.turn90().turn90(),
+                                     a.rturn90().rturn90()))
+                   < EXP);
+            assert(
+              std::abs(distance(a.turn90().rturn90(), a))
+              < EXP);
+            assert(
+              std::abs(distance(
+                a.turn90().turn90().turn90().turn90(),
+                a.rturn90().rturn90().rturn90().rturn90()))
+              < EXP) return 1;
+        }
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            return 0;
+        }
     }
-    using TestFunType                = bool (*)(void);
-    static constexpr size_t testcnt  = 3;
-    const TestFunType tests[testcnt] = { testPointLength,
-                                         testPointNormel,
-                                         testPointTurn90 };
+    static bool testPointMulT(void)
+    {
+        Point a = makePoint(T(5.0), T(-5.0));
+        Point b = makePoint(T(-5.0), T(5.0));
+        Point c = makePoint(T(10.0), T(-10.0));
+        try
+        {
+            assert(distance(a.mul(T(-1.0)), b) < EXP);
+            assert(distance(a.mul(T(2.0)), c) < EXP);
+            assert(distance(a.mul(T(1.0)), a) < EXP);
+            return 1;
+        }
+        catch(const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            return 0;
+        }
+    }
+    using TestFunType                    = bool (*)(void);
+    const std::vector<TestFunType> tests = {
+        testSig,
+        testPointLength,
+        testPointNormel,
+        testPointTurn90,
+        testPointMulT
+    };
 };
 
-#include <iostream>
 int main(void)
 {
     using LB = long double;
-    for(size_t i = 0; i < CG2D<LB>::testcnt; ++i)
+    CG2D<LB> cg;
+    for(size_t i = 0; i < cg.tests.size(); ++i)
     {
-        std::cout << CG2D<LB>().tests[i]() << std::endl;
+        // std::cout << fun() << std::endl;
+        if(!cg.tests[i]())
+        {
+            std::cout << "Faile on " << i << std::endl;
+            std::cin >> std::ws;
+            return -1;
+        }
+        else
+        {
+            std::cout << "Sucess on " << i << std::endl;
+        }
     }
+    std::cin >> std::ws;
+    return 0;
 }
