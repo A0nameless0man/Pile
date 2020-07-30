@@ -145,7 +145,7 @@ int main(void)
             LB a[3];
             LB b[3];
             LB px[3] = { 0, L / 2.0, -L / 2.0 };
-            LB py[3] = { sqrt(3.0) / 2.0 * L, 0.0, 0.0 };
+            LB py[3] = { 0.8660254037844386 * L, 0.0, 0.0 };
             CG::Point p_ref =
               CG::makePoint(static_cast<LB>(x),
                             static_cast<LB>(y));
@@ -164,9 +164,9 @@ int main(void)
                         CG::makePoint(px[i], py[i]),
                         CG::makePoint(px[(i + 1) % 3],
                                       py[(i + 1) % 3]));
-                    CG::PVLine line_b = line_a.move(
-                      line_a.v.normal().turn90().mul(
-                        py[0]));
+                    CG::PVLine line_b =
+                      line_a.move(line_a.v.turn90().mul(
+                        0.8660254037844386));
                     if(CG::PVLine::isInterect(line_ref,
                                               line_a))
                     {
@@ -178,11 +178,21 @@ int main(void)
                                                line_b);
                         a[i] = CG::distance(it_p_a, p_ref);
                         b[i] = CG::distance(it_p_b, it_p_a);
+                        if(CG::sig(
+                             p_v.dot(it_p_a.sub(p_ref)))
+                           == -1)
+                        {
+                            a[i] = b[i] - a[i];
+                        }
                     }
                     else
                     {
                         a[i] = static_cast<LB>(-1);
                     }
+#ifdef DEBUG
+                    std::cout << "a:b" << a[i] << " "
+                              << b[i] << std::endl;
+#endif  // DEBUG
                 }
             }
             while(std::abs(right - left) > 1e-5)
