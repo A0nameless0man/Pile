@@ -19,7 +19,7 @@ def get(left: int, right: int):
         return ans
 
 
-rng = 100000
+rng = 5000
 ans = [-1 for i in range(1, rng + 2)]
 limit = 1
 cnt = rng
