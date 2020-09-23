@@ -1,4 +1,4 @@
-#include <bit>
+// #include <bit>
 #include <iostream>
 
 namespace MRT
@@ -33,11 +33,16 @@ bool singleMRT(LL n, int s, LL d, LL a)
     }
     for(int i = 1; i < s; ++i)
     {  // cura = rawa^(2^i-1*d)
-        a = a * a % n;
-        if(a == n - 1)
+        LL next = a * a % n;
+        if(next == n - 1)
         {
             return true;
         }
+        else if(next == 1 && a != n - 1)
+        {
+            return false;
+        }
+        a = next;
     }
     if(a == 1)
     {
@@ -83,7 +88,12 @@ bool MRT(LL n, LL (&magicNumbers)[LEN])
         {
             if(n == magicNumbers[i])
             {
-                return true;
+                // return true;
+                continue;
+            }
+            else if(n % magicNumbers[i] == 0)
+            {
+                return false;
             }
             else if(magicNumbers[i] % n == 0)
             {
@@ -127,6 +137,7 @@ int main(void)
             //   + 2 * MRT::LLMRT(static_cast<MRT::LL>(i));
             if(ans == 1)
             {
+                std::cout << i << std::endl;
                 ++count;
             }
             // else if(ans != 0)
