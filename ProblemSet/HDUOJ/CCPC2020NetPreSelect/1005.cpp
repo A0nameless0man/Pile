@@ -1,220 +1,290 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
-#include <cstdlib>
+#include <cstdlib>  // abs
 #include <ctime>
-// #include <unordered_map>
+#include <iostream>
+// #include"../Miller-Rabin/Miller-Rabin-Test"
 #define asc(i, s, e) for((i) = (s); (i) <= (e); ++(i))
-typedef long long ll;
-using namespace std;
 
-ll gcd(ll a, ll b)
+namespace MRT
 {
-    ll t = a % b;
-    while(t)
-    {
-        a = b;
-        b = t;
-        t = a % b;
-    }
-    return b;
-}
+using LL             = long long;
+LL intMagicNumbers[] = { 2, 7, 61 };
+// LL intMagicNumbers[] = { 2, 3, 5, 7, 11 };
+LL LLMagicNumbers[] = { 2,      325,     9375,      28178,
+                        450775, 9780504, 1795265022 };
 
-ll qpow(ll a, ll b, ll n)
+LL qpow(LL a, LL b, LL mod)
 {
-    a %= n;
-    b %= n;
-    ll ans = 0;
+    LL result = 1;
     while(b)
     {
         if(b & 1)
         {
-            ans += a;
-            ans %= n;
+            result = result * a % mod;
         }
-        a <<= 1;
-        a %= n;
         b >>= 1;
+        a = a * a % mod;
     }
-    return ans;
+    return result;
 }
 
-ll getr(ll a, ll u, ll n)
+bool singleMRT(LL n, int s, LL d, LL a)
+// 对于 a , n是否满足2次探测。
 {
-    ll cur = 1;
-    ll nxt = a;
-    while(u)
+    a = qpow(a, d, n);
+    if(a == 1 || a == n - 1)
     {
-        if((u & 1) > 0)
-        {
-            cur = qpow(cur, nxt, n);
-        }
-        nxt = qpow(nxt, nxt, n);
-        u >>= 1;
+        return true;
     }
-    return cur % n;
-}
-
-bool cp(ll n)
-{
-    for(int i = 0; i < 20; ++i)
-    {
-        ll a  = rand() % (n - 1);
-        ll x  = getr(a, n - 1, n);
-        ll y  = x;
-        ll tu = n - 1;
-        while(tu < n)
+    for(int i = 1; i < s; ++i)
+    {  // cura = rawa^(2^i-1*d)
+        LL next = a * a % n;
+        if(next == n - 1)
         {
-            y = qpow(x, x, n);
-            if(y == 1 && x != 1 && x != n - 1)
-            {
-                return false;
-            }
-            x = y;
-            tu *= 2;
+            return true;
         }
-        if(x != 1)
+        else if(next == 1 && a != n - 1)
         {
             return false;
         }
+        a = next;
     }
-    return true;
-}
-ll next(ll x, ll c, ll n)
-{
-    return (x * x + c) % n;
-}
-ll pollard_rho(ll n)
-{
-    if(n > 1e6 && cp(n))
+    if(a == 1)
     {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+int countr_zero(LL n)
+{
+    for(int i = 0; i < 64; ++i)
+    {
+        if(n & 1)
+        {
+            return i;
+        }
+        n >>= 1;
+    }
+    return 64;
+}
+
+// template<LL MagicNumber[LEN]>
+template <LL LEN>
+bool MRT(LL n, LL (&magicNumbers)[LEN])
+{
+    if(n == 1 || n == 0)
+    {
+        return false;
+    }
+    else if(n == 2)
+    {
+        return true;
+    }
+    else
+    {
+        LL  n1 = n - 1;
+        int s  = countr_zero(n1);
+        // LL  d  = n1 / (1ll << s);
+        LL d = n1 >> s;
+        for(LL i = 0; i < LEN; ++i)
+        {
+            if(n == magicNumbers[i])
+            {
+                // return true;
+                continue;
+            }
+            else if(n % magicNumbers[i] == 0)
+            {
+                return false;
+            }
+            else if(magicNumbers[i] % n == 0)
+            {
+                continue;
+            }
+            else if(!singleMRT(n, s, d, magicNumbers[i]))
+            {
+#ifdef DEBUG
+                std::cerr << "Failed for " << n << " on "
+                          << magicNumbers[i] << std::endl;
+                std::cerr << "s : " << s << std::endl;
+                std::cerr << "d : " << d << std::endl;
+                std::cerr << "n1 : " << n1 << std::endl;
+#endif  // DEBUG
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+bool intMRT(LL n)
+{
+    return MRT(n, intMagicNumbers);
+}
+// bool LLMRT(LL n)
+// {
+//     return MRT(n, LLMagicNumbers);
+// }
+}  // namespace MRT
+
+namespace PR
+{
+using LL = long long;
+
+// LL quickMultiply(LL a, LL b, LL mod)
+// {
+//     LL ans = 0;
+//     while(b)
+//     {
+//         if(b & 1)
+//         {
+//             ans = (ans + a) % mod;
+//         }
+//         a <<= 1;
+//         b >>= 1;
+//     }
+//     return ans;
+// }
+
+LL gcd(LL a, LL b)
+{
+    // LL result;
+    while(b)
+    {
+        a %= b;
+        std::swap(a, b);
+    }
+    return a;
+}
+
+LL next(LL a, LL c, LL n)
+{
+    return (a * a + c) % n;
+    // return (quickMultiply(a, a, n) + c) % n;
+}
+
+LL PR(LL n)
+{
+#ifdef DEBUG
+    std::cerr << "[PR::PR] Solving : " << n << std::endl;
+#endif  // DEBUG
+    if(!(n & 1))
+    {
+        return 2;
+    }
+    else if(MRT::intMRT(n))
+    {
+#ifdef DEBUG
+        std::cerr << "[PR::PR] Is Prime : " << n
+                  << std::endl;
+#endif  // DEBUG
         return n;
     }
-    ll  x   = 2;
-    ll  y   = 2;
-    ll  c   = 5;  //
-    ll  val = 1;
-    int gal = 1;
-    while(1)
+    else
     {
-        for(int stp = 1; stp <= gal; ++stp)
+#ifdef DEBUG
+        std::cerr << "[PR::PR] Not Prime : " << n
+                  << std::endl;
+#endif  // DEBUG
+        LL c = 1;
+        LL tg;  // temp gcd
+        while(++c)
         {
-            x   = next(x, c, n);
-            val = (val * abs(x - y)) % n;
-            if((stp % 127) == 0)
+            LL x = 2;
+            LL y = 2;
+            LL s = 0;  // LL step = 0;
+            LL m = 1;  // LL multiplier = 1;
+            while(++s)
             {
-                ll g = gcd(val, n);
-                if(g > 1)
+                x = next(x, c, n);
+                y = next(next(y, c, n), c, n);
+                if(x == y || 0)
                 {
-                    return g;
+                    break;
+                }
+                tg = gcd(std::abs(x - y), n);
+                if(tg > 1)
+                {
+#ifdef DEBUG
+                    std::cerr << "[PR::PR] Find " << tg
+                              << " : " << n << std::endl;
+#endif  // DEBUG
+                    return PR(tg);
+                    // return tg;
+                }
+                if(s >= m)
+                {
+                    y = x;
+                    m <<= 1;
                 }
             }
         }
-        ll g = gcd(val, n);
-        if(g > 1)
-        {
-            return g;
-        }
-        // printf("gal=%ld\n", gal);
-        // printf("g=%ld\n", g);
-        gal <<= 1;
-        // x = y;
-        y   = x;
-        val = 1;
-    }
-    // for (;;) {
-    //     ll d = 1;
+#ifdef DEBUG
+        std::cerr << "[PR::PR] fail for " << n << std::endl;
+#endif  // DEBUG
 
-    //     while (d == 1) {
-    //         x = (x * x - 1) % n;
-    //         y = (y * y - 1) % n;
-    //         y = (y * y - 1) % n;
-    //         d = gcd(abs(x - y), n);
-    //     }
-    //     if (d == n) {
-    //         x = y = (rand() % n + 2);
-    //     } else {
-    //         return d;
-    //     }
-    // }
+        return n;
+    }
 }
 
-// unordered_map<int, int> memo;
+}  // namespace PR
 
-int calc_xi(int n)
+using LL = long long;
+
+LL calc_xi(LL n)
 {
-    // if(memo.count(n))
-    // {
-    //     return memo[n];
-    // }
-
-    int xi = 0;
-    if(n % 2 == 0)
+    LL xi      = 0;
+    LL zerocnt = MRT::countr_zero(n);
+    if(zerocnt)
     {
-        xi += 1;
-        while(n % 2 == 0)
-        {
-            n /= 2;
-        }
+        ++xi;
+        n >>= zerocnt;
     }
     while(n != 1)
     {
-        int f = pollard_rho(n);
-        // printf("f = %lld\n", f);
+        LL f = PR::PR(n);
         while(n % f == 0)
         {
             n /= f;
-            // xi += 1;
             ++xi;
         }
     }
-    // memo[n] = xi;
     return xi;
 }
 
 int main()
 {
-    int test;
-    asc(test, 1e7, 1e7 + 1e6)
+    int T;
+    while(std::cin >> T)
     {
-        int f = calc_xi(test);
-        if(test % 10000 == 0)
+        for(int t = 0; t < T; ++t)
         {
-            printf("%d", f);
-        }
-        // printf("%d / %d ... ok\n", test, f);
-    }
-    return 0;
-
-    srand(time(NULL));
-
-    int t;
-    scanf("%d", &t);
-    while(t--)
-    {
-        int n;
-        scanf("%d", &n);
-
-        int l[32];
-        int i;
-        asc(i, 1, n)
-        {
-            scanf("%d", &l[i]);
-        }
-
-        int x = 0;
-        asc(i, 1, n)
-        {
-            x ^= calc_xi(l[i]);
-        }
-
-        if(x == 0)
-        {
-            printf("L\n");
-        }
-        else
-        {
-            printf("W\n");
+            int n;
+            std::cin >> n;
+            LL x = 0;
+            for(int i = 0; i < n; ++i)
+            {
+                LL k;
+                std::cin >> k;
+                x ^= calc_xi(k);
+            }
+#ifdef DEBUG
+            std::cout << x << std::endl;
+#endif  // DEBUG
+            if(x == 0)
+            {
+                std::cout << "L" << std::endl;
+            }
+            else
+            {
+                std::cout << "W" << std::endl;
+            }
         }
     }
 }
