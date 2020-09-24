@@ -33,16 +33,16 @@ bool singleMRT(LL n, int s, LL d, LL a)
     }
     for(int i = 1; i < s; ++i)
     {  // cura = rawa^(2^i-1*d)
-        LL next = a * a % n;
-        if(next == n - 1)
+        a = a * a % n;
+        if(a == n - 1)
         {
             return true;
         }
-        else if(next == 1 && a != n - 1)
+        else if(a == 1 && a != n - 1)
         {
             return false;
         }
-        a = next;
+        // a = next;
     }
     if(a == 1)
     {
