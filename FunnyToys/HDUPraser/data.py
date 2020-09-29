@@ -4149,12 +4149,8 @@ def praseP(p):
 vp = [1,3,4,6,7,8,9,10,11,12,13]
 vp = [i - 1 for i in vp]
 
+l = [i for i in l if i[1].find("南京信息工程大学")!=-1]
 for rec in l:
-    if rec[1].find("南京信息工程大学") != -1:
-        # print(rec)
-        p = rec[5].split()
-        print(rec[2],end=' ')
-        # for P in p:
-        #     print(praseP(P), end=" ")
-        print(list(map(praseP,[p[i]for i in vp])))
-        # print()
+    p = rec[5].split()
+    print(rec[2],end=' ')
+    print(list(map(praseP,[p[i]for i in vp])))
