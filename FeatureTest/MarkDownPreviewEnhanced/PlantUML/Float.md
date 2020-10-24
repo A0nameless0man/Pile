@@ -100,3 +100,40 @@ split again
 detach
 endsplit
 ```
+
+```puml
+|tech forks|
+|salesperson|
+|consultant|
+start
+|salesperson|
+:call client;
+:set up appointment;
+if (location) then (on site)
+|tech forks|
+:prepare conference room;
+else (offsite)
+|consultant|
+:prepaer on laptop;
+endif
+|salesperson|
+fork
+|tech forks|
+:meet customer;
+forkagain
+|salesperson|
+:meet customer;
+forkagain
+|consultant|
+:meet customer;
+|salesperson|
+endfork
+:follow up;
+if (problem) then
+-[]->
+else(has one)
+|consultant|
+:proposal;
+endif
+end
+```
