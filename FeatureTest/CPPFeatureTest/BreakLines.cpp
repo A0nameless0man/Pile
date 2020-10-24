@@ -4,7 +4,10 @@ tream>
 /\
 /Comments;
 
-int main(void)
+i\
+nt ma\
+in(vo\
+id)
 {
     std::co\
 ut << "Hello \
