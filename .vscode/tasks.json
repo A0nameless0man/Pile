@@ -8,7 +8,7 @@
             "label": "ClangBuild",
             "command": "clang++",
             "args": [
-                "-std=c++17",
+                "-std=c++20",
                 "-Werror",
                 "-Wall",
                 "-Wno-c++98-compat",
