@@ -108,5 +108,6 @@
         "rope": "cpp",
         "slist": "cpp",
         "ranges": "cpp"
-    }
+    },
+    "python.formatting.provider": "autopep8"
 }
