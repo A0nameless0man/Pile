@@ -12,6 +12,12 @@ enum class State
     longcommentend,
 };
 
+std::map<char, char> escapeChars = { { 'n', '\n' },
+                                     { '0', '\0' },
+                                     { '\\', '\\' },
+                                     { '\'', '\'' },
+                                     { '\"', "\"" } };
+
 int main(void)
 {
     std::string s;
@@ -45,12 +51,17 @@ int main(void)
                             sta = State::normal;
                             std::cout << c;
                             break;
-                        case:
-                            '\\': sta = State::strescape;
+                        case '\\':
+                            sta = State::strescape;
                             std::cout << c;
                         default:
                             std::cout << c;
                             break;
+                    }
+                    break;
+                case State::strescape:
+                    switch(c)
+                    {
                     }
                     break;
                 default:
