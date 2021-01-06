@@ -14,9 +14,9 @@ octbit [0-7]
 decbit [0-9]
 hexbit [0-9a-fA-F]
 
-binpfx "0b"|"0B"
-octpfx "0"
-hexpfx "0x"|"0X"
+binpfx 0[bB]
+octpfx 0
+hexpfx 0[xX]
 
 binint {binpfx}{binbit}+
 octint {octpfx}{octbit}+
