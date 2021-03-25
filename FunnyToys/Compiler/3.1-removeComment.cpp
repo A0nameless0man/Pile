@@ -1,4 +1,6 @@
+#include <exception>
 #include <iostream>
+#include <map>
 #include <string>
 
 enum class State
@@ -12,11 +14,11 @@ enum class State
     longcommentend,
 };
 
-std::map<char, char> escapeChars = { { 'n', '\n' },
-                                     { '0', '\0' },
-                                     { '\\', '\\' },
-                                     { '\'', '\'' },
-                                     { '\"', "\"" } };
+const std::map<char, char> escapeChars { { 'n', '\n' },
+                                         { '0', '\0' },
+                                         { '\\', '\\' },
+                                         { '\'', '\'' },
+                                         { '\"', '\"' } };
 
 int main(void)
 {
@@ -60,10 +62,73 @@ int main(void)
                     }
                     break;
                 case State::strescape:
-                    switch(c)
+                {
+                    auto iter = escapeChars.find(c);
+                    if(iter != escapeChars.end())
                     {
+                        std::cout << iter->second;
+                    }
+                    else
+                    {
+                        throw new std::logic_error(
+                          "Unknow escape");
                     }
                     break;
+                }
+                case State::commentbeg:
+                {
+                    switch(c)
+                    {
+                        case '/':
+                            sta = State::linecomment;
+                            break;
+                        case '*':
+                            sta = State::longcomment;
+                            break;
+                        default:
+                            sta = State::normal;
+                            std::cout << '/' << c;
+                            break;
+                    }
+                    break;
+                }
+                case State::linecomment:
+                {
+                    switch(c)
+                    {
+                        case '\n':
+                            sta = State::normal;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case State::longcomment:
+                {
+                    switch(c)
+                    {
+                        case '*':
+                            sta = State::longcommentend;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                case State::longcommentend:
+                {
+                    switch(c)
+                    {
+                        case '/':
+                            sta = State::normal;
+                            break;
+                        default:
+                            sta = State::longcomment;
+                            break;
+                    }
+                    break;
+                }
                 default:
                     break;
             }
