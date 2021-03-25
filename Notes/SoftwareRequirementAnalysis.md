@@ -1,5 +1,6 @@
-# Software Requirement analysis Of Programing Online Judge System
+npm# Software Requirement analysis Of Programing Online Judge System
 
+by HuGuang(201883290072) at 2021-1-7
 [toc]
 
 ## Introduction
@@ -93,7 +94,7 @@ endwhile
 stop
 ```
 
-When a new problem is created, the system will automatically check the standard answer against the test cases. and refuse to create if the check fails.
+With this new system,when a new problem is created, the system will automatically check the standard answer against the test cases. and refuse to create if the check fails.
 
 #### distribute problems
 
@@ -158,6 +159,8 @@ endif
 
 #### deal with plagiarism
 
+After a student submitted his/her solution, the system will try to find any similer code which indicates plagiarism.If any found,system will alert the teacher.
+
 ```puml
 |teacher|
 |system|
@@ -177,6 +180,8 @@ end
 ```
 
 #### export results
+
+At any time, the teacher can export the data from his class.
 
 ```puml
 |teacher|
@@ -217,6 +222,7 @@ User <|-- Student
 ```
 
 A submission has many status, like Judging and Judged.
+A submission can be be judged for many times thus can have many judge result.
 
 ```puml
 class Problem{
@@ -240,10 +246,11 @@ Problem "1" -- "n" Submission
 Submission "1" - "n" JudgeResult
 ```
 
-For convenience, we have class
+For convenience, we have class which is a group of students.
 
 ```puml
 class Class{
+  +Student& students[]
 }
 ```
 
@@ -296,7 +303,7 @@ class Class{
 
 ### Mock-up
 
-Any user must login to identify
+Any user must login to identify before any operations.
 
 ```puml
 @startsalt
@@ -308,7 +315,7 @@ Any user must login to identify
 @endsalt
 ```
 
-Student Will see their class and submissions
+Student Will see their class and submissions after login
 
 ```puml
 @startsalt
@@ -360,7 +367,7 @@ They will see the statement of the Problem if they click.
 @endsalt
 ```
 
-This is Submission
+This is the list of submissions.
 
 ```puml
 @startsalt
@@ -487,8 +494,8 @@ The system should allow teacher to mark a class as active or inactive.
 
 The system should provide information about all submissions to teacher.
 The system should provide information about their own submissions to student.
-The system should allow teacher to rejudge all submissions related to a problem after modification.
-The system should allow teacher to rejudge any submissions by condition.
+The system should allow teacher to instruct a rejudge on all submissions related to a problem after modification.
+The system should allow teacher to instruct a rejudge on any submissions by condition.
 The system should detect plagiarism automaticly and inform the teacher.
 
 ### Functional modelling
@@ -511,14 +518,18 @@ User can changing his password.
 Teacher able to create student and class.
 Theacher should handle plagiarism warning.
 Teacher can create and manage problems.
+Teacher can change student's password.
 
 ##### Student
 
+Student can read the statements of the programs assign to him.
 Student can make submissions to problems.
+Students can read their previous submissions.
 
 #### Class
 
 Class is a group of students.Can be marked as inactive.
+Class can be create or managed by teachers
 
 #### ClassStudent
 
