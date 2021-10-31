@@ -6,6 +6,7 @@
 Debug/
 [xX]64/
 *.out
+out/
 *.exe
 *.user
 *.ilk
