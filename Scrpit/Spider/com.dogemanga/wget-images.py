@@ -13,7 +13,7 @@ class HTTPException(Exception):
     def __init__(self,args):
         self.args = args
 
-@retry(HTTPException,delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
+@retry(delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
 def deal_section(url:str)->Dict[str,str]:
     logger = logging.getLogger("deal_section")
     logger.info("Fetching image url from section url: %s" % url)
@@ -37,7 +37,7 @@ def deal_section(url:str)->Dict[str,str]:
         res[images_name[i]] = images_url[i]
     return  res
 
-@retry(HTTPException,delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
+@retry(delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
 def deal_book(url:str)->Dict[str,str]:
     logger=logging.getLogger("deal_book")
     logger.info("Fetching book index from url: %s"%url)
@@ -57,7 +57,7 @@ def deal_book(url:str)->Dict[str,str]:
         res[section_name[i].strip()] = section_url[i]
     return  res
 
-@retry(HTTPException,delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
+@retry(delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
 def download_images(url:str,path:str):
     logger = logging.getLogger("download_images")
     logger.debug("Start Downloading images url %s to %s" % (url,path))
@@ -73,7 +73,7 @@ def download_images(url:str,path:str):
         f.flush()
     return
 
-@retry(HTTPException,delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
+@retry(delay=1,max_delay=30,backoff=2,tries=30,logger=logging.getLogger('retry'))
 def download_section(path:str,name:str,url:str):
     logger = logging.getLogger("download_section")
     logger.info("Start Downloading section url %s to %s" % (name,path))
@@ -103,7 +103,7 @@ def main():
     #     for image in images:
     #         logger.info("Downloading %s / %s",section,image)
     #         download_images(images[image],os.path.join(args.path,section,image+".jpg"))
-    with Pool(2) as pool:
+    with Pool(16) as pool:
         pool.map(partial(download_section_s,path),sections.items())
 
 if __name__ == "__main__":
