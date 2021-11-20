@@ -23,8 +23,12 @@ def deal_section(url:str)->Dict[str,str]:
     html = resp.text
     dom = etree.HTML(html)
     logger.info("Section html length: %d"%len(html))
-    images_url = dom.xpath("//img[@data-src]/@data-src")
-    images_name = dom.xpath("//img[@data-src]/@alt")
+    images_url = []
+    images_name=[]
+    images_url.extend(dom.xpath("//img[@src and @site-page-index]/@src"))
+    images_name.extend(dom.xpath("//img[@src and @site-page-index]/@alt"))
+    images_url.extend(dom.xpath("//img[@data-src and @site-page-index]/@data-src"))
+    images_name.extend( dom.xpath("//img[@data-src and @site-page-index]/@alt"))
     logger.info("Get %d images and %d url"%(len(images_name), len(images_url)))
     if len(images_name) != len(images_url):
         raise Exception("len(images_name) != len(images_url)")
@@ -99,7 +103,7 @@ def main():
     #     for image in images:
     #         logger.info("Downloading %s / %s",section,image)
     #         download_images(images[image],os.path.join(args.path,section,image+".jpg"))
-    with Pool(8) as pool:
+    with Pool(2) as pool:
         pool.map(partial(download_section_s,path),sections.items())
 
 if __name__ == "__main__":
