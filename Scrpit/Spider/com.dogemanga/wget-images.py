@@ -105,9 +105,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("target", type=str)
     parser.add_argument("path", type=str)
+    parser.add_argument("--force", type=bool, default=False)
     args = parser.parse_args()
     sections = deal_book(args.target)
     path = args.path
+    if not args.force:
+        for k in list(sections.keys()):
+            dir = os.path.join(path, k)
+            if os.path.exists(dir):
+                logger.info("Section %s already exists, skipping", k)
+                del sections[k]
     # for section in sections:
     #     logger.info("Downloading %s",section)
     #     images = deal_section(sections[section])
