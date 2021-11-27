@@ -110,6 +110,7 @@ def main():
     sections = deal_book(args.target)
     path = args.path
     if not args.force:
+        logger.info("incremental download is enabled")
         for k in list(sections.keys()):
             dir = os.path.join(path, k)
             if os.path.exists(dir):
