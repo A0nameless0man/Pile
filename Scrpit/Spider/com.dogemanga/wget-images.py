@@ -98,18 +98,10 @@ def download_section_s(path: str, x: Tuple[str, str]):
     return download_section(path, x[0], x[1])
 
 
-def main():
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
-    logger = logging.getLogger()
-    parser = argparse.ArgumentParser()
-    parser.add_argument("target", type=str)
-    parser.add_argument("path", type=str)
-    parser.add_argument("--force", type=bool, default=False)
-    args = parser.parse_args()
-    sections = deal_book(args.target)
-    path = args.path
-    if not args.force:
+def download_book(url: str, path: str, force: bool = False):
+    logger = logging.getLogger("download_book")
+    sections = deal_book(url)
+    if not force:
         logger.info("incremental download is enabled")
         for k in list(sections.keys()):
             dir = os.path.join(path, k)
@@ -126,12 +118,27 @@ def main():
         pool.map(partial(download_section_s, path), sections.items())
 
 
+def download_books(targets: Dict[str, str], path: str, force: bool = False):
+    for item in targets:
+        download_book(targets[item], os.path.join(path, item), force)
+
+
+def main():
+    target = {
+        "小桃小栗LoveLove物语": "https://dogemanga.com/m/%E5%B0%8F%E6%A1%83%E5%B0%8F%E6%85%84-Love-Love%E7%89%A9%E8%AA%9E/b1I4KAah",
+        "搖曳百合": "https://dogemanga.com/m/%E6%90%96%E6%9B%B3%E7%99%BE%E5%90%88/ezAev-ZJ",
+        "星期一的丰满": "https://dogemanga.com/m/%E6%98%9F%E6%9C%9F%E4%B8%80%E7%9A%84%E4%B8%B0%E6%BB%A1/UlpyE4NI"
+    }
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
+    logger = logging.getLogger()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("path", type=str)
+    parser.add_argument("--force", type=bool, default=False)
+    args = parser.parse_args()
+    path = args.path
+    download_books(target, path, args.force)
+
+
 if __name__ == "__main__":
     main()
-
-"""
-python3 ~/git-repos/github.com/A0nameless0man/Pile/Scrpit/Spider/com.dogemanga/wget-images.py "https://dogemanga.com/m/%E5%B0%8F%E6%A1%83%E5%B0%8F%E6%85%84-Love-Love%E7%89%A9%E8%AA%9E/b1I4KAah" /mnt/c/Users/HuGuang/Downloads/小桃小栗LoveLove物语
-python3 ~/git-repos/github.com/A0nameless0man/Pile/Scrpit/Spider/com.dogemanga/wget-images.py "https://dogemanga.com/m/%E6%90%96%E6%9B%B3%E7%99%BE%E5%90%88/ezAev-ZJ" /mnt/c/Users/HuGuang/Downloads/搖曳百合
-python3 ~/git-repos/github.com/A0nameless0man/Pile/Scrpit/Spider/com.dogemanga/wget-images.py "https://dogemanga.com/m/%E6%98%9F%E6%9C%9F%E4%B8%80%E7%9A%84%E4%B8%B0%E6%BB%A1/UlpyE4NI" /mnt/c/Users/HuGuang/Downloads/星期一的丰满
-
-"""
