@@ -90,7 +90,8 @@ def download_section(path: str, name: str, url: str):
     logger.info("Start Downloading section url %s to %s" % (name, path))
     Path(path).mkdir(parents=True, exist_ok=True)
     images = deal_section(url)
-    for image in tqdm(images, os.path.join(os.path.basename(path), name), leave=False, position=current_process()._identity[0]+1):
+    n = current_process()._identity[0]
+    for image in tqdm(images, "%d : %s" % (n, os.path.join(os.path.basename(path), name)), leave=False, position=n+1):
         logger.info("Downloading %s / %s", name, image)
         download_images(images[image], os.path.join(path, name, image+".jpg"))
         logger.info("Finished %s / %s", name, image)
