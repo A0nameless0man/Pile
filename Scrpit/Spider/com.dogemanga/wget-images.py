@@ -90,6 +90,7 @@ def download_section(path: str, name: str, url: str):
     for image in images:
         logger.info("Downloading %s / %s", name, image)
         download_images(images[image], os.path.join(path, name, image+".jpg"))
+        logger.info("Finished %s / %s", name, image)
     logger.info("Finish Downloading section url %s to %s" % (name, path))
     return
 
@@ -114,7 +115,7 @@ def download_book(url: str, path: str, force: bool = False):
     #     for image in images:
     #         logger.info("Downloading %s / %s",section,image)
     #         download_images(images[image],os.path.join(args.path,section,image+".jpg"))
-    with Pool(16) as pool:
+    with Pool(8) as pool:
         pool.map(partial(download_section_s, path), sections.items())
 
 
