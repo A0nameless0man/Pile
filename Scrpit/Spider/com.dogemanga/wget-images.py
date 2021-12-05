@@ -21,7 +21,7 @@ class HTTPException(Exception):
 def deal_section(url: str) -> Dict[str, str]:
     logger = logging.getLogger("deal_section")
     logger.info("Fetching image url from section url: %s" % url)
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=10)
     if not resp.status_code == 200:
         raise HTTPException("not resp.status_code == 200")
     html = resp.text
@@ -48,7 +48,7 @@ def deal_section(url: str) -> Dict[str, str]:
 def deal_book(url: str) -> Dict[str, str]:
     logger = logging.getLogger("deal_book")
     logger.info("Fetching book index from url: %s" % url)
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=10)
     if not resp.status_code == 200:
         raise HTTPException("not resp.status_code == 200")
     html = resp.text
@@ -74,7 +74,7 @@ def download_images(url: str, path: str):
     Path(dir).mkdir(parents=True, exist_ok=True)
     logger.debug("mkdir -P %s" % dir)
     with open(path, "wb") as f:
-        resp = requests.get(url)
+        resp = requests.get(url, timeout=10)
         if not resp.status_code == 200:
             raise HTTPException("not resp.status_code == 200")
         logger.debug("Image size = %d" % len(resp.content))
