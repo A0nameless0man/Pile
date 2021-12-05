@@ -118,7 +118,7 @@ def download_book(url: str, path: str, pool: PoolType, force: bool = False):
     #     for image in images:
     #         logger.info("Downloading %s / %s",section,image)
     #         download_images(images[image],os.path.join(args.path,section,image+".jpg"))
-    return pool.map_async(partial(download_section_s, path), sections.items())
+    return pool.map_async(partial(download_section_s, path), sorted(sections.items()))
 
 
 def download_books(targets: Dict[str, str], path: str, pool: PoolType, force: bool = False):
