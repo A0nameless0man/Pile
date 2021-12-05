@@ -127,7 +127,9 @@ def main():
     target = {
         "小桃小栗LoveLove物语": "https://dogemanga.com/m/%E5%B0%8F%E6%A1%83%E5%B0%8F%E6%85%84-Love-Love%E7%89%A9%E8%AA%9E/b1I4KAah",
         "搖曳百合": "https://dogemanga.com/m/%E6%90%96%E6%9B%B3%E7%99%BE%E5%90%88/ezAev-ZJ",
-        "星期一的丰满": "https://dogemanga.com/m/%E6%98%9F%E6%9C%9F%E4%B8%80%E7%9A%84%E4%B8%B0%E6%BB%A1/UlpyE4NI"
+        "星期一的丰满": "https://dogemanga.com/m/%E6%98%9F%E6%9C%9F%E4%B8%80%E7%9A%84%E4%B8%B0%E6%BB%A1/UlpyE4NI",
+        "3月的狮子": "https://dogemanga.com/m/3%E6%9C%88%E7%9A%84%E7%8D%85%E5%AD%90/GLursg_Z",
+        "3月的狮子-单行本": "https://dogemanga.com/m/3%E6%9C%88%E7%9A%84%E7%8D%85%E5%AD%90-%E5%96%AE%E8%A1%8C%E6%9C%AC/w5CcDgbK"
     }
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
