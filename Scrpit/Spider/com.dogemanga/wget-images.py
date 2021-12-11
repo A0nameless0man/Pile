@@ -139,7 +139,9 @@ def main():
                 "搖曳百合": "https://dogemanga.com/m/%E6%90%96%E6%9B%B3%E7%99%BE%E5%90%88/ezAev-ZJ",
                 "星期一的丰满": "https://dogemanga.com/m/%E6%98%9F%E6%9C%9F%E4%B8%80%E7%9A%84%E4%B8%B0%E6%BB%A1/UlpyE4NI",
                 "3月的狮子": "https://dogemanga.com/m/3%E6%9C%88%E7%9A%84%E7%8D%85%E5%AD%90/GLursg_Z",
-                "3月的狮子-单行本": "https://dogemanga.com/m/3%E6%9C%88%E7%9A%84%E7%8D%85%E5%AD%90-%E5%96%AE%E8%A1%8C%E6%9C%AC/w5CcDgbK"
+                "3月的狮子-单行本": "https://dogemanga.com/m/3%E6%9C%88%E7%9A%84%E7%8D%85%E5%AD%90-%E5%96%AE%E8%A1%8C%E6%9C%AC/w5CcDgbK",
+                "摇曳露营":"https://dogemanga.com/m/%E6%91%87%E6%9B%B3%E9%9C%B2%E8%90%A5%E2%96%B3/5oQBx6WE",
+                "摇曳编程":"https://dogemanga.com/m/%E6%91%87%E6%9B%B3%E7%BC%96%E7%A8%8B/dNRgizry"
             }
             logging.basicConfig(
                 level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
