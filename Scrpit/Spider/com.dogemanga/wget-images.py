@@ -145,7 +145,8 @@ def main():
                 "这个美术部有问题":"https://dogemanga.com/m/%E8%BF%99%E4%B8%AA%E7%BE%8E%E6%9C%AF%E9%83%A8%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%81/kuwO_rOk",
                 "轻音部的百合日常":"https://dogemanga.com/m/%E8%BD%BB%E9%9F%B3%E9%83%A8%E7%9A%84%E7%99%BE%E5%90%88%E6%97%A5%E5%B8%B8/uEQ3Ce1I",
                 "轻音少女":"https://dogemanga.com/m/%E8%BC%95%E9%9F%B3%E5%B0%91%E5%A5%B3/wtFRm4P-",
-                "AZUCAT (轻音少女!)":"https://dogemanga.com/m/AZUCAT-%28%E8%BD%BB%E9%9F%B3%E5%B0%91%E5%A5%B3%21%29/Ji3RDHBZ"
+                "AZUCAT (轻音少女!)":"https://dogemanga.com/m/AZUCAT-%28%E8%BD%BB%E9%9F%B3%E5%B0%91%E5%A5%B3%21%29/Ji3RDHBZ",
+                "妖精森林的小不点":"https://dogemanga.com/m/%E5%93%88%E5%BA%93%E6%A2%85%E4%BC%8A%E4%B8%8E%E8%9C%9C%E7%8F%82%E6%9E%90/6maMCU18"
             }
             logging.basicConfig(
                 level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
